@@ -1,0 +1,14 @@
+<footer *ngIf="isSalesScreen" class="text-white py-3 mt-auto" style="background-color: var(--background-color, #007bff) !important;">
+  <div class="container d-flex justify-content-end">
+    <div>
+      <button class="btn btn-second btn-sm px-4 py-2 me-2" >Cancel</button>
+      <button class="btn btn-primary px-4 py-2 btn-sm" (click)="onPrint()">Print</button>
+    </div>
+  </div>
+</footer>
+
+<footer *ngIf="!isSalesScreen" class="bg-dark text-white text-center py-3 mt-auto">
+  <div class="container">
+    <small>&copy; 2025 MyPOS App. All rights reserved.</small>
+  </div>
+</footer>

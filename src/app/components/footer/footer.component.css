@@ -1,0 +1,27 @@
+/* src/app/footer/footer.component.css */
+footer {
+    font-size: 0.9rem;
+  }
+
+
+  .btn-primary:hover {
+    background-color: var(--secondary-color) !important; /* darker blue */
+    border-color: var(--primary-color, #007bff) !important;
+  }
+
+ .btn-second {
+  background-color: red !important; /* red background */
+  color: white !important; /* white text */
+ }
+
+ .btn-second:hover {
+  background-color: rgb(255, 72, 72) !important; /* red background */
+  color: white !important; /* white text */
+ }
+
+
+ .btn-primary {
+  background-color: var(--primary-color, #007bff) !important; /* darker blue */
+ }
+  
+  

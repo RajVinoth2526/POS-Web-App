@@ -1,0 +1,8 @@
+<div class="row">
+  <div class="col-md-6">
+    <app-product-list  (add)="addToCart($event)"></app-product-list>
+  </div>
+  <div class="col-md-6">
+    <app-cart [cart]="cart" (updateCart)="updateCartEvent($event)" (cartChange)="cart = $event"></app-cart>
+  </div>
+</div>

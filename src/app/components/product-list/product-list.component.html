@@ -1,0 +1,95 @@
+<div class="container my-4">
+  <h3 class="mb-4 text-center pos-text">🛒 Products</h3>
+
+  <div class="row justify-content-center mb-4">
+    <div class="col-md-6">
+      <input type="text" class="form-control rounded-pill px-4" placeholder="🔍 Search products..."
+        [(ngModel)]="searchQuery" (input)="onSearch()" />
+    </div>
+  </div>
+
+  <div *ngIf="!isViewStyleTable" class="scroll-container"
+    style="max-height: 60vh; overflow-y: auto; overflow-x: hidden;">
+    <div class="row g-4" *ngIf="products && products.length > 0; else noProducts">
+      <div class="col-sm-6 col-md-4 col-lg-3" *ngFor="let product of products">
+        <div class="card shadow-sm border-0 rounded-4 product-card">
+          <img [src]="product.image" class="card-img-top rounded-top-4" alt="{{ product.name }}"
+            style="width: 100%; height: 200px; object-fit: cover;" />
+          <div class="card-body text-center">
+            <h5 class="card-title fw-bold text-truncate" style="max-width: 100%; font-size: 1vw !important;">{{ product.name }}</h5>
+            <p *ngIf=" product.unitValue && product.unit" class="text-muted" style="font-size: 0.9vw !important;">${{ product.price.toFixed(2) }}({{ product.unitValue}}{{product.unit}})</p>
+            <p *ngIf=" !product.unitValue || !product.unit"class="text-muted" style="font-size: 0.9vw !important;">${{ product.price.toFixed(2) }}</p>
+            <button class="btn btn-outline-primary rounded-pill px-2 custom-btn-style"  style="font-size: 0.9vw !important;"(click)="addToCart(product)">
+              Add to Cart
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- 👇 Empty Products Template -->
+    <ng-template #noProducts>
+      <div class="d-flex flex-column align-items-center justify-content-center text-center" style="height: 50vh;">
+        <i class="bi bi-box-seam" style="font-size: 4rem; color: #adb5bd;"></i>
+        <h5 class="mt-3 text-muted">No products available</h5>
+      </div>
+    </ng-template>
+    
+  </div>
+  <div *ngIf="isViewStyleTable" class="table-wrapper" style="max-height: 60vh; overflow-y: auto;">
+    <ng-container *ngIf="products.length > 0; else noProducts">
+      <table class="table table-hover sticky-top align-middle text-center mb-0">
+        <thead >
+          <tr>
+            <th style="text-align: left !important; background-color: var(--primary-color); color: white;">Product Name</th>
+            <th style="text-align: left !important; background-color: var(--primary-color); color: white;">Description</th>
+            <th style="text-align: left !important; background-color: var(--primary-color); color: white;">Unit Price</th>
+            <th *ngIf="isFromProductViews"style="text-align: left !important; background-color: var(--primary-color); color: white;">Available Stock</th>
+            <th *ngIf="isFromProductViews"style="text-align: left !important; background-color: var(--primary-color); color: white;">ManufactureDate</th>
+            <th *ngIf="isFromProductViews"style="text-align: left !important; background-color: var(--primary-color); color: white;">expiryDate</th>
+            <th style="text-align: left !important; background-color: var(--primary-color); color: white;">Add to Cart</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let product of products">
+            <td *ngIf=" product.unitValue && product.unit" class="fw-bold pos-text" style="text-align: left !important;">{{ product.name }}({{ product.unitValue}}{{product.unit}})</td>
+            <td *ngIf=" !product.unitValue || !product.unit" class="fw-bold pos-text" style="text-align: left !important;">{{ product.name }}</td>
+            <td style="text-align: left !important;">{{ product.description }}</td>
+            <td style="text-align: left !important;">${{ product.price.toFixed(2) }}</td>
+            <td  *ngIf="isFromProductViews" style="text-align: left !important;">{{product.stockQuantity}}</td>
+            <td  *ngIf="isFromProductViews" style="text-align: left !important;">{{(product.manufactureDate | date: 'yyyy-MM-dd') ?? 'empty'}}</td>
+            <td  *ngIf="isFromProductViews" style="text-align: left !important;">{{(product.expiryDate | date: 'yyyy-MM-dd') ?? 'empty'}}</td>
+            <td class="text-center">
+              <button *ngIf="!isFromProductViews"
+                class="btn btn-outline-primary btn-sm rounded-pill px-3 custom-btn-style" (click)="addToCart(product)">
+                Add to Cart
+              </button>
+              <div class="d-flex justify-content-center gap-2 flex-wrap" *ngIf="isFromProductViews">
+                <div class="col-auto">
+                  <button class="btn btn-outline-primary btn-sm rounded-pill px-3 custom-btn-style"
+                    (click)="editProduct(product.id)">
+                    View
+                  </button>
+                </div>
+                <div class="col-auto">
+                  <button class="btn btn-outline-primary btn-sm rounded-pill px-3 custom-btn-style"
+                    (click)="editProduct(product.id)">
+                    Edit
+                  </button>
+                </div>
+              </div>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </ng-container>
+  
+    <!-- 👇 Empty Products Template -->
+    <ng-template #noProducts>
+      <div class="d-flex flex-column align-items-center justify-content-center text-center" style="height: 50vh;">
+        <i class="bi bi-box-seam" style="font-size: 4rem; color: #adb5bd;"></i>
+        <h5 class="mt-3 text-muted">No products available</h5>
+      </div>
+    </ng-template>
+  </div>
+
+</div>

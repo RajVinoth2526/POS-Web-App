@@ -1,0 +1,181 @@
+<div class="container my-4">
+    <div class="card shadow-sm border-0 rounded-4 p-4">
+        <h4 class="mb-4 text-center fw-bold">⚙️ POS System Settings</h4>
+
+        <!-- Nav Tabs -->
+        <ul class="nav nav-pills justify-content-center mb-4" id="settingsTabs" role="tablist">
+            <li class="nav-item" role="presentation">
+                <button class="nav-link active" data-bs-toggle="pill" data-bs-target="#profileSettings" type="button"
+                    role="tab">
+                    Profile
+                </button>
+            </li>
+            <li class="nav-item" role="presentation">
+                <button class="nav-link" data-bs-toggle="pill" data-bs-target="#paymentSettings" type="button"
+                    role="tab">
+                    Payment
+                </button>
+            </li>
+            <li class="nav-item" role="presentation">
+                <button class="nav-link" data-bs-toggle="pill" data-bs-target="#printerSettings" type="button"
+                    role="tab">
+                    Printer
+                </button>
+            </li>
+            <li class="nav-item" role="presentation">
+                <button class="nav-link" data-bs-toggle="pill" data-bs-target="#themeSettings" type="button" role="tab">
+                    Theme
+                </button>
+            </li>
+        </ul>
+
+
+        <!-- Tab Content -->
+        <div class="tab-content">
+            <!-- Profile Settings -->
+            <div class="tab-pane fade show active" id="profileSettings">
+                <form [formGroup]="businessForm" (ngSubmit)="onProfileSubmit()">
+                    <div class="row g-3">
+                      <div class="col-md-6">
+                        <label class="form-label">Business Name</label>
+                        <input type="text" class="form-control" formControlName="businessName" placeholder="Enter business name" />
+                        <div class="text-danger" *ngIf="businessForm.get('businessName')?.touched && businessForm.get('businessName')?.hasError('required')">
+                          Business Name is required.
+                        </div>
+                      </div>
+                  
+                      <div class="col-md-6">
+                        <label class="form-label">Owner Name</label>
+                        <input type="text" class="form-control" formControlName="ownerName" placeholder="Enter owner name" />
+                        <div class="text-danger" *ngIf="businessForm.get('ownerName')?.touched && businessForm.get('ownerName')?.hasError('required')">
+                          Owner Name is required.
+                        </div>
+                      </div>
+                  
+                      <div class="col-md-6">
+                        <label class="form-label">Phone Number</label>
+                        <input type="tel" class="form-control" formControlName="phoneNumber" placeholder="Enter phone number" />
+                        <div class="text-danger" *ngIf="businessForm.get('phoneNumber')?.touched && businessForm.get('phoneNumber')?.hasError('required')">
+                          Phone Number is required.
+                        </div>
+                      </div>
+                  
+                      <div class="col-md-6">
+                        <label class="form-label">Email Address</label>
+                        <input type="email" class="form-control" formControlName="email" placeholder="Enter email" />
+                        <div class="text-danger" *ngIf="businessForm.get('email')?.touched">
+                          <div *ngIf="businessForm.get('email')?.hasError('required')">
+                            Email is required.
+                          </div>
+                          <div *ngIf="businessForm.get('email')?.hasError('email')">
+                            Invalid email format.
+                          </div>
+                        </div>
+                      </div>
+                  
+                      <div class="col-12 text-end">
+                        <button type="submit" class="btn rounded-pill px-4 custom-btn-style">Save Changes</button>
+                      </div>
+                    </div>
+                  </form>
+                  
+                  
+            </div>
+
+            <!-- Payment Settings -->
+            <div class="tab-pane fade" id="paymentSettings">
+                <form class="row g-3">
+                    <div class="col-md-6">
+                        <label class="form-label">Preferred Payment Method</label>
+                        <select class="form-select">
+                            <option value="cash">Cash</option>
+                            <option value="card">Card</option>
+                            <option value="upi">UPI</option>
+                        </select>
+                    </div>
+                    <div class="col-md-6">
+                        <label class="form-label">Currency</label>
+                        <input type="text" class="form-control" placeholder="Enter currency symbol" />
+                    </div>
+                    <div class="col-12 text-end">
+                        <button type="submit" class="btn btn-success rounded-pill px-4">Save</button>
+                    </div>
+                </form>
+            </div>
+
+            <!-- Printer Settings -->
+            <div class="tab-pane fade" id="printerSettings">
+                <form class="row g-3">
+                    <div class="col-md-6">
+                        <label class="form-label">Printer Name</label>
+                        <input type="text" class="form-control" placeholder="Enter printer name" />
+                    </div>
+                    <div class="col-md-6">
+                        <label class="form-label">Print Format</label>
+                        <select class="form-select">
+                            <option value="thermal">Thermal</option>
+                            <option value="a4">A4</option>
+                        </select>
+                    </div>
+                    <div class="col-12 text-end">
+                        <button type="submit" class="btn btn-dark rounded-pill px-4">Apply</button>
+                    </div>
+                </form>
+            </div>
+            <!-- Theme Settings -->
+            <div class="tab-pane fade" id="themeSettings">
+                <form [formGroup]="themeForm" class="row g-3" (ngSubmit)="onApplyTheme()">
+
+                    <!-- Primary Color -->
+                    <div class="col-md-4">
+                        <label class="form-label">Primary Color</label>
+                        <input type="color" formControlName="primaryColor" class="form-control form-control-color" />
+                    </div>
+
+                    <!-- Secondary Color -->
+                    <div class="col-md-4">
+                        <label class="form-label">Secondary Color</label>
+                        <input type="color" formControlName="secondaryColor" class="form-control form-control-color" />
+                    </div>
+
+                    <!-- Background Color -->
+                    <div class="col-md-4">
+                        <label class="form-label">Background Color</label>
+                        <input type="color" formControlName="backgroundColor" class="form-control form-control-color" />
+                    </div>
+
+                    <!-- Font Family -->
+                    <div class="col-md-4">
+                        <label class="form-label">Font Family</label>
+                        <select formControlName="fontStyle" class="form-select">
+                            <option value="'Gill Sans', sans-serif">Gill Sans</option>
+                            <option value="serif">Serif</option>
+                            <option value="cursive">Cursive</option>
+                            <option value="system-ui">System UI</option>
+                            <option value="'Segoe UI', sans-serif">Segoe UI</option>
+                            <option value="'Arial', sans-serif">Arial</option>
+                            <option value="'Roboto', sans-serif">Roboto</option>
+                            <option value="'Georgia', serif">Georgia</option>
+                            <option value="'Courier New', monospace">Courier New</option>
+                            <option value="'Times New Roman', serif">Times New Roman</option>
+                        </select>
+                    </div>
+
+                    <!-- Buttons -->
+                    <div class="col-12 d-flex justify-content-end gap-2">
+                        <button type="submit" class="btn  rounded-pill px-4 custom-btn-style">
+                            Apply Theme
+                        </button>
+
+                        <button type="button" class="btn btn-danger rounded-pill px-4" (click)="onResetTheme()">
+                            <i class="bi bi-arrow-counterclockwise me-2"></i> Reset
+                        </button>
+                    </div>
+
+                </form>
+            </div>
+
+
+        </div>
+    </div>
+</div>

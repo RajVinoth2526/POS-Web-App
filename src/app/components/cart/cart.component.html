@@ -1,0 +1,96 @@
+<div class="container my-5">
+  <div class="text-center mb-4">
+    <h2 class="fw-bold pos-text">🛒 Customer Cart</h2>
+  </div>
+
+<!-- Empty cart message -->
+<div *ngIf="cart.length === 0; else cartContent" class="d-flex justify-content-center align-items-center" style="height: 300px;">
+  <div class="bg-light rounded-4 shadow p-5 text-center" style="max-width: 400px; width: 100%;">
+    <h4 class="text-muted mb-3 pos-text" >🛒 Cart is empty!</h4>
+    <p class="text-secondary">Start adding products to see them here.</p>
+  </div>
+</div>
+
+
+  <!-- Cart content if items exist -->
+<!-- Cart content if items exist -->
+<ng-template #cartContent>
+  <div class="shadow rounded-4 p-3">
+    <div style="max-height: 350px; overflow-y: auto;">
+      <table class="table table-hover table-sm align-middle mb-0 min-row-height">
+        <thead class="table-light sticky-top bg-light">
+          <tr class="text-center pos-text">
+            <th scope="col">Image</th>
+            <th scope="col">Product</th>
+            <th scope="col">Price</th>
+            <th scope="col">Quantity</th>
+            <th scope="col">Total</th>
+            <th scope="col">Action</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let item of cart; let i = index" class="text-center">
+            <td>
+              <img
+                [src]="item.product.image"
+                alt="{{ item.product.name }}"
+                style="height: 45px; width: 45px; object-fit: cover; border-radius: 10px;"
+              />
+            </td>
+            <td class="fw-semibold  pos-text" style="font-size: 0.85rem; width: 140px;">
+              <span class="text-truncate" title="{{ item.product.name }}">
+              {{ item.product.name }}
+              </span>
+            </td>
+            <td style="font-size: 0.85rem;">${{ item.product.price }}</td>
+
+            <td>
+              <div class="d-flex flex-column align-items-center gap-1" style="line-height: 1;">
+                <button 
+                  class="btn btn-light btn-sm p-1" 
+                  (click)="increaseQuantity(i)"
+                  style="width: 20px; height: 20px; font-size: 0.60rem;"
+                >
+                  ▲
+                </button>
+
+                <span class="fw-semibold" style="font-size: 0.85rem;">{{ item.quantity }}</span>
+
+                <button 
+                  class="btn btn-light btn-sm p-1" 
+                  (click)="decreaseQuantity(i)"
+                  style="width: 20px; height: 20px; font-size: 0.60rem;"
+                >
+                  ▼
+                </button>
+              </div>
+            </td>
+
+            <td class="fw-semibold text-dark" style="font-size: 0.85rem;">
+              ${{ item.price.toFixed(2) }}
+            </td>
+
+            <td>
+              <button
+                class="btn btn-sm btn-danger rounded-pill px-2 py-1"
+                (click)="removeFromCart(i)"
+                style="font-size: 0.75rem;"
+              >
+                🗑️ Delete
+              </button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- Grand Total -->
+    <div class="mt-3 text-end">
+      <h5 class="fw-bold text-primary pos-text" style="font-size: 1rem;">
+        🧾 Grand Total: ${{ getTotalAmount().toFixed(2) }}
+      </h5>
+    </div>
+  </div>
+</ng-template>
+
+</div>

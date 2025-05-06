@@ -1,0 +1,9 @@
+/* src/app/header/header.component.css */
+.navbar {
+    border-bottom: 2px solid #ffffff33;
+    background-color: rgb(1, 27, 80);
+  }
+  .navbar-brand {
+    font-size: 1.8rem;
+  }
+  

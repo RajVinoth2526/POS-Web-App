@@ -1,0 +1,75 @@
+/* Ensure full height of the container and centered content */
+.add-product-container {
+    height: 80vh;
+    width: 90vw;
+    display: flex;
+    flex-direction: column;
+    justify-content: center; /* vertically center */
+    align-items: center;     /* horizontally center */
+    padding: 20px;
+    margin: 0 auto;  
+    overflow-x: hidden !important;
+   }
+
+  .add-product-container-scroll {
+    overflow-y: auto;
+    height: 100%; /* Take remaining space */
+    width: 100%;
+  }
+
+  .add-product-title {
+    text-align: center;
+    margin-top: 2%;
+  }
+  /* Form field styling */
+  .form-control:focus {
+    border-color: #007bff;
+    box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25);
+  }
+  
+  /* Button hover effect */
+  .btn-primary:hover {
+    background-color: #0056b3;
+    border-color: #004085;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  }
+  
+  /* Image styling */
+  img.img-fluid {
+    transition: transform 0.3s ease-in-out;
+  }
+  img.img-fluid:hover {
+    transform: scale(1.05);
+  }
+  
+  /* Additional responsive tweaks for different screen sizes */
+  @media (max-width: 767px) {
+    .form-control, .form-control-file, .btn {
+      font-size: 1.1rem; /* Slightly larger for touch screens */
+    }
+  
+    .form-group {
+      margin-bottom: 1.5rem;
+    }
+  }
+  
+  @media (min-width: 768px) and (max-width: 1024px) {
+    .form-control, .form-control-file, .btn {
+      font-size: 1.2rem; /* Medium devices like tablets */
+    }
+  
+    .container {
+      max-width: 90%;
+    }
+  }
+  
+  @media (min-width: 1025px) {
+    .form-control, .form-control-file, .btn {
+      font-size: 1.3rem; /* For large devices like desktops */
+    }
+  
+    .container {
+      max-width: 50%;
+    }
+  }
+  

@@ -1,0 +1,213 @@
+<div class="add-product-container">
+  <h1 *ngIf="!productId" class="add-product-title">Create New Product</h1>
+  <h1 *ngIf="productId" class="add-product-title">Edit Product</h1>
+  <div class="add-product-container-scroll">
+    <div class="row">
+      <div class="col-12">
+        <form (ngSubmit)="onSubmit()" [formGroup]="productForm" class="shadow p-4 rounded-lg bg-white">
+
+          <div class="row">
+            <!-- Product Name -->
+            <div class="col-md-6 mb-4">
+              <div class="form-group">
+                <label for="productName" class="font-weight-bold pos-text">Product Name</label>
+                <input type="text" id="productName" formControlName="name" class="form-control form-control-lg"
+                  placeholder="Enter product name" />
+                <div class="text-danger mt-1"
+                  *ngIf="productForm.get('name')?.touched && productForm.get('name')?.hasError('required')">
+                  Product Name is required.
+                </div>
+              </div>
+            </div>
+
+            <!-- Product Description -->
+            <div class="col-md-6 mb-4">
+              <div class="form-group">
+                <label for="productDescription" class="font-weight-bold pos-text">Product Description</label>
+                <textarea id="productDescription" formControlName="description" class="form-control form-control-lg"
+                  rows="4" placeholder="Enter product description"></textarea>
+                <div class="text-danger mt-1"
+                  *ngIf="productForm.get('description')?.touched && productForm.get('description')?.hasError('required')">
+                  Product Description is required.
+                </div>
+              </div>
+            </div>
+
+            <!-- Product Price -->
+            <div class="col-md-6 mb-4">
+              <div class="form-group">
+                <label for="productPrice" class="font-weight-bold pos-text">Product Price</label>
+                <input type="number" id="productPrice" formControlName="price" class="form-control form-control-lg"
+                  placeholder="Enter product price" />
+                <div class="text-danger mt-1"
+                  *ngIf="productForm.get('price')?.touched && productForm.get('price')?.hasError('required')">
+                  Product Price is required.
+                </div>
+              </div>
+            </div>
+
+            <!-- SKU -->
+            <!-- <div class="col-md-6 mb-4">
+              <div class="form-group">
+                <label for="sku" class="font-weight-bold pos-text">SKU</label>
+                <input type="text" id="sku" formControlName="sku" class="form-control form-control-lg"
+                  placeholder="Enter SKU (optional)" />
+              </div>
+            </div> -->
+
+            <!-- Barcode -->
+            <div class="col-md-6 mb-4">
+              <div class="form-group">
+                <label for="barcode" class="font-weight-bold pos-text">Barcode</label>
+                <input type="text" id="barcode" formControlName="barcode" class="form-control form-control-lg"
+                  placeholder="Enter barcode (optional)" />
+              </div>
+            </div>
+
+            <!-- Category -->
+            <div class="col-md-6 mb-4">
+              <div class="form-group">
+                <label for="category" class="font-weight-bold pos-text">Category</label>
+                <input type="text" id="category" formControlName="category" class="form-control form-control-lg"
+                  placeholder="Enter category" />
+              </div>
+            </div>
+
+            <!-- Stock Quantity -->
+            <div class="col-md-6 mb-4">
+              <div class="form-group">
+                <label for="stockQuantity" class="font-weight-bold pos-text">Stock Quantity</label>
+                <input type="number" id="stockQuantity" formControlName="stockQuantity"
+                  class="form-control form-control-lg" placeholder="Enter quantity in stock" required />
+                <div class="text-danger mt-1"
+                  *ngIf="productForm.get('stockQuantity')?.touched && productForm.get('stockQuantity')?.hasError('required')">
+                  Stock Quantity is required.
+                </div>
+
+              </div>
+            </div>
+
+            <!-- Unit Type -->
+            <div class="col-md-6 mb-4">
+              <div class="form-group">
+                <label for="unitType" class="font-weight-bold pos-text">Unit Type</label>
+                <select id="unitType" class="form-control form-control-lg" formControlName="unitType"
+                  (change)="onUnitTypeChange()">
+                  <option value="">Select unit type</option>
+                  <option *ngFor="let type of unitTypes" [value]="type.value">{{ type.label }}</option>
+                </select>
+              </div>
+            </div>
+
+
+
+            <!-- Unit Dropdown -->
+            <div class="col-md-6 mb-4" *ngIf="availableUnits.length && productForm.get('unitType')?.value">
+              <div class="form-group">
+                <label for="unit" class="font-weight-bold pos-text">Unit</label>
+                <select id="unit" class="form-control form-control-lg" formControlName="unit">
+                  <option [ngValue]="null" disabled>Select unit</option>
+                  <option *ngFor="let unit of availableUnits" [value]="unit.value">{{ unit.label }}</option>
+                </select>
+                <div class="text-danger mt-1"
+                  *ngIf="productForm.get('unit')?.touched && productForm.get('unit')?.hasError('required')">
+                 Unit is required.
+                </div>
+              </div>
+            </div>
+
+            <!-- Weight/Volume Input -->
+            <div class="col-md-6 mb-4" *ngIf="productForm.get('unitType')?.value">
+              <div class="form-group">
+                <label for="weight" class="font-weight-bold pos-text">
+                  {{ productForm.get('unitType')?.value === 'weight' ? 'Weight' : 'Volume' }}
+                </label>
+                <input type="number" id="weight" formControlName="unitValue" class="form-control form-control-lg"
+                  placeholder="e.g. 1.25" />
+                <div class="text-danger mt-1"
+                  *ngIf="productForm.get('unitValue')?.touched && productForm.get('unitValue')?.hasError('required')">
+                  unitValue is required.
+                </div>
+              </div>
+            </div>
+
+
+            <!-- Tax Rate -->
+            <div class="col-md-6 mb-4">
+              <div class="form-group">
+                <label for="taxRate" class="font-weight-bold pos-text">Tax Rate (%)</label>
+                <input type="number" id="taxRate" formControlName="taxRate" class="form-control form-control-lg"
+                  placeholder="Enter tax rate (e.g. 5)" />
+              </div>
+            </div>
+
+            <!-- Is Available -->
+            <div class="col-md-6 mb-4 d-flex align-items-center">
+              <div class="form-check mt-3">
+                <input type="checkbox" id="isAvailable" formControlName="isAvailable" class="form-check-input" />
+                <label for="isAvailable" class="form-check-label pos-text">Available for Sale</label>
+              </div>
+            </div>
+
+            <!-- Manufacture Date -->
+            <div class="col-md-6 mb-4">
+              <div class="form-group">
+                <label for="manufactureDate" class="font-weight-bold pos-text">Manufacture Date</label>
+                <input type="date" id="manufactureDate" formControlName="manufactureDate"
+                  class="form-control form-control-lg" />
+              </div>
+            </div>
+
+            <!-- Expiry Date -->
+            <div class="col-md-6 mb-4">
+              <div class="form-group">
+                <label for="expiryDate" class="font-weight-bold pos-text">Expiry Date</label>
+                <input type="date" id="expiryDate" formControlName="expiryDate" class="form-control form-control-lg" />
+              </div>
+            </div>
+
+            <!-- Hidden file input (must be rendered always) -->
+            <input type="file" #fileInput (change)="onFileChange($event)" accept="image/*" hidden />
+
+            <!-- Upload + Preview in same row -->
+            <div class="row mb-4 align-items-center">
+              <div class="col-md-6">
+                <div
+                  class="form-group border border-secondary rounded d-flex align-items-center justify-content-center p-4 text-center"
+                  (drop)="onFileDrop($event)" (dragover)="onDragOver($event)" (dragleave)="onDragLeave($event)"
+                  [ngClass]="{ 'bg-light': isDragging }" style="cursor: pointer;" (click)="triggerFileSelect()">
+                  <div>
+                    <p class="m-0">
+                      Drag & drop an image here, or
+                      <span class="text-primary pos-text">click to select</span>
+                    </p>
+                  </div>
+                </div>
+              </div>
+
+              <div class="col-md-6 text-center" *ngIf="imagePreview">
+                <label class="font-weight-bold pos-text" style="padding-right: 10px !important;">Preview Image</label>
+                <div class="position-relative d-inline-block mt-2">
+                  <img [src]="imagePreview" alt="Image Preview" class="img-fluid rounded shadow-sm" width="150"
+                    height="150" />
+                  <button type="button" class="btn btn-danger btn-sm position-absolute top-0 end-0"
+                    (click)="removeImage()" style="transform: translate(25%, -25%)">
+                    ×
+                  </button>
+                </div>
+              </div>
+            </div>
+
+            <!-- Submit -->
+            <div class="col-12 text-center">
+              <button type="submit" class="btn btn-lg mt-3 custom-btn-style">
+                Save
+              </button>
+            </div>
+          </div>
+
+        </form>
+      </div>
+    </div>
+  </div>
+</div>

@@ -1,1 +1,205 @@
-/* You can add global styles to this file, and also import other style files */
+/* Ensure body and html take up the full height of the page */
+html,
+body {
+    height: 100%;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+}
+
+/* Main container to handle the layout */
+.app-container {
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+    min-height: 100vh;
+    /* Ensure the container takes up full screen height */
+}
+
+/* Content area should grow */
+app-dashboard,
+app-sales-order,
+app-add-product,
+app-settings,
+app-view-products {
+    flex: 1;
+    overflow: hidden;
+}
+
+/* Footer styles */
+footer {
+    background-color: #343a40;
+    /* Dark background */
+    color: white;
+    padding: 10px;
+    text-align: center;
+    font-size: 0.9rem;
+    margin-top: auto;
+    /* This pushes footer to the bottom of the container */
+    position: relative;
+    /* Ensures footer is placed at the bottom */
+    width: 100%;
+    /* Ensure footer spans the full width */
+}
+
+/* For mobile and tablets, make sure the footer is always at the bottom */
+@media (max-width: 768px) {
+    .app-container {
+        display: flex;
+        flex-direction: column;
+        min-height: 100vh;
+        /* Ensure full height on mobile */
+    }
+
+    footer {
+        margin-top: auto;
+        /* Ensure footer stays at the bottom */
+        flex-shrink: 0;
+        /* Prevent footer from shrinking */
+    }
+}
+
+/* For devices with width between 768px and 1024px (like iPad in portrait mode) */
+@media (max-width: 1024px) {
+    .app-container {
+        display: flex;
+        flex-direction: column;
+        min-height: 100vh;
+        /* Ensure full height on tablet */
+    }
+
+    footer {
+        margin-top: auto;
+        /* Ensure footer stays at the bottom */
+        flex-shrink: 0;
+        /* Prevent footer from shrinking */
+    }
+}
+
+/* For devices in landscape mode (iPad Pro, etc.) */
+@media (max-width: 1366px) {
+    .app-container {
+        display: flex;
+        flex-direction: column;
+        min-height: 100vh;
+        /* Ensure full height on tablet */
+    }
+
+    footer {
+        margin-top: auto;
+        /* Ensure footer stays at the bottom */
+        flex-shrink: 0;
+        /* Prevent footer from shrinking */
+    }
+}
+
+
+html {
+    font-size: 16px; /* default for desktop */
+  }
+  
+  @media (max-width: 1200px) {
+    html {
+      font-size: 5px; /* laptops */
+    }
+  }
+  
+  @media (max-width: 992px) {
+    html {
+      font-size: 14px; /* tablets */
+    }
+  }
+  
+  @media (max-width: 768px) {
+    html {
+      font-size: 13px; /* small tablets / big phones */
+    }
+  }
+  
+  @media (max-width: 576px) {
+    html {
+      font-size: 12px; /* mobile phones */
+    }
+  }
+
+  :root {
+    --primary-color: #ffffff;
+    --secondary-color: #000000;
+    --background-color: #f0f0f0;
+    --theme-font-family: "Segoe UI", sans-serif;
+  }
+
+  /* Set global background color */
+body {
+  background-color: var(--background-color, #f0f0f0); /* fallback if variable not set */
+  font-family: var(--theme-font-family);
+}
+
+/* Set global button styles */
+button {
+  background-color: var(--primary-color, #007bff);
+  color: #fff;
+  border: none;
+}
+
+button:hover {
+  background-color: var(--secondary-color, #0056b3);
+}
+
+.pos-header {
+  background-color: var(--primary-color, #007bff) !important;
+}
+
+.custom-btn-style {
+  border-color: var(--primary-color) !important;    /* ✅ Custom border color (green) */
+  color: var(--primary-color, #007bff) !important;          /* ✅ Text color */
+
+  transition: background-color 0.3s, color 0.3s;
+}
+
+.secondary-background {
+  background-color: var(--secondary-color, #000000) !important; /* ✅ Custom background color */
+  color: white !important;                /* ✅ Text color */
+}
+
+
+
+.custom-btn-style:hover {
+  background-color: var(--primary-color, #007bff) !important;  /* ✅ Background on hover */
+  color: white !important;                /* ✅ Text color on hover */
+}
+
+/* Style for active tab */
+.nav-pills .nav-link.active {
+  background-color:var(--primary-color, #007bff) !important; /* ✅ Custom active background */
+  color: white !important;              /* ✅ Custom active text color */
+}
+
+/* Optional: Style for inactive tabs */
+.nav-pills .nav-link {
+  color: var(--primary-color, #007bff) !important;
+  border: 1px solid var(--primary-color, #007bff) !important;
+  margin: 0 4px;
+  transition: background-color 0.3s, color 0.3s;
+}
+
+/* Optional: Hover style */
+.nav-pills .nav-link:hover {
+  background-color: var(--secondary-color, #007bff) !important;
+  color: white !important;
+}
+
+.pos-text {
+  color: var(--primary-color, #007bff) !important;
+
+}
+
+/* Smaller placeholder font */
+::placeholder {
+  font-size: 0.875rem; /* or 0.75rem for smaller size */
+  color: #aaa;
+}
+
+
+  
+  

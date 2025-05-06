@@ -1,0 +1,10 @@
+.dashboard-card {
+    transition: transform 0.2s, background-color 0.2s;
+    cursor: pointer;
+  }
+  
+  .dashboard-card:hover {
+    transform: scale(1.05);
+    background-color: #f8f9fa;
+  }
+  
