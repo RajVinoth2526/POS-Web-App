@@ -23,9 +23,15 @@ export interface Profile extends DocumentData  {
   phoneNumber: string;
 }
 
+export interface Filter {
+  [field: string]: string; // Example: { name: 'Shirt', date: '2024-05-10' }
+}
+
+
 export interface Product extends DocumentData {
   id: string;
   name: string;
+  lowerCaseName?: string; // optional for search optimization
   description?: string;
   image?: string;
   price: number;
@@ -45,6 +51,8 @@ export interface Product extends DocumentData {
 }
 
 export interface Cart {
+  id?: string;   
+  orderId?: string;         // optional for new carts
   items: CartItem[];
   subtotal: number;         // Sum of item totals before tax/discount
   taxAmount: number;        // Total tax
@@ -56,6 +64,8 @@ export interface Cart {
   paymentMethod?: string // optional
   customerName?: string;
   notes?: string;
+  cartDate?: string;
+  expanded?: boolean; // optional for UI purposes
 }
 
 export interface CartItem {
@@ -76,6 +86,11 @@ export interface OrderCartItem {
   total: number; // price * quantity
   tax?: number; // optional tax rate per item
   discount?: number; // optional discount per item
+}
+
+export interface OrderId {
+  id?: string;
+  value: string;
 }
 
 

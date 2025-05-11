@@ -2,9 +2,22 @@
   <h3 class="mb-4 text-center pos-text">🛒 Products</h3>
 
   <div class="row justify-content-center mb-4">
-    <div class="col-md-6">
-      <input type="text" class="form-control rounded-pill px-4" placeholder="🔍 Search products..."
-        [(ngModel)]="searchQuery" (input)="onSearch()" />
+    <div class="col-md-6 position-relative">
+      <input
+        [type]="'text'"
+        class="form-control rounded-pill px-4 pe-5"
+        [placeholder]="'🔍 Search here ....'"
+        [(ngModel)]="searchQuery"
+        (input)="onSearch()"
+      />
+      
+      <button
+        class="btn btn-sm btn-link text-danger position-absolute top-50 end-0 translate-middle-y me-3"
+        (click)="clearSearch()"
+        style="text-decoration: none;"
+      >
+        ✖
+      </button>
     </div>
   </div>
 
@@ -17,8 +30,8 @@
             style="width: 100%; height: 200px; object-fit: cover;" />
           <div class="card-body text-center">
             <h5 class="card-title fw-bold text-truncate" style="max-width: 100%; font-size: 1vw !important;">{{ product.name }}</h5>
-            <p *ngIf=" product.unitValue && product.unit" class="text-muted" style="font-size: 0.9vw !important;">${{ product.price.toFixed(2) }}({{ product.unitValue}}{{product.unit}})</p>
-            <p *ngIf=" !product.unitValue || !product.unit"class="text-muted" style="font-size: 0.9vw !important;">${{ product.price.toFixed(2) }}</p>
+            <p *ngIf=" product.unitValue && product.unit" class="text-muted" style="font-size: 0.9vw !important;">{{currency}}{{ product.price.toFixed(2) }}({{ product.unitValue}}{{product.unit}})</p>
+            <p *ngIf=" !product.unitValue || !product.unit"class="text-muted" style="font-size: 0.9vw !important;">{{currency}}{{ product.price.toFixed(2) }}</p>
             <button class="btn btn-outline-primary rounded-pill px-2 custom-btn-style"  style="font-size: 0.9vw !important;"(click)="addToCart(product)">
               Add to Cart
             </button>
@@ -54,7 +67,7 @@
             <td *ngIf=" product.unitValue && product.unit" class="fw-bold pos-text" style="text-align: left !important;">{{ product.name }}({{ product.unitValue}}{{product.unit}})</td>
             <td *ngIf=" !product.unitValue || !product.unit" class="fw-bold pos-text" style="text-align: left !important;">{{ product.name }}</td>
             <td style="text-align: left !important;">{{ product.description }}</td>
-            <td style="text-align: left !important;">${{ product.price.toFixed(2) }}</td>
+            <td style="text-align: left !important;">{{currency}}{{ product.price.toFixed(2) }}</td>
             <td  *ngIf="isFromProductViews" style="text-align: left !important;">{{product.stockQuantity}}</td>
             <td  *ngIf="isFromProductViews" style="text-align: left !important;">{{(product.manufactureDate | date: 'yyyy-MM-dd') ?? 'empty'}}</td>
             <td  *ngIf="isFromProductViews" style="text-align: left !important;">{{(product.expiryDate | date: 'yyyy-MM-dd') ?? 'empty'}}</td>

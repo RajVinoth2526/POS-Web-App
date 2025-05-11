@@ -9,6 +9,8 @@ export const environment = {
   apiUrl: 'https://localhost:44376/',
   companyName: "X-mart",
   firebaseDB: 'pos-db',
+  currency: 'Rs.',
+  orderId: '100',
   systemMode: SystemMode.Online,
   defaultThemeSettings: {
     primaryColor: '#001e3d',

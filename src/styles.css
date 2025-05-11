@@ -21,7 +21,8 @@ app-dashboard,
 app-sales-order,
 app-add-product,
 app-settings,
-app-view-products {
+app-view-products,
+app-view-orders {
     flex: 1;
     overflow: hidden;
 }
@@ -203,3 +204,5 @@ button:hover {
 
   
   
+html, body { height: 100%; }
+body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }

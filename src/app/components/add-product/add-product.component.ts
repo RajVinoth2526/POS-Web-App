@@ -20,6 +20,9 @@ export class AddProductComponent implements OnInit {
   isDragging = false;
   productId: string | null = null;
   availableUnits: { value: string; label: string }[] = [];
+  fileExtension: string = '';
+  selectedFileFireBase: any;
+  imageFirebaseUrl: string = '';
   @ViewChild('fileInput') fileInput!: ElementRef<HTMLInputElement>;
 
   unitTypes = [
@@ -78,6 +81,7 @@ export class AddProductComponent implements OnInit {
         // Patch form values with the fetched product data
         let product: Product = response.data;
         this.imagePreview = product.image ?? null;
+        this.imageFirebaseUrl = product.image ?? '';
         this.productForm.patchValue({
           name: product.name,
           description: product.description,
@@ -102,19 +106,39 @@ export class AddProductComponent implements OnInit {
         this.onUnitTypeChange();
       });
   }
+
+  isImageUrl(url: string): boolean {
+    // Regular expression to check if the URL starts with "http" or "https"
+    const httpRegex = /^https?:\/\//i;
+    
+    // Regular expression to check if the URL ends with image file extensions
+    const imageRegex = /\.(jpg|jpeg|png|gif|bmp|svg)(\?.*)?$/i;  // Modified to allow query parameters
+    
+    // Check if the URL is HTTP(S) and ends with an image extension
+    return httpRegex.test(url) && imageRegex.test(url);
+  }
+  
+  
+
+
   async onSubmit() {
     if (this.productForm.valid) {
-      const product: Product = {
-        ...this.productForm.value,
-        //Assuming you want to store the image URL
-      };
-
-      if(environment.systemMode == 1) {
-        this.imagePreview = await this.imageUploadService.uploadImage(this.productForm.get('image')?.value, 'uploads');
+    if(environment.systemMode == 1) {
+       this.spinnerService.show();
+        this.imagePreview = await this.imageUploadService.uploadImage(this.selectedFileFireBase);
+        if(this.productForm.value.image && this.productForm.value.image != '' && this.isImageUrl(this.productForm.value.image)) {
+          await this.imageUploadService.deleteImage(this.productForm.value.image);
+        }
         this.productForm.patchValue({
           image: this.imagePreview, // Update form with the image preview
         });
+       this.spinnerService.hide();
       }
+      const product: Product = {
+        ...this.productForm.value,
+        lowerCaseName: this.productForm.value.name.toLowerCase(),
+        //Assuming you want to store the image URL
+      };
 
       const nullableFields = [
         'taxRate',
@@ -205,17 +229,25 @@ export class AddProductComponent implements OnInit {
     this.handleFile(file);
   }
 
-  handleFile(file: File | undefined) {
+  async handleFile(file: File | undefined) {
     if (!file) return;
-
+    this.fileExtension = file.name.split('.').pop() || '';
+    if (!['jpg', 'jpeg', 'png'].includes(this.fileExtension)) {
+      this.tosterService.error('Invalid file type. Please upload an image.', 'Error');
+      return;
+    }
+    if (file.size > 2 * 1024 * 1024) { // 2MB limit
+      this.tosterService.error('File size exceeds 2MB limit.', 'Error');
+      return;
+    }
+    
+    this.selectedFileFireBase = file; // Keep the original file for Firebase
     const reader = new FileReader();
     reader.onload = () => {
       this.imagePreview = reader.result;
-      this.productForm.patchValue({
-        image: this.imagePreview, // Update form with the image preview
-      });
+      this.productForm.patchValue({ image: this.imagePreview });
     };
-    reader.readAsDataURL(file);
+    reader.readAsDataURL(file); // OK for preview only
   }
 
   removeImage() {

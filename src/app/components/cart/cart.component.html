@@ -42,7 +42,7 @@
               {{ item.product.name }}
               </span>
             </td>
-            <td style="font-size: 0.85rem;">${{ item.product.price }}</td>
+            <td style="font-size: 0.85rem;">{{currency}}{{ item.product.price }}</td>
 
             <td>
               <div class="d-flex flex-column align-items-center gap-1" style="line-height: 1;">
@@ -67,7 +67,7 @@
             </td>
 
             <td class="fw-semibold text-dark" style="font-size: 0.85rem;">
-              ${{ item.price.toFixed(2) }}
+              {{currency}}{{ item.price.toFixed(2) }}
             </td>
 
             <td>
@@ -87,7 +87,7 @@
     <!-- Grand Total -->
     <div class="mt-3 text-end">
       <h5 class="fw-bold text-primary pos-text" style="font-size: 1rem;">
-        🧾 Grand Total: ${{ getTotalAmount().toFixed(2) }}
+        🧾 Grand Total: {{currency}}{{ getTotalAmount().toFixed(2) }}
       </h5>
     </div>
   </div>

@@ -5,6 +5,7 @@ import { AddProductComponent } from './components/add-product/add-product.compon
 import { SalesOrderComponent } from './components/sales-order/sales-order.component';
 import { SettingsComponent } from './components/settings/settings.component';
 import { ViewProductsComponent } from './components/view-products/view-products.component';
+import { ViewOrdersComponent } from './components/view-orders/view-orders.component';
 
 
 const routes: Routes = [
@@ -13,7 +14,9 @@ const routes: Routes = [
   { path: 'sales-order-process', component: SalesOrderComponent },
   { path: 'settings', component: SettingsComponent },
   { path: 'view-products', component: ViewProductsComponent },
-  { path: 'edit-product/:id', component: AddProductComponent }
+  { path: 'edit-product/:id', component: AddProductComponent },
+  { path: 'view-orders', component: ViewOrdersComponent },
+
 
   // Add more routes as needed
 ];

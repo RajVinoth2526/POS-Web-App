@@ -1,8 +1,8 @@
 import { Injectable } from '@angular/core';
-import { collection, doc, addDoc, getDoc, getDocs, updateDoc, getFirestore, DocumentData } from 'firebase/firestore';
+import { collection, doc, addDoc, getDoc, getDocs, updateDoc, getFirestore, DocumentData, where, query, Query, orderBy, startAt, endAt } from 'firebase/firestore';
 import { from, Observable, throwError } from 'rxjs';
 import { catchError, map, switchMap } from 'rxjs/operators';
-import { Cart, Product } from '../../model/system.model';
+import { Cart, Filter, Product } from '../../model/system.model';
 import { FirebaseInitService } from '../firebase-init.service';
 import { environment } from 'src/environments/environment';
 @Injectable({
@@ -25,39 +25,41 @@ export class ProductService {
     );
   }
 
-  saveOrder(profile: Cart): Observable<Cart & { id: string }> {
-    const colRef = collection(this.firestore, `${environment.firebaseDB}-orders`);
-    return from(addDoc(colRef, profile)).pipe(
-      switchMap(docRef =>
-        from(getDoc(docRef)).pipe(
-          map(snapshot => {
-            if (!snapshot.exists()) throw new Error('Document not found after creation.');
-            return { ...(snapshot.data() as Cart & DocumentData), id: snapshot.id };
-          })
-        )
-      )
-    );
-  }
 
 
-  // Get all products, prefer cache when offline and network when online
-  getAllProducts(): Observable<Product[]> {
-    return from(getDocs(this.productsCol)).pipe(
+  getAllProducts(filter?: Filter): Observable<Product[]> {
+    let queryRef: Query<DocumentData> = this.productsCol;
+
+
+    if (filter && filter['lowerCaseName']?.trim()) {
+      const search = filter['lowerCaseName'].trim();
+      queryRef = query(
+        this.productsCol,
+        orderBy('lowerCaseName'),
+        startAt(search),
+        endAt(`${search}\uf8ff`)
+      );
+    } else {
+      queryRef = this.productsCol;
+    }
+    return from(getDocs(queryRef)).pipe(
       map(snapshot => {
-        if (snapshot.metadata.fromCache) {
-          console.log('Data fetched from cache');
-        } else {
-          console.log('Data fetched from network');
-        }
+        console.log(
+          snapshot.metadata.fromCache
+            ? 'Data fetched from cache'
+            : 'Data fetched from network'
+        );
 
         return snapshot.docs.map(doc => {
-          const data = doc.data() as Product & DocumentData; // Correct type assertion
-          return { ...data, id: doc.id }; // Add `id` to avoid overwriting
+          const data = doc.data() as Product & DocumentData;
+          return { ...data, id: doc.id };
         });
       }),
       catchError(this.handleError)
     );
   }
+
+
 
   // Get a product by its ID, from cache if offline or from network if online
   getProductById(id: string): Observable<Product | undefined> {

@@ -55,6 +55,7 @@ export class SalesOrderComponent implements OnInit {
       paymentMethod: 'Cash',
       createdAt: new Date(),
       updatedAt: new Date(),
+      cartDate:  new Date().toISOString().split('T')[0],
       notes: '',
       isTakeaway: false,
     }

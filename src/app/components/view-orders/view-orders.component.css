@@ -1,0 +1,23 @@
+table, th, td {
+    border: none;
+    border-collapse: collapse; /* Optional: removes spacing between cells */
+  }
+
+
+  .expand-btn {
+    background-color: var(--primary-color) !important;; /* Light blue background */
+    border-color: var(--primary-color) !important;
+    color: white !important; /* White text */
+    border-radius: 50%;
+    transition: background-color 0.3s;
+  }
+  
+  .expand-btn:hover {
+    background-color: var(--secondary-color) !important;
+ /* Light blue on hover */
+    color: white !important; /* White text on hover */
+  }
+  
+  .expand-btn mat-icon {
+    color: var(--primary-color) !important;
+  }

@@ -1,10 +1,11 @@
 import { Component, OnInit } from '@angular/core';
-import { ApiResponse, Profile, ThemeSettings } from './model/system.model';
+import { ApiResponse, OrderId, Profile, ThemeSettings } from './model/system.model';
 import { environment } from 'src/environments/environment';
 import { env } from 'process';
 import { SystemService } from './service/system.service';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { FirebaseInitService } from './firebase/firebase-init.service';
+import { OrderService } from './service/order.service';
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
@@ -14,13 +15,36 @@ export class AppComponent implements OnInit{
 
   constructor(private settingsService: SystemService,
               private spinner: NgxSpinnerService,
-              private firebaseInitService: FirebaseInitService    
+              private firebaseInitService: FirebaseInitService,
+              private orderService: OrderService   
   ) { 
     this.getThemeSettings();
     this.getProfileDetails();
+    this.getOrderId();
   }
 
   ngOnInit(): void {
+  }
+
+  getOrderId() {
+    this.spinner.show();
+    this.orderService.getOrderId().subscribe((response: ApiResponse<OrderId[]>) => {  
+      this.spinner.hide();
+      const orderIds = response.data;
+      if(orderIds.length == 0) {
+        const orderid: OrderId = {value: environment.orderId};
+        this.orderService.saveOrderId(orderid).subscribe((response: any) => {
+          if (response.success) {
+            this.settingsService.updateOrderIdValue(response.data);
+            this.spinner.hide();
+          }
+        });
+      }
+      const orderId = orderIds?.[0];
+      this.settingsService.updateOrderIdValue(orderId);
+
+    });
+
   }
 
   getThemeSettings() {

@@ -21,6 +21,12 @@ import { AngularFireAuthModule } from '@angular/fire/compat/auth';
 import { AngularFirestoreModule } from '@angular/fire/compat/firestore';
 import { environment } from 'src/environments/environment';
 import { AngularFireModule } from '@angular/fire/compat';
+import { ViewOrdersComponent } from './components/view-orders/view-orders.component'; 
+import { MatExpansionModule } from '@angular/material/expansion'; // Import MatExpansion
+import { MatSliderModule } from '@angular/material/slider'; // Import MatSlider
+import { MatButtonModule } from '@angular/material/button'; // For buttons
+import { MatTableModule } from '@angular/material/table';
+import { MatIconModule } from '@angular/material/icon';
 @NgModule({
   declarations: [
     AppComponent,
@@ -32,7 +38,8 @@ import { AngularFireModule } from '@angular/fire/compat';
     AddProductComponent,
     SalesOrderComponent,
     SettingsComponent,
-    ViewProductsComponent
+    ViewProductsComponent,
+    ViewOrdersComponent
   ],
   imports: [
     BrowserModule,
@@ -42,6 +49,11 @@ import { AngularFireModule } from '@angular/fire/compat';
     FormsModule,
     BrowserAnimationsModule,
     NgxSpinnerModule,
+    MatExpansionModule,       // Import MatExpansion
+    MatSliderModule,          // Import MatSlider
+    MatButtonModule,
+    MatTableModule,
+    MatIconModule,
     ToastrModule.forRoot(),
     AngularFireModule.initializeApp(environment.firebase), // Initialize Firebase
     AngularFireAuthModule, // For Authentication

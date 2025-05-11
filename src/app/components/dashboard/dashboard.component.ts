@@ -15,7 +15,7 @@ export class DashboardComponent implements OnInit {
     { name: 'Add Product', icon: 'fas fa-plus-square', route: '/add-product' },
     { name: 'View Products', icon: 'fas fa-boxes', route: '/view-products' },
     { name: 'Sales Analysis', icon: 'fas fa-chart-line', route: '/sales-analysis' },
-    { name: 'Orders', icon: 'fas fa-shopping-cart', route: '/orders' },
+    { name: 'Orders', icon: 'fas fa-shopping-cart', route: '/view-orders' },
     { name: 'Inventory', icon: 'fas fa-warehouse', route: '/inventory' },
     { name: 'Users', icon: 'fas fa-users', route: '/users' },
     { name: 'Reports', icon: 'fas fa-file-alt', route: '/reports' },

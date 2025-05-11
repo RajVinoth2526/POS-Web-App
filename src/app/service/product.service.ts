@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { BehaviorSubject, Observable } from 'rxjs';
-import { ApiResponse, Cart, Product, Profile } from '../model/system.model';
+import { ApiResponse, Cart, Filter, Product, Profile } from '../model/system.model';
 import { environment } from 'src/environments/environment';
 import { ProductService as FirebaseProductService } from '../firebase/fire-servie/product.service';
 import { map } from 'rxjs/operators';
@@ -37,9 +37,9 @@ export class ProductService {
   }
 
   // getAllProfile
-  getAllProducts(): Observable<ApiResponse<Product[]>> {
+  getAllProducts(filter?: Filter): Observable<ApiResponse<Product[]>> {
     if (environment.systemMode == 1) {
-      return this.firebaseProductService.getAllProducts().pipe(
+      return this.firebaseProductService.getAllProducts(filter).pipe(
         map((products: Product[]) => ({
           data: products,
           message: 'Success',
@@ -82,20 +82,6 @@ export class ProductService {
       );
     } else {
       return this.http.patch<ApiResponse<Product>>(`${environment.apiUrl}api/products/${id}`, data);
-    }
-  }
-
-  saveOrder(data: Cart): Observable<ApiResponse<any>> {
-    if (environment.systemMode == 1) {
-      return this.firebaseProductService.saveOrder(data).pipe(
-        map((order: any) => ({
-          data: order,
-          message: 'Success',
-          success: true
-        }))
-      );
-    } else {
-      return this.http.post<ApiResponse<any>>(`${environment.apiUrl}api/products/order`, data);
     }
   }
 

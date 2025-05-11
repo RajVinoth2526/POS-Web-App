@@ -1,16 +1,25 @@
-import { Component, Input, Output, EventEmitter } from '@angular/core';
+import { Component, Input, Output, EventEmitter, OnInit } from '@angular/core';
 import { Cart, CartItem, Product } from 'src/app/model/system.model';
+import { SystemService } from 'src/app/service/system.service';
 
 
 @Component({
   selector: 'app-cart',
   templateUrl: './cart.component.html'
 })
-export class CartComponent {
-  @Input() cart: CartItem [] = [];
+export class CartComponent implements OnInit {
+  currency: string = '';
+  @Input() cart: CartItem[] = [];
   @Output() cartChange = new EventEmitter<any[]>();
   @Output() updateCart = new EventEmitter<CartItem[]>();
 
+  constructor(private systemService: SystemService) {
+
+
+  }
+  ngOnInit(): void {
+    this.currency = this.systemService.getCurrencyValue() ?? '';
+  }
   // Define the card object with some dummy data
   get total(): number {
     return this.cart.reduce((sum, item) => sum + item.total, 0);
@@ -22,7 +31,7 @@ export class CartComponent {
     this.updateCart.emit(this.cart);
   }
 
-  checkout(item : any) {
+  checkout(item: any) {
     this.cart = [];
     this.cartChange.emit([]);
   }
@@ -41,7 +50,7 @@ export class CartComponent {
     this.cart[index].total = this.cart[index].quantity * this.cart[index].price;
     this.updateCart.emit(this.cart);
   }
-  
+
   decreaseQuantity(index: number) {
     if (this.cart[index].quantity > 1) {
       this.cart[index].quantity--;
@@ -52,7 +61,7 @@ export class CartComponent {
     }
     this.updateCart.emit(this.cart);
   }
-  
-  
-  
+
+
+
 }

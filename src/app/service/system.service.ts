@@ -2,7 +2,7 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { BehaviorSubject, Observable, of } from 'rxjs';
 import { map } from 'rxjs/operators';
-import { ApiResponse, Profile, ThemeSettings } from '../model/system.model';
+import { ApiResponse, OrderId, Profile, ThemeSettings } from '../model/system.model';
 import { environment } from 'src/environments/environment';
 import { SystemService as FirebaseProductService } from '../firebase/fire-servie/system.service';
 import { switchMap, throwError } from 'rxjs';
@@ -17,6 +17,13 @@ export class SystemService {
   private profileSubject = new BehaviorSubject<Profile | null>(null);
   profile$ = this.profileSubject.asObservable();
 
+  private currencySubject = new BehaviorSubject<string | null>(environment.currency);
+  currency$ = this.currencySubject.asObservable();
+
+  private orderIdSubject = new BehaviorSubject<OrderId | null>(null);
+  orderIdSubject$ = this.orderIdSubject.asObservable();
+
+
   constructor(
     private http: HttpClient,
     private firebaseSystemService: FirebaseProductService
@@ -29,6 +36,23 @@ export class SystemService {
   getCurrentThemeSettingsValue(): ThemeSettings | null {
     return this.themeSettingsSubject.value;
   }
+
+  updateOrderIdValue(orderId: OrderId) {
+    this.orderIdSubject.next(orderId);
+  }
+
+  getOrderIdValue(): OrderId | null {
+    return this.orderIdSubject.value;
+  }
+
+  updateCurrencyValue(currency: string) {
+    this.currencySubject.next(currency);
+  }
+
+  getCurrencyValue(): string | null {
+    return this.currencySubject.value;
+  }
+
 
   updateProfileValue(profile: Profile) {
     this.profileSubject.next(profile);

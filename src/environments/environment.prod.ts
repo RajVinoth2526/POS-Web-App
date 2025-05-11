@@ -7,6 +7,8 @@ export const environment = {
   companyName: "X-mart",
   firebaseDB: 'pos-db-',
   systemMode: SystemMode.Online,
+  currency: 'Rs',
+  orderId: '100',
   defaultThemeSettings: {
     primaryColor: '#001e3d',
     secondaryColor: '#1b456e',
