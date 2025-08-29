@@ -78,12 +78,7 @@
               <div class="form-group">
                 <label for="stockQuantity" class="font-weight-bold pos-text">Stock Quantity</label>
                 <input type="number" id="stockQuantity" formControlName="stockQuantity"
-                  class="form-control form-control-lg" placeholder="Enter quantity in stock" required />
-                <div class="text-danger mt-1"
-                  *ngIf="productForm.get('stockQuantity')?.touched && productForm.get('stockQuantity')?.hasError('required')">
-                  Stock Quantity is required.
-                </div>
-
+                  class="form-control form-control-lg" placeholder="Enter quantity in stock" />
               </div>
             </div>
 
@@ -96,6 +91,10 @@
                   <option value="">Select unit type</option>
                   <option *ngFor="let type of unitTypes" [value]="type.value">{{ type.label }}</option>
                 </select>
+                <div class="text-danger mt-1"
+                  *ngIf="productForm.get('unitType')?.touched && productForm.get('unitType')?.hasError('required')">
+                  unitType is required.
+                </div>
               </div>
             </div>
 
@@ -149,6 +148,21 @@
               </div>
             </div>
 
+            <!-- Is Available for partial -->
+            <div class="col-md-6 mb-4 d-flex align-items-center">
+              <div class="form-check mt-3">
+                <input 
+                  type="checkbox" 
+                  id="isPartialAllowed" 
+                  formControlName="isPartialAllowed" 
+                  class="form-check-input"
+                  (change)="onPartialAllowedChange($event)"
+                />
+                <label for="isPartialAllowed" class="form-check-label pos-text"> Available for partial sale</label>
+              </div>
+  
+            </div>
+            
             <!-- Manufacture Date -->
             <div class="col-md-6 mb-4">
               <div class="form-group">

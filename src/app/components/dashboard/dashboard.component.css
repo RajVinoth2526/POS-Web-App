@@ -7,4 +7,8 @@
     transform: scale(1.05);
     background-color: #f8f9fa;
   }
+
+  .dashboard-icon {
+    font-size: 60px  !important;
+  }
   

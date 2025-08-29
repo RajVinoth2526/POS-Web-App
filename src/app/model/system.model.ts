@@ -10,7 +10,7 @@ export interface ThemeSettings extends DocumentData {
 }
 
 export interface ApiResponse<T> {
-  data: T;
+  data: T | null;
   message: string;
   success: boolean;
 }
@@ -24,8 +24,20 @@ export interface Profile extends DocumentData  {
 }
 
 export interface Filter {
-  [field: string]: string; // Example: { name: 'Shirt', date: '2024-05-10' }
+  pageNumber: number;
+  pageSize: number;
+  name: string;
 }
+
+// models/paged-result.model.ts
+export interface PagedResult<T> {
+  items: T[];
+  totalCount: number;
+  pageNumber: number;
+  pageSize: number;
+  totalPages: number;
+}
+
 
 
 export interface Product extends DocumentData {
@@ -48,6 +60,7 @@ export interface Product extends DocumentData {
   expiryDate?: Date;
   createdAt?: Date;
   updatedAt?: Date;
+  isPartialAllowed: boolean;
 }
 
 export interface Cart {
@@ -70,12 +83,13 @@ export interface Cart {
 
 export interface CartItem {
   product: Product;
-  name: string;
   quantity: number;
+  name: string;
   price: number;
   total: number; // price * quantity
   tax?: number; // optional tax rate per item
   discount?: number; // optional discount per item
+  size?: string; // optional size for clothing
 }
 
 export interface OrderCartItem {

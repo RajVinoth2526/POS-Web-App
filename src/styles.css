@@ -5,6 +5,8 @@ body {
     margin: 0;
     display: flex;
     flex-direction: column;
+    background-color: var(--background-color, #f0f0f0); /* fallback if variable not set */
+    font-family: var(--theme-font-family);
 }
 
 /* Main container to handle the layout */
@@ -130,12 +132,6 @@ html {
     --theme-font-family: "Segoe UI", sans-serif;
   }
 
-  /* Set global background color */
-body {
-  background-color: var(--background-color, #f0f0f0); /* fallback if variable not set */
-  font-family: var(--theme-font-family);
-}
-
 /* Set global button styles */
 button {
   background-color: var(--primary-color, #007bff);
@@ -202,7 +198,6 @@ button:hover {
 }
 
 
-  
-  
-html, body { height: 100%; }
-body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
+.cdk-overlay-container {
+  z-index: 2000 !important; /* or higher if needed */
+}

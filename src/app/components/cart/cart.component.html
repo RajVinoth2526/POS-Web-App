@@ -45,7 +45,7 @@
             <td style="font-size: 0.85rem;">{{currency}}{{ item.product.price }}</td>
 
             <td>
-              <div class="d-flex flex-column align-items-center gap-1" style="line-height: 1;">
+              <div *ngIf="!item.product.isPartialAllowed"class="d-flex flex-column align-items-center gap-1" style="line-height: 1;">
                 <button 
                   class="btn btn-light btn-sm p-1" 
                   (click)="increaseQuantity(i)"
@@ -64,10 +64,13 @@
                   ▼
                 </button>
               </div>
+              <div *ngIf="item.product.isPartialAllowed" class="d-flex flex-column align-items-center gap-1" style="line-height: 1;">
+                <span class="fw-semibold" style="font-size: 0.85rem;">{{ item.size }} {{item.product.unit}}</span>
+              </div>
             </td>
 
             <td class="fw-semibold text-dark" style="font-size: 0.85rem;">
-              {{currency}}{{ item.price.toFixed(2) }}
+              {{currency}}{{ item.total.toFixed(2) }}
             </td>
 
             <td>

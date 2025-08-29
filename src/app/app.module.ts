@@ -27,6 +27,11 @@ import { MatSliderModule } from '@angular/material/slider'; // Import MatSlider
 import { MatButtonModule } from '@angular/material/button'; // For buttons
 import { MatTableModule } from '@angular/material/table';
 import { MatIconModule } from '@angular/material/icon';
+import { ConfirmationComponent } from './components/confirmation/confirmation.component';
+import { MatDialogModule } from '@angular/material/dialog';
+import { SliderComponent } from './components/slider/slider.component';
+import { AddProductPopupComponent } from './components/add-product-popup/add-product-popup.component';
+import { PaginationComponent } from './components/pagination/pagination.component';
 @NgModule({
   declarations: [
     AppComponent,
@@ -39,7 +44,11 @@ import { MatIconModule } from '@angular/material/icon';
     SalesOrderComponent,
     SettingsComponent,
     ViewProductsComponent,
-    ViewOrdersComponent
+    ViewOrdersComponent,
+    ConfirmationComponent,
+    SliderComponent,
+    AddProductPopupComponent,
+    PaginationComponent
   ],
   imports: [
     BrowserModule,
@@ -54,6 +63,7 @@ import { MatIconModule } from '@angular/material/icon';
     MatButtonModule,
     MatTableModule,
     MatIconModule,
+    MatDialogModule,
     ToastrModule.forRoot(),
     AngularFireModule.initializeApp(environment.firebase), // Initialize Firebase
     AngularFireAuthModule, // For Authentication

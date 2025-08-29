@@ -12,7 +12,7 @@ import { OrderService } from './service/order.service';
   styleUrls: ['./app.component.css']
 })
 export class AppComponent implements OnInit{
-
+  isSidebarOpen = false;
   constructor(private settingsService: SystemService,
               private spinner: NgxSpinnerService,
               private firebaseInitService: FirebaseInitService,
@@ -31,7 +31,7 @@ export class AppComponent implements OnInit{
     this.orderService.getOrderId().subscribe((response: ApiResponse<OrderId[]>) => {  
       this.spinner.hide();
       const orderIds = response.data;
-      if(orderIds.length == 0) {
+      if(orderIds && orderIds.length == 0) {
         const orderid: OrderId = {value: environment.orderId};
         this.orderService.saveOrderId(orderid).subscribe((response: any) => {
           if (response.success) {
@@ -41,7 +41,8 @@ export class AppComponent implements OnInit{
         });
       }
       const orderId = orderIds?.[0];
-      this.settingsService.updateOrderIdValue(orderId);
+      if(orderId)
+        this.settingsService.updateOrderIdValue(orderId);
 
     });
 
@@ -72,7 +73,12 @@ export class AppComponent implements OnInit{
       this.spinner.hide();
       const profiles = response.data;
       const profile = profiles?.[0] ?? null;
-      this.settingsService.updateProfileValue(profile);
+      if(profile)
+        this.settingsService.updateProfileValue(profile);
     });
+  }
+
+  toggleSidebar() {
+    this.isSidebarOpen = !this.isSidebarOpen;
   }
 }

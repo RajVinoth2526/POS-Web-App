@@ -1,6 +1,7 @@
 <!-- app.component.html -->
 <div class="app-container">
-  <app-header></app-header>
+  <app-header  (toggle)="isSidebarOpen = !isSidebarOpen"></app-header>
+  <app-slider [isOpen]="isSidebarOpen" (close)="toggleSidebar()"></app-slider>
   <router-outlet></router-outlet>
   <app-footer></app-footer>
 </div>

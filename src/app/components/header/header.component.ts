@@ -1,4 +1,4 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit, Output, EventEmitter  } from '@angular/core';
 import { SystemService } from 'src/app/service/system.service';
 import { Profile } from '../../model/system.model';
 import { environment } from 'src/environments/environment';
@@ -11,6 +11,8 @@ import { Subscription } from 'rxjs';
 export class HeaderComponent implements OnInit, OnDestroy {
   companyName: string = "";
   private subscriptions: Subscription[] = [];
+  @Output() toggle = new EventEmitter<void>();
+
 
   constructor(private systemService: SystemService) {
 
@@ -29,6 +31,10 @@ export class HeaderComponent implements OnInit, OnDestroy {
 
   ngOnDestroy(): void {
     this.subscriptions.forEach(sub => sub.unsubscribe());
+  }
+
+  toggleSidebar() {
+    this.toggle.emit();
   }
 
 }

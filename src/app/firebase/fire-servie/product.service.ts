@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { collection, doc, addDoc, getDoc, getDocs, updateDoc, getFirestore, DocumentData, where, query, Query, orderBy, startAt, endAt } from 'firebase/firestore';
+import { collection, doc, deleteDoc, addDoc, getDoc, getDocs, updateDoc, getFirestore, DocumentData, where, query, Query, orderBy, startAt, endAt } from 'firebase/firestore';
 import { from, Observable, throwError } from 'rxjs';
 import { catchError, map, switchMap } from 'rxjs/operators';
 import { Cart, Filter, Product } from '../../model/system.model';
@@ -26,38 +26,35 @@ export class ProductService {
   }
 
 
-
-  getAllProducts(filter?: Filter): Observable<Product[]> {
-    let queryRef: Query<DocumentData> = this.productsCol;
-
-
-    if (filter && filter['lowerCaseName']?.trim()) {
-      const search = filter['lowerCaseName'].trim();
-      queryRef = query(
-        this.productsCol,
-        orderBy('lowerCaseName'),
-        startAt(search),
-        endAt(`${search}\uf8ff`)
-      );
-    } else {
-      queryRef = this.productsCol;
-    }
-    return from(getDocs(queryRef)).pipe(
-      map(snapshot => {
-        console.log(
-          snapshot.metadata.fromCache
-            ? 'Data fetched from cache'
-            : 'Data fetched from network'
-        );
-
-        return snapshot.docs.map(doc => {
-          const data = doc.data() as Product & DocumentData;
-          return { ...data, id: doc.id };
-        });
-      }),
-      catchError(this.handleError)
-    );
-  }
+  // getAllProducts(filter?: Filter): Observable<Product[]> {
+  //   let queryRef: Query<DocumentData> = this.productsCol;
+  
+  //   if (filter && filter['lowerCaseName']?.trim()) {
+  //     const search = filter['lowerCaseName'].trim();
+  //     queryRef = query(
+  //       this.productsCol,
+  //       orderBy('lowerCaseName'),
+  //       startAt(search),
+  //       endAt(`${search}\uf8ff`)
+  //     );
+  //   }
+  
+  //   return from(getDocs(queryRef)).pipe(
+  //     map(snapshot => {
+  //       console.log(
+  //         snapshot.metadata.fromCache
+  //           ? 'Data fetched from cache'
+  //           : 'Data fetched from network'
+  //       );
+  //       return snapshot.docs.map(doc => {
+  //         const data = doc.data() as Product;
+  //         return { ...data, id: doc.id };
+  //       });
+  //     }),
+  //     catchError(this.handleError)
+  //   );
+  // }
+  
 
 
 
@@ -75,6 +72,12 @@ export class ProductService {
       catchError(this.handleError)
     );
   }
+
+  deleteProductById(id: string): Observable<void> {
+    const docRef = doc(this.firestore, `${environment.firebaseDB}-products/${id}`);
+    return from(deleteDoc(docRef));
+  }
+  
 
   // Update a product by its ID, this will work offline and sync when back online
   updateProduct(id: string, updatedData: Partial<Product>): Observable<Product> {

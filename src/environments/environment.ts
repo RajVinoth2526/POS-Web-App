@@ -11,7 +11,7 @@ export const environment = {
   firebaseDB: 'pos-db',
   currency: 'Rs.',
   orderId: '100',
-  systemMode: SystemMode.Online,
+  systemMode: SystemMode.OffLine,
   defaultThemeSettings: {
     primaryColor: '#001e3d',
     secondaryColor: '#1b456e',

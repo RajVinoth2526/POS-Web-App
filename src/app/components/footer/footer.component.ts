@@ -66,7 +66,8 @@ export class FooterComponent implements OnInit, OnDestroy {
           orderIdObject.value = oderId.toString();
           this.orderService.updateOrderId(orderIdObject).subscribe((response => {
             if(response) {
-              this.systemService.updateOrderIdValue(response.data);
+              if(response.data)
+                this.systemService.updateOrderIdValue(response.data);
             }
           }))
         }

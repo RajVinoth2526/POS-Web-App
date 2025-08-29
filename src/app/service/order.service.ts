@@ -24,7 +24,7 @@ export class OrderService {
         }))
       );
     } else {
-      return this.http.post<ApiResponse<Cart>>(`${environment.apiUrl}api/products/order`, data);
+      return this.http.post<ApiResponse<Cart>>(`${environment.apiUrl}api/orders`, data);
     }
   }
 
@@ -69,6 +69,20 @@ export class OrderService {
     } else {
       return this.http.get<ApiResponse<Cart[]>>(`${environment.apiUrl}api/Orders`);
     }
+  }
+
+  deleteOrder(id: string): Observable<ApiResponse<Cart>> {
+      if (environment.systemMode == 1) {
+        return this.firebaseOrderService.deleteOrderById(id.toString()).pipe(
+          map(() => ({
+            data: null, // this is allowed only if ApiResponse<Product> accepts null
+            message: 'Product deleted successfully',
+            success: true
+          }))
+        );
+      } else {
+        return this.http.delete<ApiResponse<Cart>>(`${environment.apiUrl}api/products/${id}`);
+      }
   }
 
   getOrderId(): Observable<ApiResponse<OrderId[]>> {

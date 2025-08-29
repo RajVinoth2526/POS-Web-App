@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
-import { BehaviorSubject, Observable } from 'rxjs';
-import { ApiResponse, Cart, Filter, Product, Profile } from '../model/system.model';
+import { HttpClient, HttpParams } from '@angular/common/http';
+import { BehaviorSubject, from, Observable } from 'rxjs';
+import { ApiResponse, Cart, Filter, PagedResult, Product, Profile } from '../model/system.model';
 import { environment } from 'src/environments/environment';
 import { ProductService as FirebaseProductService } from '../firebase/fire-servie/product.service';
 import { map } from 'rxjs/operators';
@@ -37,18 +37,27 @@ export class ProductService {
   }
 
   // getAllProfile
-  getAllProducts(filter?: Filter): Observable<ApiResponse<Product[]>> {
-    if (environment.systemMode == 1) {
-      return this.firebaseProductService.getAllProducts(filter).pipe(
-        map((products: Product[]) => ({
-          data: products,
-          message: 'Success',
-          success: true
-        }))
-      );
-    } else {
-      return this.http.get<ApiResponse<Product[]>>(`${environment.apiUrl}api/products`);
-    }
+  getAllProducts(filter?: Filter): Observable<PagedResult<Product>> {
+    // if (environment.systemMode == 1) {
+      // return this.firebaseProductService.getAllProducts(filter).pipe(
+    //     map((products: Product[]) => ({
+    //       data: products,
+    //       message: 'Success',
+    //       success: true
+    //     }))
+    //   );
+    // } else {
+      
+      let params = filter ? new HttpParams().set('name', filter['name'] || '') : undefined;
+      if(params) {
+        params = params
+        .set('pageNumber', filter && filter['pageNumber']?.toString() || '1')
+        .set('pageSize', filter && filter['pageSize']?.toString() || '10');  
+      }
+      
+      return this.http.get<PagedResult<Product>>(`${environment.apiUrl}api/products`, { params });
+      
+    // }
   }
   // GET: Get theme settings by ID
   getProduct(id: string): Observable<ApiResponse<Product>> {
@@ -85,4 +94,18 @@ export class ProductService {
     }
   }
 
+  deleteProduct(id: string): Observable<ApiResponse<Product>> {
+    if (environment.systemMode == 1) {
+      return this.firebaseProductService.deleteProductById(id.toString()).pipe(
+        map(() => ({
+          data: null, // this is allowed only if ApiResponse<Product> accepts null
+          message: 'Product deleted successfully',
+          success: true
+        }))
+      );
+    } else {
+      return this.http.delete<ApiResponse<Product>>(`${environment.apiUrl}api/products/${id}`);
+    }
+  }
+  
 }

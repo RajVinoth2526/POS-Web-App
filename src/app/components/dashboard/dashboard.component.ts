@@ -11,7 +11,7 @@ export class DashboardComponent implements OnInit {
   constructor(private router: Router) {}
 
   dashboardItems = [
-    { name: 'Dashboard', icon: 'fas fa-tachometer-alt', route: '/sales-order-process' },
+    { name: 'Sales', icon: 'fas fa-dollar-sign', route: '/sales-order-process' },
     { name: 'Add Product', icon: 'fas fa-plus-square', route: '/add-product' },
     { name: 'View Products', icon: 'fas fa-boxes', route: '/view-products' },
     { name: 'Sales Analysis', icon: 'fas fa-chart-line', route: '/sales-analysis' },

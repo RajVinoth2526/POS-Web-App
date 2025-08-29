@@ -1,10 +1,13 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { NgxSpinnerService } from 'ngx-spinner';
-import { ApiResponse, Cart, Filter } from 'src/app/model/system.model';
+import { ApiResponse, Cart, CartItem, Filter } from 'src/app/model/system.model';
 import { OrderService } from 'src/app/service/order.service';
 import { ProductService } from 'src/app/service/product.service';
 import { SystemService } from 'src/app/service/system.service';
 import { Subject, debounceTime, distinctUntilChanged, switchMap, takeUntil } from 'rxjs';
+import { MatDialog } from '@angular/material/dialog';
+import { ConfirmationComponent } from '../confirmation/confirmation.component';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-view-orders',
@@ -24,7 +27,10 @@ export class ViewOrdersComponent implements OnInit, OnDestroy {
   constructor(private orderService: OrderService,
     private spinnerService: NgxSpinnerService,
     private systemService: SystemService,
-    private productService: ProductService
+    private productService: ProductService,
+    private dialog: MatDialog,
+    private router: Router,
+
   ) { }
 
   // Order details array
@@ -36,7 +42,7 @@ export class ViewOrdersComponent implements OnInit, OnDestroy {
         distinctUntilChanged(),
         takeUntil(this.destroy$),
         switchMap((query: string) => {
-          const filter: Filter = {};
+          const filter: any = {};
 
           if (this.searchType === 'id' && query) {
             filter['orderId'] = query;
@@ -57,7 +63,7 @@ export class ViewOrdersComponent implements OnInit, OnDestroy {
       .subscribe({
         next: (response: ApiResponse<any[]>) => {
           this.spinnerService.hide();
-          this.carts = response.data;
+          this.carts = response.data ?? [];
         },
         error: () => {
           this.spinnerService.hide();
@@ -65,11 +71,15 @@ export class ViewOrdersComponent implements OnInit, OnDestroy {
       });
 
     this.currency = this.systemService.getCurrencyValue() ?? '';
+    this.getOrder();
+  }
+
+  getOrder() {
     this.spinnerService.show();
     this.orderService.getAllOrders().subscribe((response: any) => {
       const typedResponse = response as ApiResponse<Cart[]>;
       this.spinnerService.hide();
-      this.carts = typedResponse.data;
+      this.carts = typedResponse.data ?? [];
     }, (error: any) => {
       this.spinnerService.hide();
     });
@@ -87,9 +97,7 @@ export class ViewOrdersComponent implements OnInit, OnDestroy {
   }
 
 
-  onSliderChange(order: any, value: number | null) {
-    order.itemsVisible = !!value && value > 0;
-  }
+
 
   isNumeric(value: string): boolean {
     return !isNaN(Number(value.trim()));
@@ -100,7 +108,36 @@ export class ViewOrdersComponent implements OnInit, OnDestroy {
     this.searchInput$.next(query);
   }
 
+  deleteOrder(cart: Cart) {
+    const dialogRef = this.dialog.open(ConfirmationComponent, {
+      width: '500px',
+      height: '200px',
+      disableClose: true,
+      data: {
+        id: cart.id,
+        title: 'Delete Order',
+        message: 'Are you sure you want to delete this order?',
+      },
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      console.log('Dialog result:', result);
+      if (result) {
+        this.spinnerService.show();
+        this.orderService.deleteOrder(cart.id ?? '').subscribe((response: any) => {
+          this.spinnerService.hide();
+          this.getOrder();
+        }, (error: any) => {
+          this.spinnerService.hide();
+        });
+      }
+    });
+  }
 
 
+  viewProduct(cartItem: CartItem) {
+    this.router.navigate(['/edit-product', cartItem.product.id]);
+
+  }
 
 }

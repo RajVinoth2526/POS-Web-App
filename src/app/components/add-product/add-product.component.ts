@@ -58,7 +58,7 @@ export class AddProductComponent implements OnInit {
       sku: new FormControl(''),
       barcode: new FormControl(''),
       category: new FormControl(''),
-      stockQuantity: new FormControl('', Validators.required),
+      stockQuantity: new FormControl(''),
       unitType: new FormControl(''),
       unit: new FormControl(''),
       unitValue: new FormControl(''),
@@ -67,42 +67,46 @@ export class AddProductComponent implements OnInit {
       manufactureDate: new FormControl(''),
       expiryDate: new FormControl(''),
       image: new FormControl(null),
+      isPartialAllowed: new FormControl(false)
     });
 
     // Check for optional route param "id" and load product if present
     this.route.paramMap
       .pipe(
         switchMap(params => {
-          this.productId = params.get('id') ? params.get('id')  : '';
+          this.productId = params.get('id') ? params.get('id') : '';
           return this.productId ? this.productService.getProduct(this.productId) : EMPTY;
         })
       )
       .subscribe((response) => {
-        // Patch form values with the fetched product data
-        let product: Product = response.data;
-        this.imagePreview = product.image ?? null;
-        this.imageFirebaseUrl = product.image ?? '';
-        this.productForm.patchValue({
-          name: product.name,
-          description: product.description,
-          price: product.price,
-          sku: product.sku,
-          barcode: product.barcode,
-          category: product.category,
-          stockQuantity: product.stockQuantity,
-          unitType: product.unitType,
-          unit: product.unit,
-          unitValue: product.unitValue,
-          taxRate: product.taxRate,
-          isAvailable: product.isAvailable,
-          manufactureDate: product.manufactureDate
-            ? new Date(product.manufactureDate).toISOString().split('T')[0]
-            : null,
-          expiryDate: product.expiryDate
-            ? new Date(product.expiryDate).toISOString().split('T')[0]
-            : null,
-          image: product.image
-        });
+        // Patch form values with the fetched product data'
+        if (response.data) {
+          let product: Product = response.data;
+          this.imagePreview = product.image ?? null;
+          this.imageFirebaseUrl = product.image ?? '';
+          this.productForm.patchValue({
+            name: product.name,
+            description: product.description,
+            price: product.price,
+            sku: product.sku,
+            barcode: product.barcode,
+            category: product.category,
+            stockQuantity: product.stockQuantity,
+            unitType: product.unitType,
+            unit: product.unit,
+            unitValue: product.unitValue,
+            taxRate: product.taxRate,
+            isAvailable: product.isAvailable,
+            isPartialAllowed: product.isPartialAllowed,
+            manufactureDate: product.manufactureDate
+              ? new Date(product.manufactureDate).toISOString().split('T')[0]
+              : null,
+            expiryDate: product.expiryDate
+              ? new Date(product.expiryDate).toISOString().split('T')[0]
+              : null,
+            image: product.image
+          });
+        }
         this.onUnitTypeChange();
       });
   }
@@ -110,29 +114,32 @@ export class AddProductComponent implements OnInit {
   isImageUrl(url: string): boolean {
     // Regular expression to check if the URL starts with "http" or "https"
     const httpRegex = /^https?:\/\//i;
-    
+
     // Regular expression to check if the URL ends with image file extensions
     const imageRegex = /\.(jpg|jpeg|png|gif|bmp|svg)(\?.*)?$/i;  // Modified to allow query parameters
-    
+
     // Check if the URL is HTTP(S) and ends with an image extension
     return httpRegex.test(url) && imageRegex.test(url);
   }
-  
-  
+
+
 
 
   async onSubmit() {
     if (this.productForm.valid) {
-    if(environment.systemMode == 1) {
-       this.spinnerService.show();
-        this.imagePreview = await this.imageUploadService.uploadImage(this.selectedFileFireBase);
-        if(this.productForm.value.image && this.productForm.value.image != '' && this.isImageUrl(this.productForm.value.image)) {
+      if (environment.systemMode == 1) {
+        this.spinnerService.show();
+        if (this.selectedFileFireBase) {
+          this.imagePreview = await this.imageUploadService.uploadImage(this.selectedFileFireBase);
+        }
+
+        if (this.selectedFileFireBase && this.productForm.value.image && this.productForm.value.image != '' && this.isImageUrl(this.productForm.value.image)) {
           await this.imageUploadService.deleteImage(this.productForm.value.image);
         }
         this.productForm.patchValue({
           image: this.imagePreview, // Update form with the image preview
         });
-       this.spinnerService.hide();
+        this.spinnerService.hide();
       }
       const product: Product = {
         ...this.productForm.value,
@@ -150,29 +157,30 @@ export class AddProductComponent implements OnInit {
         'expiryDate',
         'unitType',
         'unitValue',
+        'stockQuantity'
       ] as const;
-      
+
       type NullableField = typeof nullableFields[number];
-      
+
       nullableFields.forEach((field: NullableField) => {
         if (product[field] === '') {
           (product as any)[field] = null;
         }
       });
-          
-      if (this.productId) { 
+
+      if (this.productId) {
         this.spinnerService.show();
         this.productService.updateProduct(this.productId, product).subscribe((response) => {
 
-          if (response.success) {
+          if (response.success && response.data) {
             this.productForm.patchValue({
               ...response.data,
               manufactureDate: response.data.manufactureDate
-              ? new Date(product.manufactureDate ?? '').toISOString().split('T')[0]
-              : null,
-            expiryDate: response.data.expiryDate
-              ? new Date(product.expiryDate ?? '').toISOString().split('T')[0]
-              : null,
+                ? new Date(product.manufactureDate ?? '').toISOString().split('T')[0]
+                : null,
+              expiryDate: response.data.expiryDate
+                ? new Date(product.expiryDate ?? '').toISOString().split('T')[0]
+                : null,
             });
             this.spinnerService.hide();
             this.tosterService.success('Product updated successfully!', 'Success');
@@ -194,6 +202,8 @@ export class AddProductComponent implements OnInit {
             this.spinnerService.hide();
             this.productForm.reset();
             this.productForm?.get('isAvailable')?.setValue(true);
+            this.productForm?.get('isPartialAllowed')?.setValue(false);
+
           },
           (error) => {
             this.tosterService.error('Failed to add product.', 'Error');
@@ -203,6 +213,7 @@ export class AddProductComponent implements OnInit {
 
     } else {
       this.productForm.markAllAsTouched(); // Force error messages to display
+      this.tosterService.error('Please fill all required fields.', 'Error');
     }
   }
 
@@ -240,7 +251,7 @@ export class AddProductComponent implements OnInit {
       this.tosterService.error('File size exceeds 2MB limit.', 'Error');
       return;
     }
-    
+
     this.selectedFileFireBase = file; // Keep the original file for Firebase
     const reader = new FileReader();
     reader.onload = () => {
@@ -261,6 +272,21 @@ export class AddProductComponent implements OnInit {
     this.fileInput.nativeElement.click();
   }
 
+  onPartialAllowedChange(event: Event): void {
+    const isChecked = (event.target as HTMLInputElement).checked;
+  
+    const unitTypeControl = this.productForm.get('unitType');
+    if (isChecked) {
+     unitTypeControl?.setValidators([Validators.required]);
+    } else {
+     unitTypeControl?.clearValidators();
+    }
+    
+    // ⚠️ Important: Update value and validity
+   unitTypeControl?.updateValueAndValidity();
+  }
+  
+
   onUnitTypeChange(): void {
     const selectedType = this.productForm.get('unitType')?.value as keyof typeof this.unitOptions;
     this.availableUnits = this.unitOptions[selectedType] || [];
@@ -274,14 +300,14 @@ export class AddProductComponent implements OnInit {
       unitControl?.clearValidators();
       unitValueControl?.clearValidators();
     }
-  
+
     // ⚠️ Important: Update value and validity
     unitControl?.updateValueAndValidity();
     unitValueControl?.updateValueAndValidity();
 
     unitControl?.updateValueAndValidity();
     unitValueControl?.updateValueAndValidity();
-  
+
   }
 
 

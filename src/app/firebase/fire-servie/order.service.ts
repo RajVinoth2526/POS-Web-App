@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { collection, doc, addDoc, getDoc, getDocs, updateDoc, getFirestore, DocumentData, query, Query, where } from 'firebase/firestore';
+import { collection, doc, deleteDoc, addDoc, getDoc, getDocs, updateDoc, getFirestore, DocumentData, query, Query, where } from 'firebase/firestore';
 import { from, Observable, throwError } from 'rxjs';
 import { Timestamp } from 'firebase/firestore';
 import { catchError, map, switchMap } from 'rxjs/operators';
@@ -112,6 +112,12 @@ export class OrderService {
             catchError(this.handleError)
         );
     }
+
+    deleteOrderById(id: string): Observable<void> {
+        const docRef = doc(this.firestore, `${environment.firebaseDB}-orders/${id}`);
+        return from(deleteDoc(docRef));
+    }
+
 
     // Handle errors and return an Observable error
     private handleError(error: any): Observable<never> {

@@ -115,7 +115,8 @@ export class SettingsComponent implements OnInit, OnDestroy  {
       this.systemSettings.updateThemeSettings(currentTheme.id, theme).subscribe(response => {
         if (response.success) {
           this.tosterService.success('Theme updated successfully!', 'Success');
-          this.applyThemeValue(response.data);  // Use the data from response
+          if(response.data)
+            this.applyThemeValue(response.data);  // Use the data from response
           this.spinnerService.hide();
         }
       });

@@ -24,21 +24,26 @@ export class SalesOrderComponent implements OnInit {
   ngOnInit(): void {
   }
   
-  addToCart(product: Product) {
-    let existingItem: CartItem | undefined = this.cart.find(item => item.product.id === product.id);
+  addToCart(cart: CartItem) {
+    let existingItem: CartItem | undefined = this.cart.find(item => item.product.id === cart.product.id);
     if (existingItem) {
-      existingItem.quantity += 1;
-      existingItem.total = existingItem.quantity * product.price;
+      if(cart.product.isPartialAllowed) {
+        existingItem.size = (parseFloat(existingItem.size ?? '0') + parseFloat(cart.size ?? '0')).toString();
+        existingItem.total = (existingItem.total + cart.total);
+      } else {
+        existingItem.quantity += cart.quantity;
+        existingItem.total = existingItem.quantity * cart.product.price;
+      }    
     } else {
-      const clonedProduct = cloneDeep(product);
       //clonedProduct.image = '';
       let cartItem: CartItem = {
-        product: clonedProduct,
-        name: product.name,
-        price: product.price,
-        tax: product.taxRate ? (product.taxRate/100)*product.price : 0,
-        quantity: 1,
-        total: product.price
+        product: cart.product,
+        name: cart.product.name,
+        price: cart.product.price,
+        tax: cart.product.taxRate ? (cart.product.taxRate/100)*cart.product.price : 0,
+        quantity: cart.quantity,
+        total: cart.total,
+        size: cart.size ?? '0',
       }
       this.cart.push(cartItem);
     }
