@@ -3,6 +3,86 @@ table, th, td {
     border-collapse: collapse; /* Optional: removes spacing between cells */
   }
 
+  /* Orders Table Container with Scroll */
+  .orders-table-container {
+    min-width: 400px;
+    max-width: 100%;
+    max-height: 400px;
+    min-height: 400px;
+    overflow-y: auto;
+    overflow-x: auto;
+    border: 1px solid #dee2e6;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+  }
+
+  /* Sticky Header for Main Table */
+  .sticky-header {
+    position: sticky;
+    top: 0;
+    z-index: 10;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+  }
+
+  /* Order Items Container with Scroll */
+  .order-items-container {
+    max-height: 300px;
+    overflow-y: auto;
+    overflow-x: auto;
+  }
+
+  /* Sticky Header for Order Items */
+  .sticky-sub-header {
+    position: sticky;
+    top: 0;
+    z-index: 5;
+    box-shadow: 0 1px 2px rgba(0,0,0,0.1);
+  }
+
+  /* Pagination Container - Match Orders Table Width */
+  .pagination-container {
+    min-width: 400px;
+    max-width: 100%;
+    padding-top: 20px;
+    display: flex;
+    justify-content: center;
+  }
+
+  /* Custom Scrollbar Styling */
+  .orders-table-container::-webkit-scrollbar,
+  .order-items-container::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+  }
+
+  .orders-table-container::-webkit-scrollbar-track,
+  .order-items-container::-webkit-scrollbar-track {
+    background: #f1f1f1;
+    border-radius: 4px;
+  }
+
+  .orders-table-container::-webkit-scrollbar-thumb,
+  .order-items-container::-webkit-scrollbar-thumb {
+    background: #c1c1c1;
+    border-radius: 4px;
+  }
+
+  .orders-table-container::-webkit-scrollbar-thumb:hover,
+  .order-items-container::-webkit-scrollbar-thumb:hover {
+    background: #a8a8a8;
+  }
+
+  /* Table Row Hover Effect */
+  .orders-table-container tbody tr:hover {
+    background-color: #f8f9fa;
+    transition: background-color 0.2s ease;
+  }
+
+  /* Smooth Scrolling */
+  .orders-table-container,
+  .order-items-container {
+    scroll-behavior: smooth;
+  }
 
   .expand-btn {
     background-color: var(--primary-color) !important;; /* Light blue background */

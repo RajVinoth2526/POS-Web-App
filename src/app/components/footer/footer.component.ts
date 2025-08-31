@@ -39,10 +39,11 @@ export class FooterComponent implements OnInit, OnDestroy {
         this.isSalesScreen = currentUrl.includes('sales-order-process');
       });
 
-      this.productService.cart$.subscribe((data: Cart | null) => {
+      const cartSubscription = this.productService.cart$.subscribe((data: Cart | null) => {
         if(data != null) this.disablePrintButton = true
         this.disablePrintButton = false;
       });
+      cartSubscription.add(cartSubscription);
   }
 
   ngOnDestroy() {
@@ -53,7 +54,6 @@ export class FooterComponent implements OnInit, OnDestroy {
     let oderId: number;
     this.spinnerService.show();
     let cart: Cart | null = this.productService.getCurrentCartValue();
-
 
     if(this.systemService.getOrderIdValue()?.value != null) {
       oderId = parseInt(this.systemService.getOrderIdValue()?.value || '0');

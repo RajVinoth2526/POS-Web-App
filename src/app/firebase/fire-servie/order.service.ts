@@ -85,7 +85,17 @@ export class OrderService {
                     const createdAt = (data.createdAt instanceof Timestamp)
                         ? data.createdAt.toDate()
                         : new Date(data.createdAt);
-                    return { ...data, createdAt, id: doc.id }; // Add `id` to avoid overwriting
+                    
+                    // Ensure all cart items have productId for backward compatibility
+                    const cartWithProductIds = {
+                        ...data,
+                        orderItems: data.orderItems?.map(item => ({
+                            ...item,
+                            productId: item.productId || item.product?.id
+                        })) || []
+                    };
+                    
+                    return { ...cartWithProductIds, createdAt, id: doc.id }; // Add `id` to avoid overwriting
                 });
             }),
             catchError(this.handleError)

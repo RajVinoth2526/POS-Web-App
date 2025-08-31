@@ -20,7 +20,7 @@ export class AppComponent implements OnInit{
   ) { 
     this.getThemeSettings();
     this.getProfileDetails();
-    this.getOrderId();
+   // this.getOrderId();
   }
 
   ngOnInit(): void {

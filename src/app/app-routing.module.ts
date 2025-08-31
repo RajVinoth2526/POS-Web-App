@@ -6,6 +6,7 @@ import { SalesOrderComponent } from './components/sales-order/sales-order.compon
 import { SettingsComponent } from './components/settings/settings.component';
 import { ViewProductsComponent } from './components/view-products/view-products.component';
 import { ViewOrdersComponent } from './components/view-orders/view-orders.component';
+import { SalesAnalysisComponent } from './components/sales-analysis/sales-analysis.component';
 
 
 const routes: Routes = [
@@ -16,6 +17,7 @@ const routes: Routes = [
   { path: 'view-products', component: ViewProductsComponent },
   { path: 'edit-product/:id', component: AddProductComponent },
   { path: 'view-orders', component: ViewOrdersComponent },
+  { path: 'sales-analysis', component: SalesAnalysisComponent },
 
 
   // Add more routes as needed

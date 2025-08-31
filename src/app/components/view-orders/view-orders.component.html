@@ -1,6 +1,8 @@
 <div class="container mt-4">
-    <h1 class="mb-4">Order Details</h1>
-    <div class="row justify-content-center mb-4">
+    <h1 class="mb-4" *ngIf="!hideDatePicker">Order Details</h1>
+    
+    <!-- Search Controls - Only show if not hidden -->
+    <div class="row justify-content-center mb-4" *ngIf="!hideDatePicker">
         <div class="col-md-3 mb-2">
             <select class="form-select rounded-pill px-3" [(ngModel)]="searchType">
               <option value="" disabled selected hidden>Select search type</option>
@@ -31,8 +33,10 @@
       
       
       
+  <!-- Orders Table Container with Scroll -->
+  <div class="orders-table-container">
     <table class="table table-striped">
-      <thead class="table-dark">
+      <thead class="table-dark sticky-header">
         <tr>
           <th style="text-align: left !important; background-color: var(--primary-color); color: white;">Order ID</th>
           <th style="text-align: left !important; background-color: var(--primary-color); color: white;">Ordered time</th>
@@ -61,7 +65,7 @@
             </td>
           </tr>
           <tr *ngIf="cart.expanded">
-            <td colspan="5">
+            <td colspan="6">
               <mat-expansion-panel [expanded]="true">
                 <mat-expansion-panel-header>
                   <mat-panel-title>
@@ -69,36 +73,50 @@
                   </mat-panel-title>
                 </mat-expansion-panel-header>
   
-                <table class="table table-sm table-striped">
-                  <thead class="table-secondary">
-                    <tr>
-                      <th style="text-align: left !important; background-color: var(--secondary-color); color: white;">Item</th>
-                      <th style="text-align: left !important; background-color: var(--secondary-color); color: white;">Quantity</th>
-                      <th style="text-align: left !important; background-color: var(--secondary-color); color: white;">Price</th>
-                      <th style="text-align: left !important; background-color: var(--secondary-color); color: white;">Total</th>
-                      <th style="text-align: left !important; background-color: var(--secondary-color); color: white;"></th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    <tr *ngFor="let item of cart.items">
-                      <td>{{ item.name }}</td>
-                      <td>{{ item.product.isPartialAllowed && item.size ? item.size : item.quantity }} {{item.product.isPartialAllowed ? (item.product.unit) : ''}}</td>
-                      <td>{{currency}}{{ item.price }}</td>
-                      <td>{{currency}}{{ item.total}}</td>
-                      <td class="text-center">
-                        <button 
-                          class="btn btn-outline-primary btn-sm rounded-pill px-3 custom-btn-style" (click)="viewProduct(item)">
-                          View
-                        </button>
-                      </td>
-                    </tr>
-                  </tbody>
-                </table>
+                <div class="order-items-container">
+                  <table class="table table-sm table-striped">
+                    <thead class="table-secondary sticky-sub-header">
+                      <tr>
+                        <th style="text-align: left !important; background-color: var(--secondary-color); color: white;">Product ID</th>
+                        <th style="text-align: left !important; background-color: var(--secondary-color); color: white;">Item</th>
+                        <th style="text-align: left !important; background-color: var(--secondary-color); color: white;">Quantity</th>
+                        <th style="text-align: left !important; background-color: var(--secondary-color); color: white;">Price</th>
+                        <th style="text-align: left !important; background-color: var(--secondary-color); color: white;">Total</th>
+                        <th style="text-align: left !important; background-color: var(--secondary-color); color: white;"></th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr *ngFor="let item of cart.orderItems">
+                        <td>{{ item.productId || item.product.id }}</td>
+                        <td>{{ item.name }}</td>
+                        <td>{{ item.product.isPartialAllowed && item.size ? item.size : item.quantity }} {{item.product.isPartialAllowed ? (item.product.unit) : ''}}</td>
+                        <td>{{currency}}{{ item.price }}</td>
+                        <td>{{currency}}{{ item.total}}</td>
+                        <td class="text-center">
+                          <button 
+                            class="btn btn-outline-primary btn-sm rounded-pill px-3 custom-btn-style" (click)="viewProduct(item)">
+                            View
+                          </button>
+                        </td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
               </mat-expansion-panel>
             </td>
           </tr>
         </ng-container>
       </tbody>
     </table>
+  </div>
+
+  <!-- Pagination -->
+  <div *ngIf="carts.length > 0" class="pagination-container">
+    <app-pagination
+      [totalCount]="totalCount"
+      [pageNumber]="filter.pageNumber"
+      [pageSize]="filter.pageSize"
+      (pageChange)="onPageChange($event)">
+    </app-pagination>
   </div>
   

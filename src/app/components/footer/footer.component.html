@@ -2,7 +2,7 @@
   <div class="container d-flex justify-content-end">
     <div>
       <button class="btn btn-second btn-sm px-4 py-2 me-2" >Cancel</button>
-      <button class="btn btn-primary px-4 py-2 btn-sm" (click)="onPrint()">Print</button>
+      <button [disabled]="disablePrintButton" class="btn btn-primary px-4 py-2 btn-sm" (click)="onPrint()">Print</button>
     </div>
   </div>
 </footer>

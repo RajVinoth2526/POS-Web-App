@@ -1,5 +1,6 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
+import { CommonModule } from '@angular/common';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
@@ -32,6 +33,8 @@ import { MatDialogModule } from '@angular/material/dialog';
 import { SliderComponent } from './components/slider/slider.component';
 import { AddProductPopupComponent } from './components/add-product-popup/add-product-popup.component';
 import { PaginationComponent } from './components/pagination/pagination.component';
+import { SalesAnalysisComponent } from './components/sales-analysis/sales-analysis.component';
+// import { NgChartsModule } from 'ng2-charts';
 @NgModule({
   declarations: [
     AppComponent,
@@ -48,10 +51,12 @@ import { PaginationComponent } from './components/pagination/pagination.componen
     ConfirmationComponent,
     SliderComponent,
     AddProductPopupComponent,
-    PaginationComponent
+    PaginationComponent,
+    SalesAnalysisComponent
   ],
   imports: [
     BrowserModule,
+    CommonModule,
     AppRoutingModule,
     ReactiveFormsModule,
     HttpClientModule,
@@ -64,6 +69,7 @@ import { PaginationComponent } from './components/pagination/pagination.componen
     MatTableModule,
     MatIconModule,
     MatDialogModule,
+    // NgChartsModule,
     ToastrModule.forRoot(),
     AngularFireModule.initializeApp(environment.firebase), // Initialize Firebase
     AngularFireAuthModule, // For Authentication

@@ -13,6 +13,7 @@ export interface ApiResponse<T> {
   data: T | null;
   message: string;
   success: boolean;
+  totalCount?: number;
 }
 
 export interface Profile extends DocumentData  {
@@ -27,6 +28,10 @@ export interface Filter {
   pageNumber: number;
   pageSize: number;
   name: string;
+  orderNumber?: string;
+  orderStartDate?: string;
+  orderEndDate?: string;
+  orderDate?: string;
 }
 
 // models/paged-result.model.ts
@@ -66,7 +71,7 @@ export interface Product extends DocumentData {
 export interface Cart {
   id?: string;   
   orderId?: string;         // optional for new carts
-  items: CartItem[];
+  orderItems: CartItem[];
   subtotal: number;         // Sum of item totals before tax/discount
   taxAmount: number;        // Total tax
   discountAmount: number;   // Total discount
@@ -83,6 +88,7 @@ export interface Cart {
 
 export interface CartItem {
   product: Product;
+  productId: string; // Direct access to product ID for easier querying and backward compatibility
   quantity: number;
   name: string;
   price: number;
@@ -107,6 +113,47 @@ export interface OrderId {
   value: string;
 }
 
+// API Response interfaces for orders
+export interface ApiOrderItem {
+  id: number;
+  orderId: number;
+  productId: number;
+  productName: string;
+  unitPrice: number;
+  quantity: number;
+  subTotal: number;
+  taxAmount: number;
+  discountAmount: number;
+  totalAmount: number;
+  notes?: string;
+}
+
+export interface ApiOrder {
+  id: number;
+  orderNumber: string;
+  customerId: number;
+  customerName?: string;
+  customerPhone?: string;
+  customerEmail?: string;
+  subTotal: number;
+  taxAmount: number;
+  discountAmount: number;
+  totalAmount: number;
+  paymentMethod: string;
+  paymentStatus: string;
+  orderStatus: string;
+  notes: string;
+  orderDate: string;
+  completedDate?: string;
+  createdAt: string;
+  updatedAt: string;
+  orderItems: ApiOrderItem[];
+}
+
+export interface ApiOrderResponse {
+  items: ApiOrder[];
+  totalCount: number;
+}
 
 
   

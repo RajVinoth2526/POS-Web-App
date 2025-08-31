@@ -1,4 +1,4 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit, Input, OnChanges, SimpleChanges } from '@angular/core';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { ApiResponse, Cart, CartItem, Filter } from 'src/app/model/system.model';
 import { OrderService } from 'src/app/service/order.service';
@@ -14,7 +14,11 @@ import { Router } from '@angular/router';
   templateUrl: './view-orders.component.html',
   styleUrls: ['./view-orders.component.css']
 })
-export class ViewOrdersComponent implements OnInit, OnDestroy {
+export class ViewOrdersComponent implements OnInit, OnDestroy, OnChanges {
+  @Input() filteredOrders: Cart[] = [];
+  @Input() dateFilter: Filter | null = null;
+  @Input() hideDatePicker: boolean = false;
+  
   searchQuery: string = '';
   filteredProducts: any[] = [];
   searchType: string = ''; // default to 'name'
@@ -23,6 +27,14 @@ export class ViewOrdersComponent implements OnInit, OnDestroy {
   currency: string = '';
   searchInput$ = new Subject<string>();
   private destroy$ = new Subject<void>();
+  
+  // Pagination properties
+  totalCount: number = 0;
+  filter: Filter = {
+    pageNumber: 1,
+    pageSize: 10,
+    name: ''
+  };
 
   constructor(private orderService: OrderService,
     private spinnerService: NgxSpinnerService,
@@ -35,6 +47,19 @@ export class ViewOrdersComponent implements OnInit, OnDestroy {
 
   // Order details array
   ngOnInit(): void {
+    this.currency = this.systemService.getCurrencyValue() ?? '';
+    
+    // Check if we have filtered orders from parent component
+    if (this.filteredOrders && this.filteredOrders.length > 0) {
+      this.carts = this.filteredOrders;
+      this.totalCount = this.filteredOrders.length;
+      return; // Skip normal initialization if using filtered orders
+    }
+    
+    // Check if we have a date filter from parent component
+    if (this.dateFilter) {
+      this.filter = { ...this.dateFilter };
+    }
 
     this.searchInput$
       .pipe(
@@ -42,19 +67,10 @@ export class ViewOrdersComponent implements OnInit, OnDestroy {
         distinctUntilChanged(),
         takeUntil(this.destroy$),
         switchMap((query: string) => {
-          const filter: any = {};
+          // Update filter with search parameters
+          this.updateFilterWithSearch(query);
 
-          if (this.searchType === 'id' && query) {
-            filter['orderId'] = query;
-          } else if (this.searchType === 'date' && query) {
-            filter['cartDate'] = query;
-          } else if (query && this.isNumeric(query)) {
-            filter['orderId'] = query;
-          }
-
-          const observable = !query
-            ? this.orderService.getAllOrders()
-            : this.orderService.getAllOrders(filter);
+          const observable = this.orderService.getAllOrders(this.filter);
 
           this.spinnerService.show();
           return observable;
@@ -64,25 +80,47 @@ export class ViewOrdersComponent implements OnInit, OnDestroy {
         next: (response: ApiResponse<any[]>) => {
           this.spinnerService.hide();
           this.carts = response.data ?? [];
+          this.totalCount = response.totalCount ?? 0;
         },
         error: () => {
           this.spinnerService.hide();
         }
       });
 
-    this.currency = this.systemService.getCurrencyValue() ?? '';
-    this.getOrder();
+    // Initial data load - only if we don't have filtered orders
+    if (!this.filteredOrders || this.filteredOrders.length === 0) {
+      this.getOrder();
+    }
   }
 
   getOrder() {
     this.spinnerService.show();
-    this.orderService.getAllOrders().subscribe((response: any) => {
+    this.orderService.getAllOrders(this.filter).subscribe((response: any) => {
       const typedResponse = response as ApiResponse<Cart[]>;
       this.spinnerService.hide();
+      console.log('Orders response:', typedResponse);
+      console.log('Orders data:', typedResponse.data);
       this.carts = typedResponse.data ?? [];
+      this.totalCount = typedResponse.totalCount ?? 0;
+      console.log('Carts after assignment:', this.carts);
+      console.log('Total count:', this.totalCount);
     }, (error: any) => {
       this.spinnerService.hide();
+      console.error('Error fetching orders:', error);
     });
+  }
+
+  ngOnChanges(changes: SimpleChanges): void {
+    // Handle changes to filteredOrders input
+    if (changes['filteredOrders']) {
+      if (changes['filteredOrders'].currentValue && changes['filteredOrders'].currentValue.length > 0) {
+        this.carts = changes['filteredOrders'].currentValue;
+        this.totalCount = changes['filteredOrders'].currentValue.length;
+      } else {
+        this.carts = [];
+        this.totalCount = 0;
+      }
+    }
   }
 
   ngOnDestroy(): void {
@@ -90,9 +128,37 @@ export class ViewOrdersComponent implements OnInit, OnDestroy {
     this.destroy$.complete();
   }
 
+  updateFilterWithSearch(query: string) {
+    // Reset pagination when searching
+    this.filter.pageNumber = 1;
+    
+    // Clear previous search filters
+    delete this.filter.orderNumber;
+    delete this.filter.orderStartDate;
+    delete this.filter.orderEndDate;
+    delete this.filter.orderDate;
+
+    if (this.searchType === 'id' && query) {
+      this.filter.orderNumber = query;
+    } else if (this.searchType === 'date' && query) {
+      // Create start and end time for the selected date
+      this.filter.orderStartDate = `${query}T00:00:00.000Z`;  // Start of day in UTC
+      this.filter.orderEndDate = `${query}T23:59:59.999Z`;    // End of day in UTC
+    } else if (query) {
+      this.filter.orderNumber = query;
+    }
+  }
+
+  onPageChange(event: { pageNumber: number, pageSize: number }) {
+    this.filter.pageNumber = event.pageNumber;
+    this.filter.pageSize = event.pageSize;
+    this.getOrder();
+  }
+
   clearSearch(): void {
     this.searchQuery = '';
     this.searchType = ''; // Reset to default search type
+    this.filter.pageNumber = 1; // Reset to first page
     this.onSearch();
   }
 
@@ -136,8 +202,7 @@ export class ViewOrdersComponent implements OnInit, OnDestroy {
 
 
   viewProduct(cartItem: CartItem) {
-    this.router.navigate(['/edit-product', cartItem.product.id]);
-
+    this.router.navigate(['/edit-product', cartItem.productId || cartItem.product.id]);
   }
 
 }

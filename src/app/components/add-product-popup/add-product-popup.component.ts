@@ -51,6 +51,7 @@ export class AddProductPopupComponent implements OnInit {
 
   addProduct() {
     this.cartItem.product = this.data.product;
+    this.cartItem.productId = this.data.product.id; // Add product ID
     this.cartItem.name = this.data.product.name;
     this.cartItem.price = this.data.product.price;
     this.cartItem.tax = this.data.product.taxRate ? (this.data.product.taxRate/100)*this.data.product.price : 0;
