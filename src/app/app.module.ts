@@ -34,6 +34,7 @@ import { SliderComponent } from './components/slider/slider.component';
 import { AddProductPopupComponent } from './components/add-product-popup/add-product-popup.component';
 import { PaginationComponent } from './components/pagination/pagination.component';
 import { SalesAnalysisComponent } from './components/sales-analysis/sales-analysis.component';
+import { FloatingHomeButtonComponent } from './components/floating-home-button/floating-home-button.component';
 // import { NgChartsModule } from 'ng2-charts';
 @NgModule({
   declarations: [
@@ -52,7 +53,8 @@ import { SalesAnalysisComponent } from './components/sales-analysis/sales-analys
     SliderComponent,
     AddProductPopupComponent,
     PaginationComponent,
-    SalesAnalysisComponent
+    SalesAnalysisComponent,
+    FloatingHomeButtonComponent
   ],
   imports: [
     BrowserModule,
