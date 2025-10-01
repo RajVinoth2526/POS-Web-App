@@ -1,3 +1,13 @@
+/* CSS Custom Properties for Theme Colors */
+:root {
+  --primary-color: #3b82f6;
+  --secondary-color: #1d4ed8;
+  --background-color: #ffffff;
+  --background-color-light: #f8fafc;
+  --primary-color-shadow: rgba(59, 130, 246, 0.2);
+  --font-style: 'Inter', sans-serif;
+}
+
 /* Ensure body and html take up the full height of the page */
 html,
 body {
@@ -6,7 +16,123 @@ body {
     display: flex;
     flex-direction: column;
     background-color: var(--background-color, #f0f0f0); /* fallback if variable not set */
-    font-family: var(--theme-font-family);
+    font-family: var(--theme-font-family, "Segoe UI", sans-serif) !important;
+}
+
+/* Ensure all elements inherit the theme font */
+* {
+    font-family: inherit !important;
+}
+
+/* Specific overrides for elements that need different fonts */
+input, textarea, select {
+    font-family: var(--theme-font-family, "Segoe UI", sans-serif) !important;
+}
+
+button, .btn {
+    font-family: var(--theme-font-family, "Segoe UI", sans-serif) !important;
+}
+
+/* Ensure all Angular components inherit the theme font */
+app-dashboard,
+app-sales-order,
+app-add-product,
+app-settings,
+app-view-products,
+app-view-orders,
+app-sales-analysis,
+app-inventory-management,
+app-user-management,
+app-cart,
+app-header,
+app-footer,
+app-login {
+    font-family: var(--theme-font-family, "Segoe UI", sans-serif) !important;
+}
+
+/* Ensure all child elements inherit the font */
+app-dashboard *,
+app-sales-order *,
+app-add-product *,
+app-settings *,
+app-view-products *,
+app-view-orders *,
+app-sales-analysis *,
+app-inventory-management *,
+app-user-management *,
+app-cart *,
+app-header *,
+app-footer *,
+app-login * {
+    font-family: inherit !important;
+}
+
+/* Additional font inheritance rules for common elements */
+h1, h2, h3, h4, h5, h6 {
+    font-family: var(--theme-font-family, "Segoe UI", sans-serif) !important;
+}
+
+p, span, div, a, label {
+    font-family: inherit !important;
+}
+
+/* Override any Bootstrap or framework font declarations */
+.form-control, .form-select, .form-check-label, .nav-link, .dropdown-item {
+    font-family: var(--theme-font-family, "Segoe UI", sans-serif) !important;
+}
+
+/* Debug helper - you can remove this after testing */
+body::after {
+    content: "Current font: " attr(data-font);
+    position: fixed;
+    bottom: 10px;
+    right: 10px;
+    background: rgba(0,0,0,0.8);
+    color: white;
+    padding: 5px 10px;
+    border-radius: 5px;
+    font-size: 12px;
+    z-index: 9999;
+    display: block; /* Set to block temporarily to debug */
+}
+
+/* Icon display fixes */
+.fas, .far, .fab, .fa {
+    font-family: "Font Awesome 6 Free", "Font Awesome 6 Pro", "Font Awesome 5 Free", "Font Awesome 5 Pro" !important;
+    font-weight: 900;
+    display: inline-block;
+    font-style: normal;
+    font-variant: normal;
+    text-rendering: auto;
+    line-height: 1;
+}
+
+.far {
+    font-weight: 400;
+}
+
+.fab {
+    font-family: "Font Awesome 6 Brands", "Font Awesome 5 Brands" !important;
+    font-weight: 400;
+}
+
+/* Bootstrap Icons */
+.bi {
+    font-family: "bootstrap-icons" !important;
+    font-style: normal;
+    font-variant: normal;
+    text-rendering: auto;
+    line-height: 1;
+}
+
+/* Ensure icons display properly */
+.fa-spin {
+    animation: fa-spin 2s infinite linear;
+}
+
+@keyframes fa-spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
 }
 
 /* Main container to handle the layout */
@@ -24,9 +150,14 @@ app-sales-order,
 app-add-product,
 app-settings,
 app-view-products,
-app-view-orders {
+app-view-orders,
+app-sales-analysis,
+app-inventory-management,
+app-user-management {
     flex: 1;
     overflow: hidden;
+    padding-top: 80px; /* Add padding to prevent content from being hidden behind fixed header */
+    padding-bottom: 80px; /* Add padding to prevent content from being hidden behind fixed footer */
 }
 
 /* Footer styles */
@@ -130,6 +261,29 @@ html {
     --secondary-color: #000000;
     --background-color: #f0f0f0;
     --theme-font-family: "Segoe UI", sans-serif;
+    
+    /* RGB values for better gradient support */
+    --primary-color-rgb: 255, 255, 255;
+    --secondary-color-rgb: 0, 0, 0;
+    
+    /* Modern color palette */
+    --success-color: #28a745;
+    --warning-color: #ffc107;
+    --danger-color: #dc3545;
+    --info-color: #17a2b8;
+    
+    /* Shadow variables */
+    --shadow-sm: 0 2px 4px rgba(0, 0, 0, 0.1);
+    --shadow-md: 0 4px 20px rgba(0, 0, 0, 0.1);
+    --shadow-lg: 0 20px 40px rgba(0, 0, 0, 0.1);
+    --shadow-xl: 0 25px 50px rgba(0, 0, 0, 0.15);
+    
+    /* Border radius variables */
+    --radius-sm: 8px;
+    --radius-md: 12px;
+    --radius-lg: 16px;
+    --radius-xl: 20px;
+    --radius-full: 50px;
   }
 
 /* Set global button styles */
@@ -200,4 +354,200 @@ button:hover {
 
 .cdk-overlay-container {
   z-index: 2000 !important; /* or higher if needed */
+}
+
+/* Add Product Dialog Styling */
+.add-product-dialog .mat-dialog-container {
+  padding: 0 !important;
+  border-radius: 20px !important;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3) !important;
+  overflow: hidden !important;
+}
+
+.add-product-dialog .cdk-overlay-backdrop {
+  background: rgba(0, 0, 0, 0.5) !important;
+  backdrop-filter: blur(4px) !important;
+}
+
+/* Modern Global Enhancements */
+* {
+  box-sizing: border-box;
+}
+
+body {
+  font-family: var(--theme-font-family, "Segoe UI", sans-serif);
+  line-height: 1.6;
+  color: var(--secondary-color, #2c3e50);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* Enhanced button styles */
+.btn {
+  border-radius: var(--radius-md, 12px);
+  font-weight: 600;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  box-shadow: var(--shadow-sm, 0 2px 4px rgba(0, 0, 0, 0.1));
+  border: none;
+  position: relative;
+  overflow: hidden;
+}
+
+.btn:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-md, 0 4px 20px rgba(0, 0, 0, 0.1));
+}
+
+.btn:active {
+  transform: translateY(0);
+  box-shadow: var(--shadow-sm, 0 2px 4px rgba(0, 0, 0, 0.1));
+}
+
+/* Enhanced card styles */
+.card {
+  border: none;
+  border-radius: var(--radius-lg, 16px);
+  box-shadow: var(--shadow-md, 0 4px 20px rgba(0, 0, 0, 0.1));
+  transition: all 0.3s ease;
+  background: rgba(255, 255, 255, 0.95);
+  backdrop-filter: blur(10px);
+}
+
+.card:hover {
+  transform: translateY(-4px);
+  box-shadow: var(--shadow-lg, 0 20px 40px rgba(0, 0, 0, 0.1));
+}
+
+/* Enhanced form controls */
+.form-control {
+  border-radius: var(--radius-md, 12px);
+  border: 2px solid rgba(var(--primary-color-rgb, 0, 123, 255), 0.2);
+  transition: all 0.3s ease;
+  background: rgba(255, 255, 255, 0.9);
+  backdrop-filter: blur(10px);
+}
+
+.form-control:focus {
+  border-color: var(--primary-color, #007bff);
+  box-shadow: 0 0 0 0.2rem rgba(var(--primary-color-rgb, 0, 123, 255), 0.25);
+  background: white;
+}
+
+/* Enhanced table styles */
+.table {
+  border-radius: var(--radius-lg, 16px);
+  overflow: hidden;
+  box-shadow: var(--shadow-md, 0 4px 20px rgba(0, 0, 0, 0.1));
+}
+
+.table thead th {
+  background: linear-gradient(135deg, var(--primary-color, #007bff) 0%, #0056b3 100%);
+  color: white;
+  font-weight: 600;
+  text-transform: uppercase;
+  font-size: 0.8rem;
+  letter-spacing: 0.5px;
+  border: none;
+}
+
+.table tbody tr {
+  transition: all 0.2s ease;
+}
+
+.table tbody tr:hover {
+  background: linear-gradient(135deg, rgba(var(--primary-color-rgb, 0, 123, 255), 0.05) 0%, transparent 100%);
+}
+
+/* Enhanced scrollbar styles - Global Theme Colors */
+::-webkit-scrollbar {
+  width: 8px !important;
+  height: 8px !important;
+}
+
+::-webkit-scrollbar-track {
+  background: rgba(var(--primary-color-rgb, 0, 123, 255), 0.05) !important;
+  border-radius: 10px !important;
+}
+
+::-webkit-scrollbar-thumb {
+  background: linear-gradient(135deg, var(--primary-color, #007bff) 0%, var(--secondary-color, #0056b3) 100%) !important;
+  border-radius: 10px !important;
+  transition: all 0.3s ease !important;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: linear-gradient(135deg, var(--secondary-color, #0056b3) 0%, var(--primary-color, #007bff) 100%) !important;
+  transform: scale(1.1) !important;
+}
+
+/* Enhanced animations */
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes slideInUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes slideInLeft {
+  from {
+    opacity: 0;
+    transform: translateX(-30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes slideInRight {
+  from {
+    opacity: 0;
+    transform: translateX(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+/* Utility classes */
+.animate-fade-in {
+  animation: fadeIn 0.6s ease-out;
+}
+
+.animate-slide-up {
+  animation: slideInUp 0.6s ease-out;
+}
+
+.animate-slide-left {
+  animation: slideInLeft 0.6s ease-out;
+}
+
+.animate-slide-right {
+  animation: slideInRight 0.6s ease-out;
+}
+
+/* Glass morphism effect */
+.glass {
+  background: rgba(255, 255, 255, 0.25);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.37);
+}
+
+/* Gradient text */
+.gradient-text {
+  background: linear-gradient(135deg, var(--primary-color, #007bff) 0%, #0056b3 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
 }

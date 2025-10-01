@@ -1,62 +1,111 @@
-<!-- Backdrop -->
-<div class="popup-backdrop" (click)="cancel()"></div>
-
 <!-- Popup Content -->
-<div class="popup-container p-0">
-    <div class="d-flex justify-content-between align-items-center mb-3">
-        <h1 class="mb-0">Add Product</h1>
-        <button class="btn-close" (click)="cancel()"></button>
+<div class="popup-container">
+    <div class="popup-header">
+        <h1>Add Product</h1>
+        <button class="btn-close" (click)="cancel()" aria-label="Close">
+            <i class="fas fa-times"></i>
+        </button>
     </div>
-    <hr class="border border-dark border-1 opacity-50 my-3">
 
 
-    <div class="row align-items-center g-5" style="padding-top: 10px !important;">
-        <!-- Product Image -->
-        <div class="col-12 col-sm-2 text-center">
-            <img [src]="data.product.image" alt="Product" class="img-fluid" style="max-height: 80px;">
-        </div>
-
-        <!-- Product Info -->
-        <div class="col-12 col-sm-3">
-            <h5 class="mb-1">{{ data.product.name }}</h5>
-
-            <p class="text-muted mb-0">Unit Price: {{currency}}{{ data.product.price }}</p>
-
-        </div>
-
-        <!-- Quantity Controls -->
-        <div *ngIf="!data.product.isPartialAllowed"
-            class="col-12 col-sm-4 d-flex align-items-center justify-content-center gap-2 flex-wrap">
-            <label class="me-2 mb-0">Quantity</label>
-            <input type="number" class="form-control mx-2 text-center" style="width: 60px; appearance: textfield;"
-                [(ngModel)]="quantity" (ngModelChange)="validateQuantity()" min="1">
-        </div>
-
-        <!-- Conditional weight input -->
-        <div class="col-12 col-sm-3" *ngIf="data.product.isPartialAllowed">
-            <label>Weight ({{data.product.unit}}):</label>
-            <input type="number" [(ngModel)]="cartItem.size" class="form-control form-control-sm" min="1" (ngModelChange)="onSizeChange($event)"
-                placeholder="e.g. 200">
-        </div>
-
-        <!-- Total Price -->
-        <div class="col-12 col-sm-3 text-start">
-            <!-- If partial sale is allowed, show input for unit price -->
-            <div *ngIf="data.product.isPartialAllowed; else readonlyPrice">
-                <label>Total Price {{currency}} :</label>
-                <input type="number" [(ngModel)]="cartItem.total" (ngModelChange)="onPriceChange($event)"
-                    class="form-control form-control-sm" min="0">
+    <div class="popup-content">
+        <div class="product-info-section">
+            <!-- Product Image -->
+            <div class="product-image">
+                <img [src]="data.product.image" alt="Product" class="product-img">
             </div>
-            <!-- Readonly price if partial sale not allowed -->
-            <ng-template #readonlyPrice>
-                <p class="text-muted mb-0">Total: {{currency}} {{ totalPrice }}</p>
-            </ng-template>
+
+            <!-- Product Info -->
+            <div class="product-details">
+                <h5>{{ data.product.name }}</h5>
+                <p class="unit-price" *ngIf="!data.product.isPartialAllowed">
+                  Unit Price: {{currency}}{{ data.product.price }}
+                </p>
+                <p class="unit-price" *ngIf="data.product.isPartialAllowed">
+                  {{data.product.unitValue}}{{data.product.unit}} for {{currency}}{{ data.product.price }}
+                </p>
+            </div>
+        </div>
+
+        <!-- Input Controls Section -->
+        <div class="input-controls-section">
+            <!-- Quantity Controls -->
+            <div *ngIf="!data.product.isPartialAllowed" class="quantity-control">
+                <label>Quantity</label>
+                <div class="input-with-buttons">
+                    <button type="button" class="btn btn-outline-secondary btn-sm" (click)="decrease()" title="Decrease">
+                        <i class="fas fa-minus"></i>
+                    </button>
+                    <input type="number" 
+                           class="form-control quantity-input" 
+                           [(ngModel)]="quantity" 
+                           (ngModelChange)="validateQuantity()" 
+                           min="1">
+                    <button type="button" class="btn btn-outline-secondary btn-sm" (click)="increase()" title="Increase">
+                        <i class="fas fa-plus"></i>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Weight/Volume Input -->
+            <div *ngIf="data.product.isPartialAllowed" class="size-control">
+                <label>{{ getUnitLabel() }} ({{data.product.unit}})</label>
+                <div class="input-with-buttons">
+                    <button type="button" class="btn btn-outline-secondary btn-sm" (click)="decreaseSize()" title="Decrease">
+                        <i class="fas fa-minus"></i>
+                    </button>
+                    <input type="number" 
+                           [(ngModel)]="cartItem.size" 
+                           class="form-control" 
+                           min="0.01" 
+                           step="0.01"
+                           (ngModelChange)="onSizeChange($event)"
+                           placeholder="e.g. 200">
+                    <button type="button" class="btn btn-outline-secondary btn-sm" (click)="increaseSize()" title="Increase">
+                        <i class="fas fa-plus"></i>
+                    </button>
+                </div>
+                <small class="text-muted">
+                  Original package: {{data.product.unitValue}}{{data.product.unit}}
+                </small>
+            </div>
+
+            <!-- Total Price -->
+            <div class="price-control">
+                <!-- If partial sale is allowed, show input for unit price -->
+                <div *ngIf="data.product.isPartialAllowed; else readonlyPrice">
+                    <label>Total Price {{currency}}</label>
+                    <div class="input-with-buttons">
+                        <button type="button" class="btn btn-outline-secondary btn-sm" (click)="decreasePrice()" title="Decrease">
+                            <i class="fas fa-minus"></i>
+                        </button>
+                        <input type="number" 
+                               [(ngModel)]="cartItem.total" 
+                               (ngModelChange)="onPriceChange($event)"
+                               class="form-control" 
+                               min="0.01"
+                               step="0.01"
+                               placeholder="0.00">
+                        <button type="button" class="btn btn-outline-secondary btn-sm" (click)="increasePrice()" title="Increase">
+                            <i class="fas fa-plus"></i>
+                        </button>
+                    </div>
+                    <small class="price-per-unit">
+                      Rate: {{currency}}{{ getPricePerUnit().toFixed(2) }} per {{data.product.unit}}
+                    </small>
+                </div>
+                <!-- Readonly price if partial sale not allowed -->
+                <ng-template #readonlyPrice>
+                    <label>Total Price</label>
+                    <div class="total-price-display">{{currency}} {{ totalPrice }}</div>
+                </ng-template>
+            </div>
         </div>
     </div>
 
 
-    <div class="d-flex justify-content-end mt-3">
-        <button class="btn btn-outline-secondary me-2" (click)="cancel()">Cancel</button>
-        <button class="btn btn-primary" (click)="addProduct()">Add</button>
+    <div class="popup-footer">
+        <button class="btn btn-outline-secondary" (click)="cancel()">Cancel</button>
+        <button class="btn btn-primary" (click)="addProduct()">Add to Cart</button>
     </div>
 </div>

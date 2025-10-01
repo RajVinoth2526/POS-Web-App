@@ -61,13 +61,13 @@ export class SalesAnalysisComponent implements OnInit, OnDestroy {
   ngOnInit(): void {
     this.currency = this.systemService.getCurrencyValue() ?? '';
     
-    // Set default date range (last 30 days)
-    const endDate = new Date();
-    const startDate = new Date();
-    startDate.setDate(startDate.getDate() - 30);
+    // Set default date range (today to tomorrow)
+    const today = new Date();
+    const tomorrow = new Date();
+    tomorrow.setDate(tomorrow.getDate() + 1);
     
-    this.endDate = endDate.toISOString().split('T')[0];
-    this.startDate = startDate.toISOString().split('T')[0];
+    this.startDate = today.toISOString().split('T')[0];
+    this.endDate = tomorrow.toISOString().split('T')[0];
     
     // Load initial data
     this.loadSalesAnalysis();

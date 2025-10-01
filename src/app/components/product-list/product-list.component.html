@@ -1,15 +1,26 @@
-<div class="container my-4">
-  <h3 class="mb-4 text-center pos-text">🛒 Products</h3>
+<div class="container my-2">
+  <!-- Only show title and search when NOT in product views -->
+  <div *ngIf="!isFromProductViews">
+    <h3 class="mb-2 text-center pos-text">🛒 Products</h3>
 
-  <div class="row justify-content-center mb-4">
-    <div class="col-md-6 position-relative">
-      <input [type]="'text'" class="form-control rounded-pill px-4 pe-5" [placeholder]="'🔍 Search here ....'"
-        [(ngModel)]="searchQuery" (input)="onSearch()" />
+    <div class="row justify-content-center mb-2">
+      <div class="col-md-5 position-relative">
+        <input [type]="'text'" class="form-control rounded-pill px-4 pe-5" [placeholder]="'🔍 Search here ....'"
+          [(ngModel)]="searchQuery" (input)="onSearch()" />
 
-      <button class="btn btn-sm btn-link text-danger position-absolute top-50 end-0 translate-middle-y me-3"
-        (click)="clearSearch()" style="text-decoration: none;">
-        ✖
-      </button>
+        <button class="btn btn-sm btn-link text-danger position-absolute top-50 end-0 translate-middle-y me-3"
+          (click)="clearSearch()" style="text-decoration: none;">
+          ✖
+        </button>
+      </div>
+      <div class="col-md-3">
+        <select class="form-control rounded-pill px-3" [(ngModel)]="selectedCategory" (change)="onCategoryFilter()">
+          <option value="">All Categories</option>
+          <option *ngFor="let category of categories" [value]="category.value">
+            {{ category.label }}
+          </option>
+        </select>
+      </div>
     </div>
   </div>
 
@@ -27,10 +38,20 @@
               {{currency}}{{ product.price.toFixed(2) }}({{ product.unitValue}}{{product.unit}})</p>
             <p *ngIf=" !product.unitValue || !product.unit" class="text-muted" style="font-size: 15px !important;">
               {{currency}}{{ product.price.toFixed(2) }}</p>
-            <button class="btn btn-outline-primary rounded-pill px-2 custom-btn-style"
+            <button *ngIf="!isFromProductViews" class="btn btn-outline-primary rounded-pill px-2 custom-btn-style"
               style="font-size: 0.9vw !important;" (click)="addToCart(product)">
               Add to Cart
             </button>
+            <div *ngIf="isFromProductViews" class="d-flex justify-content-center gap-2 flex-wrap">
+              <button class="btn btn-outline-primary btn-sm rounded-pill px-3 custom-btn-style"
+                (click)="editProduct(product.id)">
+                View
+              </button>
+              <button class="btn btn-outline-danger btn-sm rounded-pill px-3 custom-btn-style"
+                (click)="OnDelete(product.id)">
+                Delete
+              </button>
+            </div>
           </div>
         </div>
       </div>
@@ -51,21 +72,21 @@
       <table class="table table-hover sticky-top align-middle text-center mb-0">
         <thead>
           <tr>
-            <th style="text-align: left !important; background-color: var(--primary-color); color: white;">Product Name
+            <th style="text-align: left !important; background: linear-gradient(135deg, var(--primary-color, #007bff) 0%, var(--secondary-color, #0056b3) 100%); color: white;">Product Name
             </th>
-            <th style="text-align: left !important; background-color: var(--primary-color); color: white;">Description
+            <th style="text-align: left !important; background: linear-gradient(135deg, var(--primary-color, #007bff) 0%, var(--secondary-color, #0056b3) 100%); color: white;">Description
             </th>
-            <th style="text-align: left !important; background-color: var(--primary-color); color: white;">Unit Price
-            </th>
-            <th *ngIf="isFromProductViews"
-              style="text-align: left !important; background-color: var(--primary-color); color: white;">Available Stock
+            <th style="text-align: left !important; background: linear-gradient(135deg, var(--primary-color, #007bff) 0%, var(--secondary-color, #0056b3) 100%); color: white;">Unit Price
             </th>
             <th *ngIf="isFromProductViews"
-              style="text-align: left !important; background-color: var(--primary-color); color: white;">ManufactureDate
+              style="text-align: left !important; background: linear-gradient(135deg, var(--primary-color, #007bff) 0%, var(--secondary-color, #0056b3) 100%); color: white;">Available Stock
             </th>
             <th *ngIf="isFromProductViews"
-              style="text-align: left !important; background-color: var(--primary-color); color: white;">expiryDate</th>
-            <th style="text-align: left !important; background-color: var(--primary-color); color: white;">Add to Cart
+              style="text-align: left !important; background: linear-gradient(135deg, var(--primary-color, #007bff) 0%, var(--secondary-color, #0056b3) 100%); color: white;">ManufactureDate
+            </th>
+            <th *ngIf="isFromProductViews"
+              style="text-align: left !important; background: linear-gradient(135deg, var(--primary-color, #007bff) 0%, var(--secondary-color, #0056b3) 100%); color: white;">expiryDate</th>
+            <th style="text-align: left !important; background: linear-gradient(135deg, var(--primary-color, #007bff) 0%, var(--secondary-color, #0056b3) 100%); color: white;">Add to Cart
             </th>
           </tr>
         </thead>

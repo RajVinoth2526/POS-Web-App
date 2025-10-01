@@ -1,12 +1,17 @@
 <!-- app.component.html -->
 <div class="app-container">
-  <app-header  (toggle)="isSidebarOpen = !isSidebarOpen"></app-header>
-  <app-slider [isOpen]="isSidebarOpen" (close)="toggleSidebar()"></app-slider>
-  <router-outlet></router-outlet>
-  <app-footer></app-footer>
+  <!-- Header and navigation only for authenticated pages -->
+  <app-header *ngIf="!isAuthPage" (toggle)="isSidebarOpen = !isSidebarOpen"></app-header>
+  <app-slider *ngIf="!isAuthPage" [isOpen]="isSidebarOpen" (close)="toggleSidebar()"></app-slider>
   
-  <!-- Floating Home Button -->
-  <app-floating-home-button></app-floating-home-button>
+  <!-- Main content -->
+  <router-outlet></router-outlet>
+  
+  <!-- Footer only for authenticated pages -->
+  <app-footer *ngIf="!isAuthPage"></app-footer>
+  
+  <!-- Floating Home Button only for authenticated pages -->
+  <app-floating-home-button *ngIf="!isAuthPage"></app-floating-home-button>
 </div>
 <ngx-spinner
   bdColor="rgba(51,51,51,0.8)"

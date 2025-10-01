@@ -11,7 +11,8 @@ import { HeaderComponent } from './components/header/header.component';
 import { FooterComponent } from './components/footer/footer.component';
 import { AddProductComponent } from './components/add-product/add-product.component';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { HttpClientModule } from '@angular/common/http';
+import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
+import { AuthInterceptor } from './interceptors/auth.interceptor';
 import { SalesOrderComponent } from './components/sales-order/sales-order.component';
 import { SettingsComponent } from './components/settings/settings.component';
 import { NgxSpinnerModule } from 'ngx-spinner';
@@ -23,6 +24,7 @@ import { AngularFirestoreModule } from '@angular/fire/compat/firestore';
 import { environment } from 'src/environments/environment';
 import { AngularFireModule } from '@angular/fire/compat';
 import { ViewOrdersComponent } from './components/view-orders/view-orders.component'; 
+import { DraftsPopupComponent } from './components/drafts-popup/drafts-popup.component';
 import { MatExpansionModule } from '@angular/material/expansion'; // Import MatExpansion
 import { MatSliderModule } from '@angular/material/slider'; // Import MatSlider
 import { MatButtonModule } from '@angular/material/button'; // For buttons
@@ -35,6 +37,12 @@ import { AddProductPopupComponent } from './components/add-product-popup/add-pro
 import { PaginationComponent } from './components/pagination/pagination.component';
 import { SalesAnalysisComponent } from './components/sales-analysis/sales-analysis.component';
 import { FloatingHomeButtonComponent } from './components/floating-home-button/floating-home-button.component';
+import { InventoryManagementComponent } from './components/inventory-management/inventory-management.component';
+import { UserManagementComponent } from './components/user-management/user-management.component';
+import { AddUserComponent } from './components/add-user/add-user.component';
+import { LoginComponent } from './components/login/login.component';
+import { PasswordResetComponent } from './components/password-reset/password-reset.component';
+import { UserProfileComponent } from './components/user-profile/user-profile.component';
 // import { NgChartsModule } from 'ng2-charts';
 @NgModule({
   declarations: [
@@ -54,7 +62,14 @@ import { FloatingHomeButtonComponent } from './components/floating-home-button/f
     AddProductPopupComponent,
     PaginationComponent,
     SalesAnalysisComponent,
-    FloatingHomeButtonComponent
+    FloatingHomeButtonComponent,
+    InventoryManagementComponent,
+    UserManagementComponent,
+    AddUserComponent,
+    LoginComponent,
+    PasswordResetComponent,
+    UserProfileComponent,
+    DraftsPopupComponent,
   ],
   imports: [
     BrowserModule,
@@ -78,7 +93,13 @@ import { FloatingHomeButtonComponent } from './components/floating-home-button/f
     AngularFirestoreModule, // For Firestore
     AngularFirestoreModule.enablePersistence(), 
   ],
-  providers: [],
+  providers: [
+    {
+      provide: HTTP_INTERCEPTORS,
+      useClass: AuthInterceptor,
+      multi: true
+    }
+  ],
   bootstrap: [AppComponent]
 })
 export class AppModule {

@@ -1,0 +1,184 @@
+<div class="drafts-popup">
+  <!-- Header -->
+  <div class="d-flex justify-content-between align-items-center mb-4">
+    <h4 class="mb-0 text-primary">
+      <i class="fas fa-file-alt me-2"></i>
+      Draft Orders
+    </h4>
+    <button type="button" class="btn-close" (click)="closeDialog()" aria-label="Close"></button>
+  </div>
+
+  <!-- Loading State -->
+  <div *ngIf="isLoading" class="text-center py-4">
+    <div class="spinner-border text-primary" role="status">
+      <span class="visually-hidden">Loading...</span>
+    </div>
+    <p class="mt-2 text-muted">Loading draft orders...</p>
+  </div>
+
+  <!-- No Drafts Message -->
+  <div *ngIf="!isLoading && drafts.length === 0" class="text-center py-5">
+    <i class="fas fa-file-alt fa-3x text-muted mb-3"></i>
+    <h5 class="text-muted">No Draft Orders Found</h5>
+    <p class="text-muted">You don't have any draft orders at the moment.</p>
+  </div>
+
+  <!-- Drafts List -->
+  <div *ngIf="!isLoading && drafts.length > 0" class="drafts-list">
+    <!-- Summary -->
+    <div class="d-flex justify-content-between align-items-center mb-3">
+      <span class="text-muted">
+        Showing {{ drafts.length }} of {{ totalCount }} draft orders
+      </span>
+      <span class="badge bg-primary">{{ totalCount }} Total</span>
+    </div>
+
+    <!-- Draft Orders Expansion Panels -->
+    <div class="drafts-expansion-list">
+      <mat-accordion>
+        <mat-expansion-panel *ngFor="let draft of filteredDrafts" class="draft-panel">
+          <mat-expansion-panel-header>
+            <mat-panel-title>
+              <div class="d-flex justify-content-between align-items-center w-100">
+                <div class="d-flex align-items-center gap-3">
+                  <strong class="text-primary">#{{ draft.orderId }}</strong>
+                  <span class="badge" [class]="getStatusBadgeClass(draft)">
+                    {{ getStatusText(draft) }}
+                  </span>
+                  <span class="badge bg-info">{{ draft.orderItems?.length || 0 }} items</span>
+                </div>
+                <div class="d-flex align-items-center gap-2">
+                  <strong class="text-success me-3">${{ draft.totalAmount?.toFixed(2) || '0.00' }}</strong>
+                  <small class="text-muted">{{ formatDate(draft.createdAt) }}</small>
+                </div>
+              </div>
+            </mat-panel-title>
+          </mat-expansion-panel-header>
+
+          <!-- Order Items Content -->
+          <div class="order-items-content">
+            <div class="row mb-3">
+              <div class="col-md-6">
+                <h6 class="text-primary mb-2">
+                  <i class="fas fa-list me-2"></i>Order Items
+                </h6>
+              </div>
+              <div class="col-md-6 text-end">
+                <div class="d-flex gap-2 justify-content-end">
+                  <button 
+                    class="btn btn-success btn-sm" 
+                    (click)="restoreDraftToCart(draft)"
+                    title="Restore to Cart"
+                  >
+                    <i class="fas fa-shopping-cart me-1"></i>
+                    Restore to Cart
+                  </button>
+                  <button 
+                    class="btn btn-danger btn-sm" 
+                    (click)="deleteDraft(draft)"
+                    title="Delete Draft"
+                  >
+                    <i class="fas fa-trash me-1"></i>
+                    Delete
+                  </button>
+                </div>
+              </div>
+            </div>
+
+            <!-- Items Table -->
+            <div class="table-responsive">
+              <table class="table table-sm table-striped">
+                <thead class="table-light">
+                  <tr>
+                    <th>Product</th>
+                    <th>Price</th>
+                    <th>Qty</th>
+                    <th>Total</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr *ngFor="let item of draft.orderItems">
+                    <td>
+                      <div class="d-flex align-items-center">
+                        <img 
+                          [src]="item.product?.image || 'assets/images/no-image.png'" 
+                          [alt]="item.name"
+                          class="product-thumb me-2"
+                          style="width: 30px; height: 30px; object-fit: cover; border-radius: 4px;"
+                        >
+                        <span class="fw-medium">{{ item.name }}</span>
+                      </div>
+                    </td>
+                    <td>${{ item.price?.toFixed(2) || '0.00' }}</td>
+                    <td>{{ item.quantity || 0 }}</td>
+                    <td class="fw-bold">${{ item.total?.toFixed(2) || '0.00' }}</td>
+                  </tr>
+                </tbody>
+                <tfoot class="table-light">
+                  <tr>
+                    <th colspan="3" class="text-end">Subtotal:</th>
+                    <th class="text-success">${{ draft.subtotal?.toFixed(2) || '0.00' }}</th>
+                  </tr>
+                  <tr *ngIf="draft.taxAmount && draft.taxAmount > 0">
+                    <th colspan="3" class="text-end">Tax:</th>
+                    <th class="text-warning">${{ draft.taxAmount?.toFixed(2) || '0.00' }}</th>
+                  </tr>
+                  <tr *ngIf="draft.discountAmount && draft.discountAmount > 0">
+                    <th colspan="3" class="text-end">Discount:</th>
+                    <th class="text-danger">-${{ draft.discountAmount?.toFixed(2) || '0.00' }}</th>
+                  </tr>
+                  <tr class="table-primary">
+                    <th colspan="3" class="text-end">Total:</th>
+                    <th class="text-primary">${{ draft.totalAmount?.toFixed(2) || '0.00' }}</th>
+                  </tr>
+                </tfoot>
+              </table>
+            </div>
+
+            <!-- Additional Order Info -->
+            <div class="row mt-3">
+              <div class="col-md-6">
+                <small class="text-muted">
+                  <strong>Created:</strong> {{ formatDate(draft.createdAt) }}
+                </small>
+              </div>
+              <div class="col-md-6 text-end">
+                <small class="text-muted">
+                  <strong>Payment Method:</strong> {{ draft.paymentMethod || 'Cash' }}
+                </small>
+              </div>
+            </div>
+          </div>
+        </mat-expansion-panel>
+      </mat-accordion>
+    </div>
+
+    <!-- Pagination -->
+    <div *ngIf="totalPages > 1" class="d-flex justify-content-center mt-4">
+      <nav aria-label="Drafts pagination">
+        <ul class="pagination">
+          <li class="page-item" [class.disabled]="currentPage === 1">
+            <button class="page-link" (click)="onPageChange(currentPage - 1)" [disabled]="currentPage === 1">
+              <i class="fas fa-chevron-left"></i>
+            </button>
+          </li>
+          
+          <li *ngFor="let page of [].constructor(totalPages); let i = index" 
+              class="page-item" 
+              [class.active]="currentPage === (i + 1)">
+            <button class="page-link" (click)="onPageChange(i + 1)">
+              {{ i + 1 }}
+            </button>
+          </li>
+          
+          <li class="page-item" [class.disabled]="currentPage === totalPages">
+            <button class="page-link" (click)="onPageChange(currentPage + 1)" [disabled]="currentPage === totalPages">
+              <i class="fas fa-chevron-right"></i>
+            </button>
+          </li>
+        </ul>
+      </nav>
+    </div>
+  </div>
+
+</div>

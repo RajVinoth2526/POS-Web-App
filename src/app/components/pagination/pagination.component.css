@@ -1,0 +1,79 @@
+/* Table Width Pagination Component */
+.fixed-pagination {
+  position: relative !important;
+  background: rgba(255, 255, 255, 0.98) !important;
+  backdrop-filter: blur(10px) !important;
+  border: 2px solid var(--primary-color, #007bff) !important;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.15) !important;
+  padding: 1rem !important;
+  margin: 0 auto !important;
+  pointer-events: auto !important;
+  min-height: 60px !important;
+  display: flex !important;
+  align-items: center !important;
+  border-radius: 20px !important;
+  width: 100% !important;
+  transition: all 0.3s ease !important;
+}
+
+.fixed-pagination:hover {
+  transform: translateY(-2px) !important;
+  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.2) !important;
+}
+
+/* Ensure all interactive elements are clickable */
+.fixed-pagination * {
+  pointer-events: auto !important;
+  z-index: inherit !important;
+}
+
+/* Specific button styling for fixed pagination */
+.fixed-pagination .btn {
+  position: relative !important;
+  z-index: 1000 !important;
+  pointer-events: auto !important;
+  cursor: pointer !important;
+  border: 1px solid var(--primary-color, #007bff) !important;
+  background: white !important;
+  color: var(--primary-color, #007bff) !important;
+  transition: all 0.2s ease !important;
+  border-radius: 12px !important;
+}
+
+.fixed-pagination .btn:hover {
+  background: var(--primary-color, #007bff) !important;
+  color: white !important;
+  transform: translateY(-1px) !important;
+}
+
+.fixed-pagination .btn:disabled {
+  opacity: 0.5 !important;
+  cursor: not-allowed !important;
+}
+
+.fixed-pagination .form-select {
+  position: relative !important;
+  z-index: 10000 !important;
+  pointer-events: auto !important;
+  cursor: pointer !important;
+  border: 1px solid var(--primary-color, #007bff) !important;
+  border-radius: 12px !important;
+}
+
+/* Remove fixed pagination padding */
+.modern-products-container {
+  padding-bottom: 0 !important;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .fixed-pagination {
+    padding: 0.75rem !important;
+  }
+}
+
+@media (max-width: 576px) {
+  .fixed-pagination {
+    padding: 0.5rem !important;
+  }
+}

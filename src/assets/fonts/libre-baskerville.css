@@ -1,0 +1,21 @@
+/* Libre Baskerville Font - Downloaded for offline use */
+@font-face {
+  font-family: 'Libre Baskerville';
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url('./libre-baskerville-v14-latin-regular.woff2') format('woff2'),
+       url('./libre-baskerville-v14-latin-regular.woff') format('woff');
+}
+
+@font-face {
+  font-family: 'Libre Baskerville';
+  font-style: normal;
+  font-weight: 700;
+  font-display: swap;
+  src: url('./libre-baskerville-v14-latin-700.woff2') format('woff2'),
+       url('./libre-baskerville-v14-latin-700.woff') format('woff');
+}
+
+
+

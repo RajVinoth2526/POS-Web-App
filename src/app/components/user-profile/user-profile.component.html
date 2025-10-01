@@ -1,0 +1,356 @@
+<div class="user-profile-container">
+  <!-- Modern Header -->
+  <div class="modern-header">
+    <div class="header-content">
+      <div class="header-text">
+        <div class="welcome-icon">
+          <i class="fas fa-user-edit"></i>
+        </div>
+        <h1 class="modern-title">My Profile</h1>
+        <p class="modern-subtitle">
+          Update your personal information and account settings
+        </p>
+      </div>
+      <div class="header-actions">
+        <button class="btn-modern-secondary" (click)="goBack()">
+          <i class="fas fa-arrow-left"></i>
+          <span>Back to Dashboard</span>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modern Form Container -->
+  <div class="modern-form-container">
+    <div class="form-wrapper">
+      
+      <!-- Profile Overview Section -->
+      <div class="profile-overview">
+        <div class="profile-avatar-section">
+          <div class="profile-avatar">
+            <i class="fas fa-user-circle"></i>
+          </div>
+          <div class="profile-info">
+            <h2 class="profile-name">{{ currentUser?.firstName }} {{ currentUser?.lastName }}</h2>
+            <p class="profile-role">{{ currentUser?.role | titlecase }}</p>
+            <p class="profile-email">{{ currentUser?.email }}</p>
+          </div>
+        </div>
+        <div class="profile-stats">
+          <div class="stat-item">
+            <div class="stat-value">{{ currentUser?.username }}</div>
+            <div class="stat-label">Username</div>
+          </div>
+          <div class="stat-item">
+            <div class="stat-value">{{ currentUser?.department || 'N/A' }}</div>
+            <div class="stat-label">Department</div>
+          </div>
+          <div class="stat-item">
+            <div class="stat-value">{{ currentUser?.isActive ? 'Active' : 'Inactive' }}</div>
+            <div class="stat-label">Status</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Form Header -->
+      <div class="form-header">
+        <div class="form-icon">
+          <i class="fas fa-edit"></i>
+        </div>
+        <h2 class="form-title">Update Profile Information</h2>
+        <p class="form-description">
+          Modify your personal details and contact information
+        </p>
+      </div>
+
+      <!-- Modern Form -->
+      <form [formGroup]="profileForm" (ngSubmit)="onSubmit()" class="modern-form">
+        <div class="form-sections">
+          <!-- Personal Information Section -->
+          <div class="form-section">
+            <div class="section-header">
+              <div class="section-icon">
+                <i class="fas fa-user"></i>
+              </div>
+              <h3 class="section-title">Personal Information</h3>
+            </div>
+            <div class="form-grid">
+              <!-- First Name Field -->
+              <div class="form-field">
+                <label for="firstName" class="field-label">
+                  <i class="fas fa-user field-icon"></i>
+                  First Name
+                  <span class="required">*</span>
+                </label>
+                <div class="input-container">
+                  <input
+                    type="text"
+                    id="firstName"
+                    formControlName="firstName"
+                    [class]="getFieldClasses(profileForm.get('firstName'))"
+                    placeholder="Enter your first name"
+                    maxlength="50"
+                    class="modern-input">
+                  <div class="input-focus-border"></div>
+                </div>
+                <div class="field-feedback" *ngIf="hasError(profileForm.get('firstName'))">
+                  <i class="fas fa-exclamation-circle"></i>
+                  {{ getErrorMessage(profileForm.get('firstName'), 'First Name') }}
+                </div>
+              </div>
+
+              <!-- Last Name Field -->
+              <div class="form-field">
+                <label for="lastName" class="field-label">
+                  <i class="fas fa-user field-icon"></i>
+                  Last Name
+                  <span class="required">*</span>
+                </label>
+                <div class="input-container">
+                  <input
+                    type="text"
+                    id="lastName"
+                    formControlName="lastName"
+                    [class]="getFieldClasses(profileForm.get('lastName'))"
+                    placeholder="Enter your last name"
+                    maxlength="50"
+                    class="modern-input">
+                  <div class="input-focus-border"></div>
+                </div>
+                <div class="field-feedback" *ngIf="hasError(profileForm.get('lastName'))">
+                  <i class="fas fa-exclamation-circle"></i>
+                  {{ getErrorMessage(profileForm.get('lastName'), 'Last Name') }}
+                </div>
+              </div>
+
+              <!-- Email Field -->
+              <div class="form-field">
+                <label for="email" class="field-label">
+                  <i class="fas fa-envelope field-icon"></i>
+                  Email Address
+                  <span class="required">*</span>
+                </label>
+                <div class="input-container">
+                  <input
+                    type="email"
+                    id="email"
+                    formControlName="email"
+                    [class]="getFieldClasses(profileForm.get('email'))"
+                    placeholder="Enter your email address"
+                    class="modern-input">
+                  <div class="input-focus-border"></div>
+                </div>
+                <div class="field-feedback" *ngIf="hasError(profileForm.get('email'))">
+                  <i class="fas fa-exclamation-circle"></i>
+                  {{ getErrorMessage(profileForm.get('email'), 'Email') }}
+                </div>
+              </div>
+
+              <!-- Phone Field -->
+              <div class="form-field">
+                <label for="phone" class="field-label">
+                  <i class="fas fa-phone field-icon"></i>
+                  Phone Number
+                </label>
+                <div class="input-container">
+                  <input
+                    type="tel"
+                    id="phone"
+                    formControlName="phone"
+                    [class]="getFieldClasses(profileForm.get('phone'))"
+                    placeholder="Enter your phone number"
+                    class="modern-input">
+                  <div class="input-focus-border"></div>
+                </div>
+                <div class="field-feedback" *ngIf="hasError(profileForm.get('phone'))">
+                  <i class="fas fa-exclamation-circle"></i>
+                  {{ getErrorMessage(profileForm.get('phone'), 'Phone') }}
+                </div>
+                <div class="field-hint">
+                  <i class="fas fa-info-circle"></i>
+                  Optional - International format supported
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Account Information Section -->
+          <div class="form-section">
+            <div class="section-header">
+              <div class="section-icon">
+                <i class="fas fa-cog"></i>
+              </div>
+              <h3 class="section-title">Account Information</h3>
+            </div>
+            <div class="form-grid">
+              <!-- Username Field (Read-only) -->
+              <div class="form-field">
+                <label for="username" class="field-label">
+                  <i class="fas fa-at field-icon"></i>
+                  Username
+                </label>
+                <div class="input-container">
+                  <input
+                    type="text"
+                    id="username"
+                    [value]="currentUser?.username"
+                    class="modern-input readonly-input"
+                    readonly>
+                  <div class="input-focus-border"></div>
+                </div>
+                <div class="field-hint">
+                  <i class="fas fa-lock"></i>
+                  Username cannot be changed
+                </div>
+              </div>
+
+              <!-- Department Field -->
+              <div class="form-field">
+                <label for="department" class="field-label">
+                  <i class="fas fa-building field-icon"></i>
+                  Department
+                </label>
+                <div class="input-container">
+                  <select
+                    id="department"
+                    formControlName="department"
+                    [class]="getFieldClasses(profileForm.get('department'))"
+                    class="modern-select">
+                    <option value="">Select Department</option>
+                    <option *ngFor="let dept of departments" [value]="dept.value">
+                      {{ dept.label }}
+                    </option>
+                  </select>
+                  <div class="input-focus-border"></div>
+                </div>
+                <div class="field-feedback" *ngIf="hasError(profileForm.get('department'))">
+                  <i class="fas fa-exclamation-circle"></i>
+                  {{ getErrorMessage(profileForm.get('department'), 'Department') }}
+                </div>
+              </div>
+
+              <!-- Role Field (Read-only for non-admin users) -->
+              <div class="form-field">
+                <label for="role" class="field-label">
+                  <i class="fas fa-user-tag field-icon"></i>
+                  User Role
+                </label>
+                <div class="input-container">
+                  <input
+                    type="text"
+                    id="role"
+                    [value]="currentUser?.role | titlecase"
+                    class="modern-input readonly-input"
+                    readonly>
+                  <div class="input-focus-border"></div>
+                </div>
+                <div class="field-hint">
+                  <i class="fas fa-lock"></i>
+                  Role can only be changed by administrators
+                </div>
+              </div>
+
+              <!-- Account Status (Read-only) -->
+              <div class="form-field">
+                <label for="status" class="field-label">
+                  <i class="fas fa-toggle-on field-icon"></i>
+                  Account Status
+                </label>
+                <div class="input-container">
+                  <input
+                    type="text"
+                    id="status"
+                    [value]="currentUser?.isActive ? 'Active' : 'Inactive'"
+                    class="modern-input readonly-input"
+                    readonly>
+                  <div class="input-focus-border"></div>
+                </div>
+                <div class="field-hint">
+                  <i class="fas fa-info-circle"></i>
+                  Status is managed by administrators
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Modern Form Actions -->
+        <div class="form-actions">
+          <div class="actions-left">
+            <button
+              type="button"
+              class="btn-modern-secondary"
+              (click)="onReset()"
+              [disabled]="isSubmitting">
+              <i class="fas fa-undo"></i>
+              <span>Reset Changes</span>
+            </button>
+          </div>
+          <div class="actions-right">
+            <button
+              type="button"
+              class="btn-modern-secondary"
+              (click)="goBack()"
+              [disabled]="isSubmitting">
+              <i class="fas fa-times"></i>
+              <span>Cancel</span>
+            </button>
+            <button
+              type="submit"
+              class="btn-modern-primary"
+              [disabled]="profileForm.invalid || isSubmitting || !hasChanges()">
+              <div class="btn-content">
+                <i class="fas fa-save" *ngIf="!isSubmitting"></i>
+                <div class="spinner" *ngIf="isSubmitting">
+                  <div class="spinner-circle"></div>
+                </div>
+                <span>{{ isSubmitting ? 'Updating...' : 'Update Profile' }}</span>
+              </div>
+            </button>
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Modern Help Section -->
+  <div class="modern-help-section">
+    <div class="help-header">
+      <div class="help-icon">
+        <i class="fas fa-question-circle"></i>
+      </div>
+      <h3 class="help-title">Profile Update Guidelines</h3>
+    </div>
+    <div class="help-content">
+      <div class="help-grid">
+        <div class="help-card">
+          <div class="help-card-header">
+            <i class="fas fa-info-circle"></i>
+            <h4>Editable Fields</h4>
+          </div>
+          <ul class="help-list">
+            <li><i class="fas fa-check"></i> First Name and Last Name</li>
+            <li><i class="fas fa-check"></i> Email Address</li>
+            <li><i class="fas fa-check"></i> Phone Number</li>
+            <li><i class="fas fa-check"></i> Department</li>
+          </ul>
+        </div>
+        <div class="help-card">
+          <div class="help-card-header">
+            <i class="fas fa-lock"></i>
+            <h4>Read-Only Fields</h4>
+          </div>
+          <ul class="help-list">
+            <li><i class="fas fa-user"></i> <strong>Username:</strong> Cannot be changed</li>
+            <li><i class="fas fa-user-tag"></i> <strong>Role:</strong> Admin only</li>
+            <li><i class="fas fa-toggle-on"></i> <strong>Status:</strong> Admin only</li>
+            <li><i class="fas fa-calendar"></i> <strong>Join Date:</strong> System managed</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+

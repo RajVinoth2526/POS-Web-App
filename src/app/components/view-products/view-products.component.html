@@ -1,5 +1,141 @@
-<app-product-list 
-[isViewStyleTable]="isViewStyleTable" 
-[isFromProductViews]="isFromProductViews"
->
-</app-product-list>
+<div class="modern-products-container">
+  <!-- Header Section -->
+  <div class="products-header">
+    <div class="header-content">
+      <div class="header-left">
+        <h1 class="page-title">
+          <i class="fas fa-boxes me-3"></i>
+          Product Management
+        </h1>
+        <p class="page-subtitle">Manage your inventory and product catalog</p>
+      </div>
+      <div class="header-right">
+        <button class="btn btn-primary modern-btn" routerLink="/add-product">
+          <i class="fas fa-plus me-2"></i>
+          Add Product
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Filters and Controls Section -->
+  <div class="filters-section">
+    <div class="filters-container">
+      <!-- Search Bar -->
+      <div class="search-container">
+        <div class="search-input-wrapper">
+          <i class="fas fa-search search-icon"></i>
+          <input 
+            type="text" 
+            class="form-control modern-search-input" 
+            placeholder="Search products by name, description, or SKU..."
+            [(ngModel)]="searchQuery" 
+            (input)="onSearch()"
+          >
+          <button 
+            class="btn btn-link clear-search-btn" 
+            (click)="clearSearch()" 
+            *ngIf="searchQuery"
+            title="Clear search"
+          >
+            <i class="fas fa-times"></i>
+          </button>
+        </div>
+      </div>
+
+      <!-- View Toggle and Filters -->
+      <div class="controls-container">
+        <div class="view-toggle">
+          <button 
+            class="btn view-btn" 
+            [class.active]="!isViewStyleTable"
+            (click)="toggleView(false)"
+            title="Grid View"
+          >
+            <i class="fas fa-th-large"></i>
+          </button>
+          <button 
+            class="btn view-btn" 
+            [class.active]="isViewStyleTable"
+            (click)="toggleView(true)"
+            title="Table View"
+          >
+            <i class="fas fa-list"></i>
+          </button>
+        </div>
+
+        <div class="filter-dropdowns">
+          <select class="form-select modern-select" [(ngModel)]="selectedCategory" (change)="onCategoryFilter()">
+            <option value="">All Categories</option>
+            <option value="electronics">Electronics</option>
+            <option value="clothing">Clothing</option>
+            <option value="food">Food & Beverages</option>
+            <option value="books">Books</option>
+            <option value="home">Home & Garden</option>
+          </select>
+
+          <select class="form-select modern-select" [(ngModel)]="sortBy" (change)="onSortChange()">
+            <option value="name">Sort by Name</option>
+            <option value="price">Sort by Price</option>
+            <option value="stock">Sort by Stock</option>
+            <option value="date">Sort by Date Added</option>
+          </select>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Products Content -->
+  <div class="products-content" [class.table-view]="isViewStyleTable">
+    <app-product-list 
+      [isViewStyleTable]="isViewStyleTable" 
+      [isFromProductViews]="isFromProductViews"
+      [externalSearchQuery]="searchQuery"
+      [externalCategory]="selectedCategory"
+      [externalSortBy]="sortBy"
+    >
+    </app-product-list>
+  </div>
+
+  <!-- Stats Section -->
+  <div class="stats-section" *ngIf="!isViewStyleTable">
+    <div class="stats-container">
+      <div class="stat-card">
+        <div class="stat-icon">
+          <i class="fas fa-boxes"></i>
+        </div>
+        <div class="stat-content">
+          <h3 class="stat-number">{{ totalCount || 0 }}</h3>
+          <p class="stat-label">Total Products</p>
+        </div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-icon">
+          <i class="fas fa-check-circle"></i>
+        </div>
+        <div class="stat-content">
+          <h3 class="stat-number">{{ availableProducts || 0 }}</h3>
+          <p class="stat-label">In Stock</p>
+        </div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-icon">
+          <i class="fas fa-exclamation-triangle"></i>
+        </div>
+        <div class="stat-content">
+          <h3 class="stat-number">{{ lowStockProducts || 0 }}</h3>
+          <p class="stat-label">Low Stock</p>
+        </div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-icon">
+          <i class="fas fa-dollar-sign"></i>
+        </div>
+        <div class="stat-content">
+          <h3 class="stat-number">${{ averagePrice || '0.00' }}</h3>
+          <p class="stat-label">Avg. Price</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

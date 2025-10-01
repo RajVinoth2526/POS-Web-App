@@ -1,27 +1,118 @@
-/* src/app/footer/footer.component.css */
+/* Footer Component Styles */
 footer {
-    font-size: 0.9rem;
+  font-size: 0.9rem;
+}
+
+/* Fixed Footer Styles */
+.fixed-footer {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  z-index: 10001;
+  box-shadow: 0 -4px 20px rgba(0, 0, 0, 0.15);
+  backdrop-filter: blur(10px);
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+/* Button styling for footer */
+footer .btn {
+  border-radius: 0.5rem;
+  font-weight: 500;
+  transition: all 0.2s ease-in-out;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  border: none;
+}
+
+footer .btn:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+}
+
+footer .btn:active {
+  transform: translateY(0);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+footer .btn:disabled {
+  opacity: 0.6;
+  transform: none;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+/* Specific button colors */
+footer .btn-warning {
+  background: linear-gradient(135deg, #ffc107 0%, #ff8f00 100%);
+  color: #000;
+}
+
+footer .btn-success {
+  background: linear-gradient(135deg, #28a745 0%, #20c997 100%);
+  color: white;
+}
+
+footer .btn-info {
+  background: linear-gradient(135deg, #17a2b8 0%, #6f42c1 100%);
+  color: white;
+}
+
+footer .btn-danger {
+  background: linear-gradient(135deg, #dc3545 0%, #e83e8c 100%);
+  color: white;
+}
+
+footer .btn-secondary {
+  background: linear-gradient(135deg, #6c757d 0%, #495057 100%);
+  color: white;
+}
+
+/* Legacy button styles */
+.btn-primary:hover {
+  background-color: var(--secondary-color) !important;
+  border-color: var(--primary-color, #007bff) !important;
+}
+
+.btn-second {
+  background-color: red !important;
+  color: white !important;
+}
+
+.btn-second:hover {
+  background-color: rgb(255, 72, 72) !important;
+  color: white !important;
+}
+
+.btn-primary {
+  background-color: var(--primary-color, #007bff) !important;
+}
+
+/* Responsive design for footer buttons */
+@media (max-width: 768px) {
+  .fixed-footer {
+    padding: 0.75rem 0;
   }
-
-
-  .btn-primary:hover {
-    background-color: var(--secondary-color) !important; /* darker blue */
-    border-color: var(--primary-color, #007bff) !important;
-  }
-
- .btn-second {
-  background-color: red !important; /* red background */
-  color: white !important; /* white text */
- }
-
- .btn-second:hover {
-  background-color: rgb(255, 72, 72) !important; /* red background */
-  color: white !important; /* white text */
- }
-
-
- .btn-primary {
-  background-color: var(--primary-color, #007bff) !important; /* darker blue */
- }
   
+  footer .d-flex.gap-2 {
+    flex-direction: column;
+    align-items: center;
+    gap: 0.5rem !important;
+  }
+  
+  footer .btn {
+    width: 100%;
+    max-width: 200px;
+    margin-bottom: 0.25rem;
+  }
+}
+
+@media (max-width: 576px) {
+  .fixed-footer {
+    padding: 0.5rem 0;
+  }
+  
+  footer .btn {
+    font-size: 0.8rem;
+    padding: 0.5rem 1rem;
+  }
+}
   

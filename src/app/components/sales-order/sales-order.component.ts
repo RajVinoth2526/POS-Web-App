@@ -1,9 +1,11 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { Cart, CartItem, Product } from 'src/app/model/system.model';
 import { ProductService } from 'src/app/service/product.service';
 import { ToastrService } from 'ngx-toastr';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { cloneDeep } from 'lodash';
+import { Subject } from 'rxjs';
+import { takeUntil } from 'rxjs/operators';
 
 
 @Component({
@@ -11,7 +13,8 @@ import { cloneDeep } from 'lodash';
   templateUrl: './sales-order.component.html',
   styleUrls: ['./sales-order.component.css']
 })
-export class SalesOrderComponent implements OnInit {
+export class SalesOrderComponent implements OnInit, OnDestroy {
+  private destroy$ = new Subject<void>();
 
   constructor(private productService: ProductService,
     private tosterService: ToastrService,
@@ -22,6 +25,20 @@ export class SalesOrderComponent implements OnInit {
   
 
   ngOnInit(): void {
+    // Subscribe to cart changes to clear local cart when service cart is cleared
+    this.productService.cart$
+      .pipe(takeUntil(this.destroy$))
+      .subscribe(cart => {
+        if (cart === null) {
+          // Cart was cleared, clear local cart as well
+          this.cart = [];
+        }
+      });
+  }
+
+  ngOnDestroy(): void {
+    this.destroy$.next();
+    this.destroy$.complete();
   }
   
   addToCart(cart: CartItem) {

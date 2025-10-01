@@ -1,12 +1,12 @@
 <div class="sidebar" [class.open]="isOpen">
     <button class="close-btn" (click)="onClose()">×</button>
     <ul>
-      <li><a href="#">Home</a></li>
-      <li><a href="#/sales-order-process">Sales</a></li>
-      <li><a href="#/view-products">Products</a></li>
-      <li><a href="#/add-product">Add product</a></li>
-      <li><a href="#/view-orders">Orders</a></li>
-      <li><a href="#/settings">Settings</a></li>
+      <li><a href="#" (click)="navigateToHome($event)">Home</a></li>
+      <li><a href="#" (click)="navigateTo('/sales-order-process', $event)">Sales</a></li>
+      <li><a href="#" (click)="navigateTo('/view-products', $event)">Products</a></li>
+      <li><a href="#" (click)="navigateTo('/add-product', $event)">Add product</a></li>
+      <li><a href="#" (click)="navigateTo('/view-orders', $event)">Orders</a></li>
+      <li><a href="#" (click)="navigateTo('/settings', $event)">Settings</a></li>
     </ul>
   </div>
   

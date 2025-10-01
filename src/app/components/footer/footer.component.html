@@ -1,13 +1,47 @@
-<footer *ngIf="isSalesScreen" class="text-white py-3 mt-auto" style="background-color: var(--background-color, #007bff) !important;">
-  <div class="container d-flex justify-content-end">
-    <div>
-      <button class="btn btn-second btn-sm px-4 py-2 me-2" >Cancel</button>
-      <button [disabled]="disablePrintButton" class="btn btn-primary px-4 py-2 btn-sm" (click)="onPrint()">Print</button>
+<footer *ngIf="isSalesScreen" class="fixed-footer text-white py-3" style="background-color: var(--background-color, #007bff) !important;">
+  <div class="container d-flex justify-content-end align-items-center">
+    <!-- Action buttons aligned to the right -->
+    <div class="d-flex gap-2 flex-wrap">
+
+      <button 
+        class="btn btn-warning btn-sm px-3 py-2"
+        (click)="openDraftsPopup()"
+        title="View Draft Orders">
+        <i class="fas fa-file-alt me-2"></i>
+        <span>Drafts</span>
+      </button>
+
+      <button 
+        class="btn btn-warning btn-sm px-3 py-2"
+        (click)="onSaveAsDraft()"
+        [disabled]="isCartEmpty"
+        style="font-size: 0.85rem;"
+      >
+        💾 Save as Draft
+      </button>
+      
+      <button 
+        class="btn btn-success btn-sm px-3 py-2"
+        (click)="onCompleteOrder()"
+        [disabled]="isCartEmpty"
+        style="font-size: 0.85rem;"
+      >
+        ✅ Complete Order
+      </button>
+      
+      <button 
+        class="btn btn-secondary btn-sm px-3 py-2"
+        (click)="onClearCart()"
+        [disabled]="isCartEmpty"
+        style="font-size: 0.85rem;"
+      >
+        🗑️ Clear Cart
+      </button>
     </div>
   </div>
 </footer>
 
-<footer *ngIf="!isSalesScreen" class="bg-dark text-white text-center py-3 mt-auto">
+<footer *ngIf="!isSalesScreen" class="fixed-footer bg-dark text-white text-center py-3">
   <div class="container">
     <small>&copy; 2025 MyPOS App. All rights reserved.</small>
   </div>

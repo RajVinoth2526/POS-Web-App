@@ -1,153 +1,377 @@
-<div class="container my-4">
-    <div class="card shadow-sm border-0 rounded-4 p-4">
-        <h4 class="mb-4 text-center fw-bold">⚙️ POS System Settings</h4>
+<div class="settings-container">
+    <!-- Modern Header -->
+    <div class="settings-header">
+        <div class="header-content">
+            <div class="header-icon">
+                <i class="fas fa-cog fa-spin"></i>
+            </div>
+            <div class="header-text">
+                <h1 class="settings-title">System Settings</h1>
+                <p class="settings-subtitle">Customize your POS system preferences</p>
+            </div>
+        </div>
+    </div>
 
-        <!-- Nav Tabs -->
-        <ul class="nav nav-pills justify-content-center mb-4" id="settingsTabs" role="tablist">
-            <li class="nav-item" role="presentation">
-                <button class="nav-link active" data-bs-toggle="pill" data-bs-target="#profileSettings" type="button"
-                    role="tab">
-                    Profile
+    <!-- Modern Navigation -->
+    <div class="settings-nav-container">
+        <div class="settings-nav">
+            <button class="nav-item" [class.active]="activeTab === 'profile'" (click)="switchTab('profile')" type="button" role="tab">
+                <i class="fas fa-user-circle"></i>
+                <span>Profile</span>
                 </button>
-            </li>
-            <li class="nav-item" role="presentation">
-                <button class="nav-link" data-bs-toggle="pill" data-bs-target="#paymentSettings" type="button"
-                    role="tab">
-                    Payment
+            <button class="nav-item" [class.active]="activeTab === 'payment'" (click)="switchTab('payment')" type="button" role="tab">
+                <i class="fas fa-credit-card"></i>
+                <span>Payment</span>
                 </button>
-            </li>
-            <li class="nav-item" role="presentation">
-                <button class="nav-link" data-bs-toggle="pill" data-bs-target="#printerSettings" type="button"
-                    role="tab">
-                    Printer
+            <button class="nav-item" [class.active]="activeTab === 'printer'" (click)="switchTab('printer')" type="button" role="tab">
+                <i class="fas fa-print"></i>
+                <span>Printer</span>
                 </button>
-            </li>
-            <li class="nav-item" role="presentation">
-                <button class="nav-link" data-bs-toggle="pill" data-bs-target="#themeSettings" type="button" role="tab">
-                    Theme
+            <button class="nav-item" [class.active]="activeTab === 'theme'" (click)="switchTab('theme')" type="button" role="tab">
+                <i class="fas fa-palette"></i>
+                <span>Theme</span>
                 </button>
-            </li>
-        </ul>
+        </div>
+    </div>
 
 
-        <!-- Tab Content -->
+    <!-- Modern Tab Content -->
+    <div class="settings-content">
         <div class="tab-content">
             <!-- Profile Settings -->
-            <div class="tab-pane fade show active" id="profileSettings">
-                <form [formGroup]="businessForm" (ngSubmit)="onProfileSubmit()">
-                    <div class="row g-3">
-                      <div class="col-md-6">
-                        <label class="form-label">Business Name</label>
-                        <input type="text" class="form-control" formControlName="businessName" placeholder="Enter business name" />
-                        <div class="text-danger" *ngIf="businessForm.get('businessName')?.touched && businessForm.get('businessName')?.hasError('required')">
-                          Business Name is required.
+            <div class="tab-pane" [class.show]="activeTab === 'profile'" [class.active]="activeTab === 'profile'" *ngIf="activeTab === 'profile'">
+                <div class="settings-card">
+                    <div class="card-header">
+                        <div class="header-icon-text">
+                            <i class="fas fa-user-circle"></i>
+                            <h3>Business Profile</h3>
+                        </div>
+                        <p class="card-description">Manage your business information and contact details</p>
+                    </div>
+                    <div class="card-body">
+                        <form [formGroup]="businessForm" (ngSubmit)="onProfileSubmit()">
+                            <div class="form-grid">
+                                <div class="form-group">
+                                    <label class="modern-label">
+                                        <i class="fas fa-store"></i>
+                                        Business Name
+                                    </label>
+                                    <div class="input-wrapper">
+                                        <input type="text" class="modern-input" formControlName="businessName" placeholder="Enter your business name" />
+                                        <i class="input-icon fas fa-building"></i>
+                                    </div>
+                                    <div class="error-message" *ngIf="businessForm.get('businessName')?.touched && businessForm.get('businessName')?.hasError('required')">
+                                        <i class="fas fa-exclamation-circle"></i>
+                                        Business name is required
                         </div>
                       </div>
                   
-                      <div class="col-md-6">
-                        <label class="form-label">Owner Name</label>
-                        <input type="text" class="form-control" formControlName="ownerName" placeholder="Enter owner name" />
-                        <div class="text-danger" *ngIf="businessForm.get('ownerName')?.touched && businessForm.get('ownerName')?.hasError('required')">
-                          Owner Name is required.
+                                <div class="form-group">
+                                    <label class="modern-label">
+                                        <i class="fas fa-user-tie"></i>
+                                        Owner Name
+                                    </label>
+                                    <div class="input-wrapper">
+                                        <input type="text" class="modern-input" formControlName="ownerName" placeholder="Enter owner's full name" />
+                                        <i class="input-icon fas fa-user"></i>
+                                    </div>
+                                    <div class="error-message" *ngIf="businessForm.get('ownerName')?.touched && businessForm.get('ownerName')?.hasError('required')">
+                                        <i class="fas fa-exclamation-circle"></i>
+                                        Owner name is required
                         </div>
                       </div>
                   
-                      <div class="col-md-6">
-                        <label class="form-label">Phone Number</label>
-                        <input type="tel" class="form-control" formControlName="phoneNumber" placeholder="Enter phone number" />
-                        <div class="text-danger" *ngIf="businessForm.get('phoneNumber')?.touched && businessForm.get('phoneNumber')?.hasError('required')">
-                          Phone Number is required.
+                                <div class="form-group">
+                                    <label class="modern-label">
+                                        <i class="fas fa-phone"></i>
+                                        Phone Number
+                                    </label>
+                                    <div class="input-wrapper">
+                                        <input type="tel" class="modern-input" formControlName="phoneNumber" placeholder="Enter contact number" />
+                                        <i class="input-icon fas fa-phone-alt"></i>
+                                    </div>
+                                    <div class="error-message" *ngIf="businessForm.get('phoneNumber')?.touched && businessForm.get('phoneNumber')?.hasError('required')">
+                                        <i class="fas fa-exclamation-circle"></i>
+                                        Phone number is required
                         </div>
                       </div>
                   
-                      <div class="col-md-6">
-                        <label class="form-label">Email Address</label>
-                        <input type="email" class="form-control" formControlName="email" placeholder="Enter email" />
-                        <div class="text-danger" *ngIf="businessForm.get('email')?.touched">
+                                <div class="form-group">
+                                    <label class="modern-label">
+                                        <i class="fas fa-envelope"></i>
+                                        Email Address
+                                    </label>
+                                    <div class="input-wrapper">
+                                        <input type="email" class="modern-input" formControlName="email" placeholder="Enter email address" />
+                                        <i class="input-icon fas fa-at"></i>
+                                    </div>
+                                    <div class="error-message" *ngIf="businessForm.get('email')?.touched">
                           <div *ngIf="businessForm.get('email')?.hasError('required')">
-                            Email is required.
+                                            <i class="fas fa-exclamation-circle"></i>
+                                            Email address is required
                           </div>
                           <div *ngIf="businessForm.get('email')?.hasError('email')">
-                            Invalid email format.
+                                            <i class="fas fa-exclamation-circle"></i>
+                                            Please enter a valid email address
+                                        </div>
                           </div>
                         </div>
                       </div>
                   
-                      <div class="col-12 text-end">
-                        <button type="submit" class="btn rounded-pill px-4 custom-btn-style">Save Changes</button>
+                            <div class="form-actions">
+                                <button type="submit" class="btn-primary-modern">
+                                    <i class="fas fa-save"></i>
+                                    Save Profile
+                                </button>
                       </div>
+                        </form>
                     </div>
-                  </form>
-                  
-                  
+                </div>
             </div>
 
             <!-- Payment Settings -->
-            <div class="tab-pane fade" id="paymentSettings">
-                <form class="row g-3">
-                    <div class="col-md-6">
-                        <label class="form-label">Preferred Payment Method</label>
-                        <select class="form-select">
-                            <option value="cash">Cash</option>
-                            <option value="card">Card</option>
-                            <option value="upi">UPI</option>
-                        </select>
+            <div class="tab-pane" [class.show]="activeTab === 'payment'" [class.active]="activeTab === 'payment'" *ngIf="activeTab === 'payment'">
+                <div class="settings-card">
+                    <div class="card-header">
+                        <div class="header-icon-text">
+                            <i class="fas fa-credit-card"></i>
+                            <h3>Payment Configuration</h3>
                     </div>
-                    <div class="col-md-6">
-                        <label class="form-label">Currency</label>
-                        <input type="text" class="form-control" placeholder="Enter currency symbol" />
+                        <p class="card-description">Configure payment methods and currency settings</p>
                     </div>
-                    <div class="col-12 text-end">
-                        <button type="submit" class="btn btn-success rounded-pill px-4">Save</button>
+                    <div class="card-body">
+                        <form>
+                            <div class="form-grid">
+                                <div class="form-group">
+                                    <label class="modern-label">
+                                        <i class="fas fa-credit-card"></i>
+                                        Default Payment Method
+                                    </label>
+                                    <div class="input-wrapper">
+                                        <select class="modern-select">
+                                            <option value="cash">💵 Cash</option>
+                                            <option value="card">💳 Card Payment</option>
+                                            <option value="upi">📱 UPI</option>
+                                            <option value="digital">💰 Digital Wallet</option>
+                                        </select>
+                                        <i class="input-icon fas fa-chevron-down"></i>
+                                    </div>
+                                </div>
+
+                                <div class="form-group">
+                                    <label class="modern-label">
+                                        <i class="fas fa-dollar-sign"></i>
+                                        Currency Symbol
+                                    </label>
+                                    <div class="input-wrapper">
+                                        <input type="text" class="modern-input" placeholder="Enter currency symbol (e.g., $, ₹, €)" />
+                                        <i class="input-icon fas fa-coins"></i>
+                                    </div>
+                                </div>
+
+                                <div class="form-group">
+                                    <label class="modern-label">
+                                        <i class="fas fa-percentage"></i>
+                                        Default Tax Rate
+                                    </label>
+                                    <div class="input-wrapper">
+                                        <input type="number" class="modern-input" placeholder="Enter tax percentage" step="0.01" min="0" max="100" />
+                                        <i class="input-icon fas fa-calculator"></i>
+                                    </div>
+                                </div>
+
+                                <div class="form-group">
+                                    <label class="modern-label">
+                                        <i class="fas fa-toggle-on"></i>
+                                        Auto-Apply Tax
+                                    </label>
+                                    <div class="toggle-wrapper">
+                                        <label class="modern-toggle">
+                                            <input type="checkbox" checked>
+                                            <span class="toggle-slider"></span>
+                                        </label>
+                                        <span class="toggle-label">Automatically apply tax to all transactions</span>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="form-actions">
+                                <button type="submit" class="btn-success-modern">
+                                    <i class="fas fa-check"></i>
+                                    Save Payment Settings
+                                </button>
+                            </div>
+                        </form>
                     </div>
-                </form>
+                </div>
             </div>
 
             <!-- Printer Settings -->
-            <div class="tab-pane fade" id="printerSettings">
-                <form class="row g-3">
-                    <div class="col-md-6">
-                        <label class="form-label">Printer Name</label>
-                        <input type="text" class="form-control" placeholder="Enter printer name" />
+            <div class="tab-pane" [class.show]="activeTab === 'printer'" [class.active]="activeTab === 'printer'" *ngIf="activeTab === 'printer'">
+                <div class="settings-card">
+                    <div class="card-header">
+                        <div class="header-icon-text">
+                            <i class="fas fa-print"></i>
+                            <h3>Printer Configuration</h3>
+                        </div>
+                        <p class="card-description">Configure receipt and invoice printing settings</p>
                     </div>
-                    <div class="col-md-6">
-                        <label class="form-label">Print Format</label>
-                        <select class="form-select">
-                            <option value="thermal">Thermal</option>
-                            <option value="a4">A4</option>
+                    <div class="card-body">
+                        <form>
+                            <div class="form-grid">
+                                <div class="form-group">
+                                    <label class="modern-label">
+                                        <i class="fas fa-print"></i>
+                                        Printer Name
+                                    </label>
+                                    <div class="input-wrapper">
+                                        <input type="text" class="modern-input" placeholder="Enter printer name or IP address" />
+                                        <i class="input-icon fas fa-search"></i>
+                                    </div>
+                                </div>
+
+                                <div class="form-group">
+                                    <label class="modern-label">
+                                        <i class="fas fa-file-alt"></i>
+                                        Print Format
+                                    </label>
+                                    <div class="input-wrapper">
+                                        <select class="modern-select">
+                                            <option value="thermal">🖨️ Thermal Receipt</option>
+                                            <option value="a4">📄 A4 Paper</option>
+                                            <option value="invoice">🧾 Invoice Format</option>
                         </select>
+                                        <i class="input-icon fas fa-chevron-down"></i>
+                                    </div>
+                                </div>
+
+                                <div class="form-group">
+                                    <label class="modern-label">
+                                        <i class="fas fa-cog"></i>
+                                        Print Settings
+                                    </label>
+                                    <div class="settings-grid">
+                                        <div class="setting-item">
+                                            <label class="modern-label-small">Auto Print Receipts</label>
+                                            <label class="modern-toggle">
+                                                <input type="checkbox" checked>
+                                                <span class="toggle-slider"></span>
+                                            </label>
+                                        </div>
+                                        <div class="setting-item">
+                                            <label class="modern-label-small">Print Logo</label>
+                                            <label class="modern-toggle">
+                                                <input type="checkbox">
+                                                <span class="toggle-slider"></span>
+                                            </label>
+                                        </div>
+                                        <div class="setting-item">
+                                            <label class="modern-label-small">Print Footer</label>
+                                            <label class="modern-toggle">
+                                                <input type="checkbox" checked>
+                                                <span class="toggle-slider"></span>
+                                            </label>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="form-group">
+                                    <label class="modern-label">
+                                        <i class="fas fa-test-tube"></i>
+                                        Test Print
+                                    </label>
+                                    <div class="test-print-section">
+                                        <button type="button" class="btn-test-modern" (click)="testPrinter('receipt')">
+                                            <i class="fas fa-print"></i>
+                                            Test Print Receipt
+                                        </button>
+                                        <button type="button" class="btn-test-modern" (click)="testPrinter('invoice')">
+                                            <i class="fas fa-file-invoice"></i>
+                                            Test Print Invoice
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="form-actions">
+                                <button type="submit" class="btn-dark-modern">
+                                    <i class="fas fa-save"></i>
+                                    Save Printer Settings
+                                </button>
+                            </div>
+                        </form>
                     </div>
-                    <div class="col-12 text-end">
-                        <button type="submit" class="btn btn-dark rounded-pill px-4">Apply</button>
                     </div>
-                </form>
             </div>
             <!-- Theme Settings -->
-            <div class="tab-pane fade" id="themeSettings">
-                <form [formGroup]="themeForm" class="row g-3" (ngSubmit)="onApplyTheme()">
+            <div class="tab-pane" [class.show]="activeTab === 'theme'" [class.active]="activeTab === 'theme'" *ngIf="activeTab === 'theme'">
+                <div class="settings-card">
+                    <div class="card-header">
+                        <div class="header-icon-text">
+                            <i class="fas fa-palette"></i>
+                            <h3>Theme Customization</h3>
+                        </div>
+                        <p class="card-description">Personalize your POS system with custom colors and fonts</p>
+                    </div>
+                    <div class="card-body">
+                        <form [formGroup]="themeForm" (ngSubmit)="onApplyTheme()">
+                            <div class="theme-preview-section">
+                                <div class="preview-card">
+                                    <h4>Live Preview</h4>
+                                    <div class="preview-content">
+                                        <div class="preview-header">Sample Interface</div>
+                                        <div class="preview-body">
+                                            <div class="preview-button">Sample Button</div>
+                                            <div class="preview-text">Sample text with current font</div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
 
-                    <!-- Primary Color -->
-                    <div class="col-md-4">
-                        <label class="form-label">Primary Color</label>
-                        <input type="color" formControlName="primaryColor" class="form-control form-control-color" />
+                            <div class="form-grid">
+                                <div class="color-picker-group">
+                                    <label class="modern-label">
+                                        <i class="fas fa-paint-brush"></i>
+                                        Primary Color
+                                    </label>
+                                    <div class="color-picker-wrapper">
+                                        <input type="color" formControlName="primaryColor" class="modern-color-picker" />
+                                        <div class="color-preview" [style.background-color]="themeForm.get('primaryColor')?.value"></div>
+                                        <span class="color-value">{{ themeForm.get('primaryColor')?.value }}</span>
+                                    </div>
                     </div>
 
-                    <!-- Secondary Color -->
-                    <div class="col-md-4">
-                        <label class="form-label">Secondary Color</label>
-                        <input type="color" formControlName="secondaryColor" class="form-control form-control-color" />
+                                <div class="color-picker-group">
+                                    <label class="modern-label">
+                                        <i class="fas fa-fill-drip"></i>
+                                        Secondary Color
+                                    </label>
+                                    <div class="color-picker-wrapper">
+                                        <input type="color" formControlName="secondaryColor" class="modern-color-picker" />
+                                        <div class="color-preview" [style.background-color]="themeForm.get('secondaryColor')?.value"></div>
+                                        <span class="color-value">{{ themeForm.get('secondaryColor')?.value }}</span>
+                                    </div>
                     </div>
 
-                    <!-- Background Color -->
-                    <div class="col-md-4">
-                        <label class="form-label">Background Color</label>
-                        <input type="color" formControlName="backgroundColor" class="form-control form-control-color" />
+                                <div class="color-picker-group">
+                                    <label class="modern-label">
+                                        <i class="fas fa-adjust"></i>
+                                        Background Color
+                                    </label>
+                                    <div class="color-picker-wrapper">
+                                        <input type="color" formControlName="backgroundColor" class="modern-color-picker" />
+                                        <div class="color-preview" [style.background-color]="themeForm.get('backgroundColor')?.value"></div>
+                                        <span class="color-value">{{ themeForm.get('backgroundColor')?.value }}</span>
+                                    </div>
                     </div>
 
-                    <!-- Font Family -->
-                    <div class="col-md-4">
-                        <label class="form-label">Font Family</label>
-                        <select formControlName="fontStyle" class="form-select">
+                                <div class="form-group">
+                                    <label class="modern-label">
+                                        <i class="fas fa-font"></i>
+                                        Font Family
+                                    </label>
+                                    <div class="input-wrapper">
+                                        <select formControlName="fontStyle" class="modern-select">
                             <option value="'Gill Sans', sans-serif">Gill Sans</option>
                             <option value="serif">Serif</option>
                             <option value="cursive">Cursive</option>
@@ -158,24 +382,215 @@
                             <option value="'Georgia', serif">Georgia</option>
                             <option value="'Courier New', monospace">Courier New</option>
                             <option value="'Times New Roman', serif">Times New Roman</option>
+                            <option value="'Playfair Display', serif">Playfair Display</option>
+                            <option value="'Inter', sans-serif">Inter</option>
+                            <option value="'Nunito', sans-serif">Nunito</option>
+                            <option value="'Merriweather', serif">Merriweather</option>
+                            <option value="'Lora', serif">Lora</option>
+                            <option value="'Source Sans Pro', sans-serif">Source Sans Pro</option>
+                            <option value="'Crimson Text', serif">Crimson Text</option>
+                            <option value="'Libre Baskerville', serif">Libre Baskerville</option>
+                            <option value="'Lato', sans-serif">Lato</option>
                         </select>
+                                        <i class="input-icon fas fa-chevron-down"></i>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="theme-preview-toggle">
+                                <label class="modern-label">
+                                    <i class="fas fa-eye"></i>
+                                    Live Theme Preview
+                                </label>
+                                <div class="toggle-wrapper">
+                                    <label class="modern-toggle">
+                                        <input type="checkbox" [(ngModel)]="isThemePreviewEnabled" (change)="toggleThemePreview()">
+                                        <span class="toggle-slider"></span>
+                                    </label>
+                                    <span class="toggle-label">Enable real-time theme preview</span>
+                                </div>
+                            </div>
+
+                            <div class="preset-themes">
+                                <h4>Quick Themes</h4>
+                                <div class="theme-presets">
+                                    <button type="button" class="preset-theme" (click)="applyPresetTheme('default')">
+                                        <div class="preset-colors">
+                                            <div class="preset-color" style="background: #001e3d;"></div>
+                                            <div class="preset-color" style="background: #1b456e;"></div>
+                                            <div class="preset-color" style="background: #f2f7fc;"></div>
+                                        </div>
+                                        <span>Default</span>
+                                    </button>
+                                    <button type="button" class="preset-theme" (click)="applyPresetTheme('dark')">
+                                        <div class="preset-colors">
+                                            <div class="preset-color" style="background: #28a745;"></div>
+                                            <div class="preset-color" style="background: #343a40;"></div>
+                                            <div class="preset-color" style="background: #212529;"></div>
+                                        </div>
+                                        <span>Dark</span>
+                                    </button>
+                                    <button type="button" class="preset-theme" (click)="applyPresetTheme('purple')">
+                                        <div class="preset-colors">
+                                            <div class="preset-color" style="background: #6f42c1;"></div>
+                                            <div class="preset-color" style="background: #e83e8c;"></div>
+                                            <div class="preset-color" style="background: #f8f9fa;"></div>
+                                        </div>
+                                        <span>Purple</span>
+                                    </button>
+                                    <button type="button" class="preset-theme" (click)="applyPresetTheme('ocean')">
+                                        <div class="preset-colors">
+                                            <div class="preset-color" style="background: #17a2b8;"></div>
+                                            <div class="preset-color" style="background: #138496;"></div>
+                                            <div class="preset-color" style="background: #e6f7ff;"></div>
+                                        </div>
+                                        <span>Ocean</span>
+                                    </button>
+                                    <button type="button" class="preset-theme" (click)="applyPresetTheme('sunset')">
+                                        <div class="preset-colors">
+                                            <div class="preset-color" style="background: #fd7e14;"></div>
+                                            <div class="preset-color" style="background: #e55a00;"></div>
+                                            <div class="preset-color" style="background: #fff3e0;"></div>
+                                        </div>
+                                        <span>Sunset</span>
+                                    </button>
+                                    <button type="button" class="preset-theme" (click)="applyPresetTheme('forest')">
+                                        <div class="preset-colors">
+                                            <div class="preset-color" style="background: #198754;"></div>
+                                            <div class="preset-color" style="background: #146c43;"></div>
+                                            <div class="preset-color" style="background: #f0f8f0;"></div>
+                                        </div>
+                                        <span>Forest</span>
+                                    </button>
+                                    <button type="button" class="preset-theme" (click)="applyPresetTheme('rose')">
+                                        <div class="preset-colors">
+                                            <div class="preset-color" style="background: #dc3545;"></div>
+                                            <div class="preset-color" style="background: #b02a37;"></div>
+                                            <div class="preset-color" style="background: #fdf2f8;"></div>
+                                        </div>
+                                        <span>Rose</span>
+                                    </button>
+                                    <button type="button" class="preset-theme" (click)="applyPresetTheme('midnight')">
+                                        <div class="preset-colors">
+                                            <div class="preset-color" style="background: #212529;"></div>
+                                            <div class="preset-color" style="background: #495057;"></div>
+                                            <div class="preset-color" style="background: #f8f9fa;"></div>
+                                        </div>
+                                        <span>Midnight</span>
+                                    </button>
+                                    <button type="button" class="preset-theme" (click)="applyPresetTheme('lavender')">
+                                        <div class="preset-colors">
+                                            <div class="preset-color" style="background: #8e44ad;"></div>
+                                            <div class="preset-color" style="background: #9b59b6;"></div>
+                                            <div class="preset-color" style="background: #f4ecf7;"></div>
+                                        </div>
+                                        <span>Lavender</span>
+                                    </button>
+                                    <button type="button" class="preset-theme" (click)="applyPresetTheme('emerald')">
+                                        <div class="preset-colors">
+                                            <div class="preset-color" style="background: #20c997;"></div>
+                                            <div class="preset-color" style="background: #17a2b8;"></div>
+                                            <div class="preset-color" style="background: #e8f5e8;"></div>
+                                        </div>
+                                        <span>Emerald</span>
+                                    </button>
+                                    <button type="button" class="preset-theme" data-theme="gold" (click)="applyPresetTheme('gold')">
+                                        <div class="preset-colors">
+                                            <div class="preset-color" style="background: #ffd700;"></div>
+                                            <div class="preset-color" style="background: #ffb347;"></div>
+                                            <div class="preset-color" style="background: #fffef7;"></div>
+                                        </div>
+                                        <span>Gold</span>
+                                    </button>
+                                    <button type="button" class="preset-theme" data-theme="darkGold" (click)="applyPresetTheme('darkGold')">
+                                        <div class="preset-colors">
+                                            <div class="preset-color" style="background: #b8860b;"></div>
+                                            <div class="preset-color" style="background: #daa520;"></div>
+                                            <div class="preset-color" style="background: #1a1a1a;"></div>
+                                        </div>
+                                        <span>Dark Gold</span>
+                                    </button>
+                                    <button type="button" class="preset-theme" data-theme="darkBlue" (click)="applyPresetTheme('darkBlue')">
+                                        <div class="preset-colors">
+                                            <div class="preset-color" style="background: #1e3a8a;"></div>
+                                            <div class="preset-color" style="background: #3b82f6;"></div>
+                                            <div class="preset-color" style="background: #0f172a;"></div>
+                                        </div>
+                                        <span>Dark Blue</span>
+                                    </button>
+                                    <button type="button" class="preset-theme" data-theme="forestMoss" (click)="applyPresetTheme('forestMoss')">
+                                        <div class="preset-colors">
+                                            <div class="preset-color" style="background: #2C5F2D;"></div>
+                                            <div class="preset-color" style="background: #97BC62;"></div>
+                                            <div class="preset-color" style="background: #f0f8f0;"></div>
+                                        </div>
+                                        <span>Forest & Moss</span>
+                                    </button>
+                                    <button type="button" class="preset-theme" data-theme="autumnRustic" (click)="applyPresetTheme('autumnRustic')">
+                                        <div class="preset-colors">
+                                            <div class="preset-color" style="background: #46211A;"></div>
+                                            <div class="preset-color" style="background: #A43820;"></div>
+                                            <div class="preset-color" style="background: #F1D3B2;"></div>
+                                        </div>
+                                        <span>Autumn Rustic</span>
+                                    </button>
+                                    <button type="button" class="preset-theme" data-theme="dreamyPeriwinkle" (click)="applyPresetTheme('dreamyPeriwinkle')">
+                                        <div class="preset-colors">
+                                            <div class="preset-color" style="background: #735DA5;"></div>
+                                            <div class="preset-color" style="background: #D3C5E5;"></div>
+                                            <div class="preset-color" style="background: #faf8ff;"></div>
+                                        </div>
+                                        <span>Dreamy Periwinkle</span>
+                                    </button>
+                                    <button type="button" class="preset-theme" data-theme="timelessSerene" (click)="applyPresetTheme('timelessSerene')">
+                                        <div class="preset-colors">
+                                            <div class="preset-color" style="background: #31473A;"></div>
+                                            <div class="preset-color" style="background: #6B7B6F;"></div>
+                                            <div class="preset-color" style="background: #EDF4F2;"></div>
+                                        </div>
+                                        <span>Timeless Serene</span>
+                                    </button>
+                                    <button type="button" class="preset-theme" data-theme="navyBeige" (click)="applyPresetTheme('navyBeige')">
+                                        <div class="preset-colors">
+                                            <div class="preset-color" style="background: #1B2951;"></div>
+                                            <div class="preset-color" style="background: #8B7355;"></div>
+                                            <div class="preset-color" style="background: #F5F5DC;"></div>
+                                        </div>
+                                        <span>Navy & Beige</span>
+                                    </button>
+                                    <button type="button" class="preset-theme" data-theme="brownBeige" (click)="applyPresetTheme('brownBeige')">
+                                        <div class="preset-colors">
+                                            <div class="preset-color" style="background: #8B4513;"></div>
+                                            <div class="preset-color" style="background: #D2B48C;"></div>
+                                            <div class="preset-color" style="background: #F5F5DC;"></div>
+                                        </div>
+                                        <span>Brown & Beige</span>
+                                    </button>
+                                    <button type="button" class="preset-theme" data-theme="beigeVino" (click)="applyPresetTheme('beigeVino')">
+                                        <div class="preset-colors">
+                                            <div class="preset-color" style="background: #7B1F2B;"></div>
+                                            <div class="preset-color" style="background: #A42A3A;"></div>
+                                            <div class="preset-color" style="background: #E0D8C7;"></div>
+                                        </div>
+                                        <span>Beige & Vino</span>
+                                    </button>
+                                </div>
                     </div>
 
-                    <!-- Buttons -->
-                    <div class="col-12 d-flex justify-content-end gap-2">
-                        <button type="submit" class="btn  rounded-pill px-4 custom-btn-style">
+                            <div class="form-actions">
+                                <button type="submit" class="btn-primary-modern">
+                                    <i class="fas fa-check"></i>
                             Apply Theme
                         </button>
-
-                        <button type="button" class="btn btn-danger rounded-pill px-4" (click)="onResetTheme()">
-                            <i class="bi bi-arrow-counterclockwise me-2"></i> Reset
+                                <button type="button" class="btn-danger-modern" (click)="onResetTheme()">
+                                    <i class="fas fa-undo"></i>
+                                    Reset to Default
                         </button>
+                            </div>
+                        </form>
                     </div>
-
-                </form>
+                </div>
             </div>
-
-
         </div>
     </div>
 </div>

@@ -1,21 +1,58 @@
+/* Modern Product List Styles */
 ::ng-deep .product-container {
   max-height: 50vh !important; 
   min-height: 50vh !important;
   overflow-y: auto !important;
 }
+
 .product-card {
-  height: 200px !important; /* fixed height */
+  height: 280px !important;
   display: flex;
   flex-direction: column;
-  justify-content: space-between; /* important: spread items */
-  padding: 10px;
-  transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+  justify-content: space-between;
+  padding: 0;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  border: none;
+  border-radius: 16px;
+  overflow: hidden;
+  background: linear-gradient(145deg, #ffffff 0%, #f8f9fa 100%);
+  box-shadow: 
+    0 4px 20px rgba(0, 0, 0, 0.08),
+    0 1px 3px rgba(0, 0, 0, 0.1);
+  position: relative;
+}
+
+.product-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(135deg, 
+    rgba(var(--primary-color-rgb, 0, 123, 255), 0.02) 0%, 
+    transparent 50%);
+  pointer-events: none;
+  z-index: 1;
+}
+
+.product-card:hover {
+  transform: translateY(-8px) scale(1.02);
+  box-shadow: 
+    0 20px 40px rgba(0, 0, 0, 0.15),
+    0 0 0 1px rgba(var(--primary-color-rgb, 0, 123, 255), 0.1);
 }
 
 .product-card img {
-  width: 100%; /* makes image take full card width */
-  height: 200px;
-  object-fit: cover; /* makes the image fit nicely */
+  width: 100%;
+  height: 160px;
+  object-fit: cover;
+  transition: all 0.3s ease;
+  border-radius: 16px 16px 0 0;
+}
+
+.product-card:hover img {
+  transform: scale(1.05);
 }
 
 .card-body {
@@ -23,42 +60,228 @@
   display: flex;
   flex-direction: column;
   justify-content: space-between;
+  padding: 1rem;
+  position: relative;
+  z-index: 2;
+  background: rgba(255, 255, 255, 0.95);
+  backdrop-filter: blur(10px);
 }
 
-.product-card:hover {
-  transform: translateY(-5px);
-  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.1);
+.card-title {
+  font-size: 0.95rem !important;
+  font-weight: 600;
+  color: var(--secondary-color, #2c3e50);
+  margin-bottom: 0.5rem;
+  line-height: 1.3;
+}
+
+.text-muted {
+  color: #6c757d !important;
+  font-size: 0.85rem !important;
+  font-weight: 500;
+}
+
+.custom-btn-style {
+  background: linear-gradient(135deg, var(--primary-color, #007bff) 0%, #0056b3 100%) !important;
+  border: none !important;
+  color: white !important;
+  font-weight: 600;
+  font-size: 0.8rem !important;
+  padding: 0.5rem 1rem;
+  border-radius: 25px;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 15px rgba(var(--primary-color-rgb, 0, 123, 255), 0.3);
+  position: relative;
+  overflow: hidden;
+}
+
+.custom-btn-style::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+  transition: left 0.5s;
+}
+
+.custom-btn-style:hover::before {
+  left: 100%;
+}
+
+.custom-btn-style:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(var(--primary-color-rgb, 0, 123, 255), 0.4);
+  background: linear-gradient(135deg, #0056b3 0%, var(--primary-color, #007bff) 100%) !important;
 }
 
 .card-img-top {
   object-fit: cover;
-  height: 100px;       /* fixed height */
-  width: 100%;         /* makes image take full card width */
-  max-height: 260px !important;   /* optional but good practice */
-  max-width: 100%;     /* ensures it doesn't overflow */
+  height: 160px;
+  width: 100%;
+  border-radius: 16px 16px 0 0;
 }
 
 .scroll-container {
-  max-height: 60vh !important; /* height of the scrollable area */
-  overflow-y: auto !important;  /* enable vertical scrolling */
-  padding-right: 8px;
+  max-height: 60vh !important;
+  overflow-y: auto !important;
+  padding-right: 12px;
+  scrollbar-width: thin;
+  scrollbar-color: var(--primary-color, #007bff) transparent;
+}
+
+.scroll-container::-webkit-scrollbar {
+  width: 6px;
+}
+
+.scroll-container::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.scroll-container::-webkit-scrollbar-thumb {
+  background: linear-gradient(135deg, var(--primary-color, #007bff), #0056b3);
+  border-radius: 10px;
+}
+
+.scroll-container::-webkit-scrollbar-thumb:hover {
+  background: linear-gradient(135deg, #0056b3, var(--primary-color, #007bff));
 }
 
 .scroll-container .row {
   display: flex;
   flex-wrap: wrap;
+  gap: 1rem;
 }
 
-.scroll-container .col-sm-6, .scroll-container .col-md-4, .scroll-container .col-lg-3 {
-  margin-bottom: 20px;  
+.scroll-container .col-sm-6, 
+.scroll-container .col-md-4, 
+.scroll-container .col-lg-3 {
+  margin-bottom: 0;
 }
 
-/* Removes borders */
+/* Modern Table Styles */
 table td, table th {
   border: none !important;
 }
 
-/* Fixes the table header */
 .table-wrapper {
   position: relative;
+  border-radius: 16px;
+  overflow: hidden;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+  background: white;
+}
+
+.table {
+  margin-bottom: 0;
+}
+
+.table thead th {
+  background: linear-gradient(135deg, var(--primary-color, #007bff) 0%, #0056b3 100%);
+  color: white;
+  font-weight: 600;
+  text-transform: uppercase;
+  font-size: 0.8rem;
+  letter-spacing: 0.5px;
+  padding: 1rem 0.75rem;
+  border: none;
+}
+
+.table tbody tr {
+  transition: all 0.2s ease;
+}
+
+.table tbody tr:hover {
+  background: linear-gradient(135deg, rgba(var(--primary-color-rgb, 0, 123, 255), 0.05) 0%, transparent 100%);
+  transform: scale(1.01);
+}
+
+.table tbody td {
+  padding: 1rem 0.75rem;
+  vertical-align: middle;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+}
+
+/* Search Input Modernization - Always Visible Outline */
+::ng-deep .form-control.rounded-pill {
+  border: 1px solid var(--primary-color, #007bff) !important;
+  background: rgba(255, 255, 255, 0.95) !important;
+  backdrop-filter: blur(10px);
+  transition: all 0.3s ease;
+  box-shadow: 0 0 0 1px var(--primary-color, #007bff) !important;
+  outline: 1px solid var(--primary-color, #007bff) !important;
+  outline-offset: 1px !important;
+}
+
+::ng-deep .form-control.rounded-pill:focus {
+  border-color: var(--primary-color, #007bff) !important;
+  box-shadow: 
+    0 0 0 0.2rem rgba(var(--primary-color-rgb, 0, 123, 255), 0.25),
+    0 0 0 1px var(--primary-color, #007bff) !important;
+  background: white !important;
+  outline: 1px solid var(--primary-color, #007bff) !important;
+  outline-offset: 1px !important;
+}
+
+::ng-deep .form-control.rounded-pill:not(:focus) {
+  border: 1px solid var(--primary-color, #007bff) !important;
+  box-shadow: 0 0 0 1px var(--primary-color, #007bff) !important;
+  outline: 1px solid var(--primary-color, #007bff) !important;
+  outline-offset: 1px !important;
+}
+
+/* Empty State Styling */
+.bi-box-seam {
+  background: linear-gradient(135deg, var(--primary-color, #007bff), #0056b3);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .product-card {
+    height: 260px !important;
+  }
+  
+  .product-card img {
+    height: 140px;
+  }
+  
+  .card-body {
+    padding: 0.75rem;
+  }
+  
+  .card-title {
+    font-size: 0.9rem !important;
+  }
+  
+  .custom-btn-style {
+    font-size: 0.75rem !important;
+    padding: 0.4rem 0.8rem;
+  }
+}
+
+@media (max-width: 576px) {
+  .product-card {
+    height: 240px !important;
+  }
+  
+  .product-card img {
+    height: 120px;
+  }
+  
+  .card-body {
+    padding: 0.5rem;
+  }
+  
+  .card-title {
+    font-size: 0.85rem !important;
+  }
+  
+  .custom-btn-style {
+    font-size: 0.7rem !important;
+    padding: 0.3rem 0.6rem;
+  }
 }

@@ -1,0 +1,142 @@
+<div class="login-container">
+  <div class="login-split-layout">
+    <!-- Left Section - Company Branding -->
+    <div class="branding-section">
+      <div class="branding-content">
+        <div class="company-logo">
+          <i class="fas fa-store"></i>
+        </div>
+        <h1 class="company-name">POS System</h1>
+        <p class="company-tagline">Powered By Angular Technology</p>
+      </div>
+    </div>
+
+    <!-- Right Section - Login Form -->
+    <div class="login-section">
+      <div class="login-card">
+        <div class="login-header">
+          <h2 class="login-title">Login</h2>
+        </div>
+        <div class="login-body">
+          <form [formGroup]="loginForm" (ngSubmit)="onSubmit()">
+            <!-- Username Field -->
+            <div class="mb-3">
+              <label for="username" class="form-label">
+                <i class="fas fa-user me-2"></i>Username
+                <span class="text-danger">*</span>
+              </label>
+              <div class="input-group">
+                <span class="input-group-text">
+                  <i class="fas fa-user"></i>
+                </span>
+                <input
+                  type="text"
+                  id="username"
+                  formControlName="username"
+                  class="form-control"
+                  placeholder="Enter your username"
+                  [disabled]="isSubmitting">
+              </div>
+              <div class="invalid-feedback d-block" *ngIf="hasError(username)">
+                {{ getErrorMessage(username, 'Username') }}
+              </div>
+            </div>
+
+            <!-- Password Field -->
+            <div class="mb-4">
+              <label for="password" class="form-label">
+                <i class="fas fa-lock me-2"></i>Password
+                <span class="text-danger">*</span>
+              </label>
+              <div class="input-group">
+                <span class="input-group-text">
+                  <i class="fas fa-lock"></i>
+                </span>
+                <input
+                  [type]="showPassword ? 'text' : 'password'"
+                  id="password"
+                  formControlName="password"
+                  class="form-control"
+                  placeholder="Enter your password"
+                  [disabled]="isSubmitting">
+                <button
+                  type="button"
+                  class="btn"
+                  (click)="togglePasswordVisibility()"
+                  [disabled]="isSubmitting">
+                  <i class="fas" [class.fa-eye]="!showPassword" [class.fa-eye-slash]="showPassword"></i>
+                </button>
+              </div>
+              <div class="invalid-feedback d-block" *ngIf="hasError(password)">
+                {{ getErrorMessage(password, 'Password') }}
+              </div>
+            </div>
+
+            <!-- Remember Me & Forgot Password -->
+            <div class="row mb-4">
+              <div class="col-6">
+                <div class="form-check">
+                  <input
+                    class="form-check-input"
+                    type="checkbox"
+                    id="rememberMe"
+                    formControlName="rememberMe">
+                  <label class="form-check-label" for="rememberMe">
+                    Remember me
+                  </label>
+                </div>
+              </div>
+              <div class="col-6 text-end">
+                <a href="#" class="text-decoration-none" (click)="onForgotPassword($event)">
+                  Forgot password?
+                </a>
+              </div>
+            </div>
+
+            <!-- Login Button -->
+            <div class="d-grid mb-3">
+              <button
+                type="submit"
+                class="btn btn-primary btn-lg"
+                [disabled]="loginForm.invalid || isSubmitting">
+                <i class="fas fa-sign-in-alt me-2" *ngIf="!isSubmitting"></i>
+                <span class="spinner-border spinner-border-sm me-2" *ngIf="isSubmitting"></span>
+                {{ isSubmitting ? 'Signing in...' : 'Sign In' }}
+              </button>
+            </div>
+
+
+
+            <!-- Register Link -->
+            <div class="register-link">
+              <p class="mb-0">
+                Don't have an account?
+                <a href="#" class="register-text" (click)="onRegister($event)">
+                  Register here
+                </a>
+              </p>
+            </div>
+          </form>
+        </div>
+      </div>
+
+      <!-- Demo Credentials -->
+      <div class="demo-credentials">
+        <div class="demo-header">
+          <i class="fas fa-info-circle me-2"></i>
+          Demo Credentials
+        </div>
+        <div class="demo-content">
+          <div class="demo-item">
+            <small class="demo-label">Admin:</small><br>
+            <span class="demo-code">admin / admin123</span>
+          </div>
+          <div class="demo-item">
+            <small class="demo-label">User:</small><br>
+            <span class="demo-code">user / user123</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

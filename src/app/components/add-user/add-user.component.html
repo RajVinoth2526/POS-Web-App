@@ -1,0 +1,447 @@
+<div class="modern-registration-container">
+  <!-- Modern Header with Gradient Background -->
+  <div class="modern-header">
+    <div class="header-content">
+      <div class="header-text">
+        <div class="welcome-icon">
+          <i class="fas fa-user-plus"></i>
+        </div>
+        <h1 class="modern-title">
+          {{ isRegistrationMode ? 'Create Your Account' : 'Add New User' }}
+        </h1>
+        <p class="modern-subtitle">
+          {{ isRegistrationMode ? 'Join our modern POS system and start your journey' : 'Create a new user account with appropriate permissions' }}
+        </p>
+      </div>
+      <div class="header-actions">
+        <button class="btn-modern-secondary" (click)="onCancel()">
+          <i class="fas fa-arrow-left"></i>
+          <span>{{ isRegistrationMode ? 'Back to Login' : 'Back to Users' }}</span>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modern Form Container -->
+  <div class="modern-form-container">
+    <div class="form-wrapper">
+      <!-- Form Header -->
+      <div class="form-header">
+        <div class="form-icon">
+          <i class="fas fa-user-edit"></i>
+        </div>
+        <h2 class="form-title">
+          {{ isRegistrationMode ? 'Registration Information' : 'User Information' }}
+        </h2>
+        <p class="form-description">
+          {{ isRegistrationMode ? 'Fill in your details to create your account' : 'Enter user details and permissions' }}
+        </p>
+      </div>
+
+      <!-- Modern Form -->
+      <form [formGroup]="userForm" (ngSubmit)="onSubmit()" class="modern-form">
+        <div class="form-sections">
+          <!-- Personal Information Section -->
+          <div class="form-section">
+            <div class="section-header">
+              <div class="section-icon">
+                <i class="fas fa-user"></i>
+              </div>
+              <h3 class="section-title">Personal Information</h3>
+            </div>
+            <div class="form-grid">
+              <!-- Username Field -->
+              <div class="form-field">
+                <label for="username" class="field-label">
+                  <i class="fas fa-at field-icon"></i>
+                  Username
+                  <span class="required">*</span>
+                </label>
+                <div class="input-container">
+                  <input
+                    type="text"
+                    id="username"
+                    formControlName="username"
+                    [class]="getFieldClasses(username)"
+                    placeholder="Enter your username"
+                    maxlength="20"
+                    class="modern-input">
+                  <div class="input-focus-border"></div>
+                </div>
+                <div class="field-feedback" *ngIf="hasError(username)">
+                  <i class="fas fa-exclamation-circle"></i>
+                  {{ getErrorMessage(username, 'Username') }}
+                </div>
+                <div class="field-hint">
+                  <i class="fas fa-info-circle"></i>
+                  3-20 characters, letters, numbers, and underscores only
+                </div>
+              </div>
+
+              <!-- Email Field -->
+              <div class="form-field">
+                <label for="email" class="field-label">
+                  <i class="fas fa-envelope field-icon"></i>
+                  Email Address
+                  <span class="required">*</span>
+                </label>
+                <div class="input-container">
+                  <input
+                    type="email"
+                    id="email"
+                    formControlName="email"
+                    [class]="getFieldClasses(email)"
+                    placeholder="Enter your email address"
+                    class="modern-input">
+                  <div class="input-focus-border"></div>
+                </div>
+                <div class="field-feedback" *ngIf="hasError(email)">
+                  <i class="fas fa-exclamation-circle"></i>
+                  {{ getErrorMessage(email, 'Email') }}
+                </div>
+              </div>
+
+              <!-- First Name Field -->
+              <div class="form-field">
+                <label for="firstName" class="field-label">
+                  <i class="fas fa-user field-icon"></i>
+                  First Name
+                  <span class="required">*</span>
+                </label>
+                <div class="input-container">
+                  <input
+                    type="text"
+                    id="firstName"
+                    formControlName="firstName"
+                    [class]="getFieldClasses(firstName)"
+                    placeholder="Enter your first name"
+                    maxlength="50"
+                    class="modern-input">
+                  <div class="input-focus-border"></div>
+                </div>
+                <div class="field-feedback" *ngIf="hasError(firstName)">
+                  <i class="fas fa-exclamation-circle"></i>
+                  {{ getErrorMessage(firstName, 'First Name') }}
+                </div>
+              </div>
+
+              <!-- Last Name Field -->
+              <div class="form-field">
+                <label for="lastName" class="field-label">
+                  <i class="fas fa-user field-icon"></i>
+                  Last Name
+                  <span class="required">*</span>
+                </label>
+                <div class="input-container">
+                  <input
+                    type="text"
+                    id="lastName"
+                    formControlName="lastName"
+                    [class]="getFieldClasses(lastName)"
+                    placeholder="Enter your last name"
+                    maxlength="50"
+                    class="modern-input">
+                  <div class="input-focus-border"></div>
+                </div>
+                <div class="field-feedback" *ngIf="hasError(lastName)">
+                  <i class="fas fa-exclamation-circle"></i>
+                  {{ getErrorMessage(lastName, 'Last Name') }}
+                </div>
+              </div>
+
+              <!-- Phone Field -->
+              <div class="form-field">
+                <label for="phone" class="field-label">
+                  <i class="fas fa-phone field-icon"></i>
+                  Phone Number
+                </label>
+                <div class="input-container">
+                  <input
+                    type="tel"
+                    id="phone"
+                    formControlName="phone"
+                    [class]="getFieldClasses(phone)"
+                    placeholder="Enter your phone number"
+                    class="modern-input">
+                  <div class="input-focus-border"></div>
+                </div>
+                <div class="field-feedback" *ngIf="hasError(phone)">
+                  <i class="fas fa-exclamation-circle"></i>
+                  {{ getErrorMessage(phone, 'Phone') }}
+                </div>
+                <div class="field-hint">
+                  <i class="fas fa-info-circle"></i>
+                  Optional - International format supported
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Security & Access Section -->
+          <div class="form-section">
+            <div class="section-header">
+              <div class="section-icon">
+                <i class="fas fa-shield-alt"></i>
+              </div>
+              <h3 class="section-title">Security & Access</h3>
+            </div>
+            <div class="form-grid">
+
+              <!-- Password Field -->
+              <div class="form-field">
+                <label for="password" class="field-label">
+                  <i class="fas fa-lock field-icon"></i>
+                  Password
+                  <span class="required">*</span>
+                </label>
+                <div class="input-container password-container">
+                  <input
+                    [type]="showPassword ? 'text' : 'password'"
+                    id="password"
+                    formControlName="password"
+                    [class]="getFieldClasses(password)"
+                    placeholder="Enter your password"
+                    class="modern-input">
+                  <button
+                    type="button"
+                    class="password-toggle"
+                    (click)="togglePasswordVisibility()">
+                    <i class="fas" [class.fa-eye]="!showPassword" [class.fa-eye-slash]="showPassword"></i>
+                  </button>
+                  <div class="input-focus-border"></div>
+                </div>
+                <div class="field-feedback" *ngIf="hasError(password)">
+                  <i class="fas fa-exclamation-circle"></i>
+                  {{ getErrorMessage(password, 'Password') }}
+                </div>
+                
+                <!-- Modern Password Strength Indicator -->
+                <div class="password-strength" *ngIf="password?.value">
+                  <div class="strength-header">
+                    <span class="strength-label">Password Strength:</span>
+                    <span class="strength-text" [class]="'strength-' + getPasswordStrength().color">
+                      {{ getPasswordStrength().strength }}
+                    </span>
+                  </div>
+                  <div class="strength-bar">
+                    <div class="strength-fill" [class]="'strength-' + getPasswordStrength().color" [style.width.%]="getPasswordStrength().percentage"></div>
+                  </div>
+                  <div class="password-requirements">
+                    <i class="fas fa-info-circle"></i>
+                    Must contain uppercase, lowercase, number, and special character
+                  </div>
+                </div>
+              </div>
+
+              <!-- Confirm Password Field -->
+              <div class="form-field">
+                <label for="confirmPassword" class="field-label">
+                  <i class="fas fa-lock field-icon"></i>
+                  Confirm Password
+                  <span class="required">*</span>
+                </label>
+                <div class="input-container password-container">
+                  <input
+                    [type]="showConfirmPassword ? 'text' : 'password'"
+                    id="confirmPassword"
+                    formControlName="confirmPassword"
+                    [class]="getFieldClasses(confirmPassword)"
+                    placeholder="Confirm your password"
+                    class="modern-input">
+                  <button
+                    type="button"
+                    class="password-toggle"
+                    (click)="toggleConfirmPasswordVisibility()">
+                    <i class="fas" [class.fa-eye]="!showConfirmPassword" [class.fa-eye-slash]="showConfirmPassword"></i>
+                  </button>
+                  <div class="input-focus-border"></div>
+                </div>
+                <div class="field-feedback" *ngIf="hasError(confirmPassword)">
+                  <i class="fas fa-exclamation-circle"></i>
+                  {{ getErrorMessage(confirmPassword, 'Confirm Password') }}
+                </div>
+              </div>
+
+              <!-- Role Field -->
+              <div class="form-field">
+                <label for="role" class="field-label">
+                  <i class="fas fa-user-tag field-icon"></i>
+                  User Role
+                  <span class="required">*</span>
+                </label>
+                <div class="input-container">
+                  <select
+                    id="role"
+                    formControlName="role"
+                    [class]="getFieldClasses(role)"
+                    class="modern-select">
+                    <option *ngFor="let role of roles" [value]="role.value">
+                      {{ role.label }} - {{ role.description }}
+                    </option>
+                  </select>
+                  <div class="input-focus-border"></div>
+                </div>
+                <div class="field-feedback" *ngIf="hasError(role)">
+                  <i class="fas fa-exclamation-circle"></i>
+                  {{ getErrorMessage(role, 'Role') }}
+                </div>
+              </div>
+
+              <!-- Department Field -->
+              <div class="form-field">
+                <label for="department" class="field-label">
+                  <i class="fas fa-building field-icon"></i>
+                  Department
+                  <span class="required">*</span>
+                </label>
+                <div class="input-container">
+                  <select
+                    id="department"
+                    formControlName="department"
+                    [class]="getFieldClasses(department)"
+                    class="modern-select">
+                    <option value="">Select Department</option>
+                    <option *ngFor="let dept of departments" [value]="dept.value">
+                      {{ dept.label }}
+                    </option>
+                  </select>
+                  <div class="input-focus-border"></div>
+                </div>
+                <div class="field-feedback" *ngIf="hasError(department)">
+                  <i class="fas fa-exclamation-circle"></i>
+                  {{ getErrorMessage(department, 'Department') }}
+                </div>
+              </div>
+
+              <!-- Active Status (only show in admin mode) -->
+              <div class="form-field" *ngIf="!isRegistrationMode">
+                <div class="modern-switch">
+                  <input
+                    type="checkbox"
+                    id="isActive"
+                    formControlName="isActive"
+                    class="switch-input">
+                  <label for="isActive" class="switch-label">
+                    <div class="switch-slider"></div>
+                    <div class="switch-content">
+                      <i class="fas fa-toggle-on"></i>
+                      <span>Account Active</span>
+                    </div>
+                  </label>
+                </div>
+                <div class="field-hint">
+                  <i class="fas fa-info-circle"></i>
+                  Inactive accounts cannot log in to the system
+                </div>
+              </div>
+
+              <!-- Terms Agreement (only show in registration mode) -->
+              <div class="form-field" *ngIf="isRegistrationMode">
+                <div class="modern-switch">
+                  <input
+                    type="checkbox"
+                    id="agreeTerms"
+                    formControlName="agreeTerms"
+                    class="switch-input">
+                  <label for="agreeTerms" class="switch-label">
+                    <div class="switch-slider"></div>
+                    <div class="switch-content">
+                      <i class="fas fa-check-circle"></i>
+                      <span>I agree to the Terms and Conditions</span>
+                    </div>
+                  </label>
+                </div>
+                <div class="field-feedback" *ngIf="hasError(agreeTerms)">
+                  <i class="fas fa-exclamation-circle"></i>
+                  {{ getErrorMessage(agreeTerms, 'Terms Agreement') }}
+                </div>
+                <div class="field-hint">
+                  <i class="fas fa-info-circle"></i>
+                  You must agree to the terms to create an account
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Modern Form Actions -->
+        <div class="form-actions">
+          <div class="actions-left">
+            <button
+              type="button"
+              class="btn-modern-secondary"
+              (click)="onReset()"
+              [disabled]="isSubmitting">
+              <i class="fas fa-undo"></i>
+              <span>Reset Form</span>
+            </button>
+          </div>
+          <div class="actions-right">
+            <button
+              type="button"
+              class="btn-modern-secondary"
+              (click)="onCancel()"
+              [disabled]="isSubmitting">
+              <i class="fas fa-times"></i>
+              <span>Cancel</span>
+            </button>
+            <button
+              type="submit"
+              class="btn-modern-primary"
+              [disabled]="userForm.invalid || isSubmitting">
+              <div class="btn-content">
+                <i class="fas fa-user-plus" *ngIf="!isSubmitting"></i>
+                <div class="spinner" *ngIf="isSubmitting">
+                  <div class="spinner-circle"></div>
+                </div>
+                <span>{{ isSubmitting ? (isRegistrationMode ? 'Creating Account...' : 'Creating User...') : (isRegistrationMode ? 'Create Account' : 'Create User') }}</span>
+              </div>
+            </button>
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Modern Help Section -->
+  <div class="modern-help-section">
+    <div class="help-header">
+      <div class="help-icon">
+        <i class="fas fa-question-circle"></i>
+      </div>
+      <h3 class="help-title">
+        {{ isRegistrationMode ? 'Registration Guidelines' : 'Help & Guidelines' }}
+      </h3>
+    </div>
+    <div class="help-content">
+      <div class="help-grid">
+        <div class="help-card">
+          <div class="help-card-header">
+            <i class="fas fa-shield-alt"></i>
+            <h4>Password Requirements</h4>
+          </div>
+          <ul class="help-list">
+            <li><i class="fas fa-check"></i> Minimum 8 characters long</li>
+            <li><i class="fas fa-check"></i> At least one uppercase letter (A-Z)</li>
+            <li><i class="fas fa-check"></i> At least one lowercase letter (a-z)</li>
+            <li><i class="fas fa-check"></i> At least one number (0-9)</li>
+            <li><i class="fas fa-check"></i> At least one special character (@$!%*?&)</li>
+          </ul>
+        </div>
+        <div class="help-card">
+          <div class="help-card-header">
+            <i class="fas fa-users-cog"></i>
+            <h4>Role Permissions</h4>
+          </div>
+          <ul class="help-list">
+            <li><i class="fas fa-crown"></i> <strong>Admin:</strong> Full system access and user management</li>
+            <li><i class="fas fa-user-tie"></i> <strong>Manager:</strong> Department oversight and reporting</li>
+            <li><i class="fas fa-user"></i> <strong>User:</strong> Standard application access</li>
+            <li><i class="fas fa-cash-register"></i> <strong>Cashier:</strong> Sales transactions and basic operations</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+

@@ -26,6 +26,21 @@ export class DashboardComponent implements OnInit {
     this.router.navigate([route]);
   }
 
+  getCardDescription(name: string): string {
+    const descriptions: { [key: string]: string } = {
+      'Sales': 'Process new sales transactions',
+      'Add Product': 'Add new products to inventory',
+      'View Products': 'Browse and manage products',
+      'Sales Analysis': 'View sales reports and analytics',
+      'Orders': 'Manage customer orders',
+      'Inventory': 'Track and manage inventory',
+      'Users': 'Manage system users and permissions',
+      'Reports': 'Generate business reports',
+      'Settings': 'Configure system settings'
+    };
+    return descriptions[name] || 'Access this feature';
+  }
+
   ngOnInit(): void {
   }
 

@@ -28,10 +28,20 @@ export interface Filter {
   pageNumber: number;
   pageSize: number;
   name: string;
+  category?: string; // Filter by product category
   orderNumber?: string;
   orderStartDate?: string;
   orderEndDate?: string;
   orderDate?: string;
+  orderStatus?: string;
+  isDraft?: boolean; // Filter by draft status
+  customerName?: string;
+  customerPhone?: string;
+  paymentStatus?: string;
+  startDate?: string;
+  endDate?: string;
+  minTotal?: number;
+  maxTotal?: number;
 }
 
 // models/paged-result.model.ts
@@ -84,6 +94,8 @@ export interface Cart {
   notes?: string;
   cartDate?: string;
   expanded?: boolean; // optional for UI purposes
+  isDraft?: boolean; // true for draft orders, false for completed orders
+  orderStatus?: string; // 'draft', 'completed', 'cancelled'
 }
 
 export interface CartItem {
@@ -142,6 +154,7 @@ export interface ApiOrder {
   paymentMethod: string;
   paymentStatus: string;
   orderStatus: string;
+  isDraft: boolean; // ✅ Added missing isDraft property
   notes: string;
   orderDate: string;
   completedDate?: string;

@@ -1,8 +1,18 @@
-<div class="row">
-  <div class="col-md-6">
-    <app-product-list  (add)="addToCart($event)"></app-product-list>
-  </div>
-  <div class="col-md-6">
-    <app-cart [cart]="cart" (updateCart)="updateCartEvent($event)" (cartChange)="cart = $event"></app-cart>
+<!-- Modern Sales Order Process Layout -->
+<div class="sales-order-container">
+  <div class="row g-4 h-100">
+    <!-- Products Section -->
+    <div class="col-md-6">
+      <div class="products-section">
+        <app-product-list (add)="addToCart($event)"></app-product-list>
+      </div>
+    </div>
+    
+    <!-- Cart Section -->
+    <div class="col-md-6">
+      <div class="cart-section">
+        <app-cart [cart]="cart" (updateCart)="updateCartEvent($event)" (cartChange)="cart = $event"></app-cart>
+      </div>
+    </div>
   </div>
 </div>

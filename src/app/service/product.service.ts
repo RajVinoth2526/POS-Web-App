@@ -23,15 +23,23 @@ export class ProductService {
     this.cartSubject.next(settings);
   }
 
+  updateCart(cart: Cart): void {
+    this.cartSubject.next(cart);
+  }
+
   getCurrentCartValue(): Cart | null {
     return this.cartSubject.value;
   }
 
+  clearCart(): void {
+    this.cartSubject.next(null);
+  }
+
   // Method to insert a new product
   addProduct(product: Product): Observable<Product> {
-    if (environment.systemMode == 1) {
+    if (environment.systemMode == 2) { // OffLine mode - use Firebase
       return this.firebaseProductService.addProduct(product);
-    } else {
+    } else { // Online mode - use API
       return this.http.post<Product>(`${environment.apiUrl}api/products`, product);
     }
   }
@@ -48,20 +56,32 @@ export class ProductService {
     //   );
     // } else {
       
-      let params = filter ? new HttpParams().set('name', filter['name'] || '') : undefined;
-      if(params) {
+      let params = new HttpParams();
+      
+      if (filter) {
+        if (filter['name']) {
+          params = params.set('name', filter['name']);
+        }
+        if (filter['category']) {
+          params = params.set('category', filter['category']);
+        }
         params = params
-        .set('pageNumber', filter && filter['pageNumber']?.toString() || '1')
-        .set('pageSize', filter && filter['pageSize']?.toString() || '10');  
+          .set('pageNumber', filter['pageNumber']?.toString() || '1')
+          .set('pageSize', filter['pageSize']?.toString() || '10');
+      } else {
+        params = params
+          .set('pageNumber', '1')
+          .set('pageSize', '10');
       }
       
+      console.log('API Call:', `${environment.apiUrl}api/products`, params.toString());
       return this.http.get<PagedResult<Product>>(`${environment.apiUrl}api/products`, { params });
       
     // }
   }
   // GET: Get theme settings by ID
   getProduct(id: string): Observable<ApiResponse<Product>> {
-    if (environment.systemMode == 1) {
+    if (environment.systemMode == 2) { // OffLine mode - use Firebase
       return this.firebaseProductService.getProductById(id.toString()).pipe(
         map((product): ApiResponse<Product> => {
           if (!product) {
@@ -81,7 +101,7 @@ export class ProductService {
 
 
   updateProduct(id: string, data: Partial<Product>): Observable<ApiResponse<Product>> {
-    if (environment.systemMode == 1) {
+    if (environment.systemMode == 2) { // OffLine mode - use Firebase
       return this.firebaseProductService.updateProduct(id.toString(), data).pipe(
         map((product: Product) => ({
           data: product,
@@ -95,7 +115,7 @@ export class ProductService {
   }
 
   deleteProduct(id: string): Observable<ApiResponse<Product>> {
-    if (environment.systemMode == 1) {
+    if (environment.systemMode == 2) { // OffLine mode - use Firebase
       return this.firebaseProductService.deleteProductById(id.toString()).pipe(
         map(() => ({
           data: null, // this is allowed only if ApiResponse<Product> accepts null

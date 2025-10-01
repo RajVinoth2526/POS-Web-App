@@ -1,22 +1,21 @@
 <div class="container mt-4">
     <h1 class="mb-4" *ngIf="!hideDatePicker">Order Details</h1>
     
-    <!-- Search Controls - Only show if not hidden -->
+    <!-- Search and Filter Controls - Only show if not hidden -->
     <div class="row justify-content-center mb-4" *ngIf="!hideDatePicker">
-        <div class="col-md-3 mb-2">
+        <div class="col-md-2 mb-2">
             <select class="form-select rounded-pill px-3" [(ngModel)]="searchType">
-              <option value="" disabled selected hidden>Select search type</option>
+              <option value="" disabled selected hidden>Search type</option>
               <option value="id">Search by Order ID</option>
               <option value="date">Search by Date</option>
             </select>
           </div>
           
-      
-        <div class="col-md-6 position-relative">
+        <div class="col-md-4 position-relative">
           <input
             [type]="searchType === 'date' ? 'date' : 'text'"
             class="form-control rounded-pill px-4 pe-5"
-            [placeholder]="searchType === 'id' ? '🔍 Search by ID...' : searchType === 'date' ? '📅 Search by date (YYYY-MM-DD)...' : 'Search here..'"
+            [placeholder]="searchType === 'id' ? '🔍 Search by ID...' : searchType === 'date' ? '📅 Search by date...' : 'Search here..'"
             [(ngModel)]="searchQuery"
             (input)="onSearch()"
           />
@@ -29,6 +28,16 @@
             ✖
           </button>
         </div>
+
+        <div class="col-md-2 mb-2">
+          <select class="form-select rounded-pill px-3" [(ngModel)]="orderStatusFilter" (change)="onStatusFilterChange()">
+            <option value="">All Status</option>
+            <option value="draft">Draft</option>
+            <option value="Pending">Pending</option>
+            <option value="completed">Completed</option>
+            <option value="cancelled">Cancelled</option>
+          </select>
+        </div>
       </div>
       
       
@@ -38,34 +47,72 @@
     <table class="table table-striped">
       <thead class="table-dark sticky-header">
         <tr>
-          <th style="text-align: left !important; background-color: var(--primary-color); color: white;">Order ID</th>
-          <th style="text-align: left !important; background-color: var(--primary-color); color: white;">Ordered time</th>
-          <th style="text-align: left !important; background-color: var(--primary-color); color: white;">TotalAmount</th>
-          <th style="text-align: left !important; background-color: var(--primary-color); color: white;">PaymentMethod</th>
-          <th style="text-align: left !important; background-color: var(--primary-color); color: white;"></th>
-          <th style="text-align: left !important; background-color: var(--primary-color); color: white;"></th>
+          <th style="text-align: left !important; background: linear-gradient(135deg, var(--primary-color, #007bff) 0%, var(--secondary-color, #0056b3) 100%); color: white;">Order ID</th>
+          <th style="text-align: left !important; background: linear-gradient(135deg, var(--primary-color, #007bff) 0%, var(--secondary-color, #0056b3) 100%); color: white;">Status</th>
+          <th style="text-align: left !important; background: linear-gradient(135deg, var(--primary-color, #007bff) 0%, var(--secondary-color, #0056b3) 100%); color: white;">Ordered time</th>
+          <th style="text-align: left !important; background: linear-gradient(135deg, var(--primary-color, #007bff) 0%, var(--secondary-color, #0056b3) 100%); color: white;">TotalAmount</th>
+          <th style="text-align: left !important; background: linear-gradient(135deg, var(--primary-color, #007bff) 0%, var(--secondary-color, #0056b3) 100%); color: white;">PaymentMethod</th>
+          <th style="text-align: left !important; background: linear-gradient(135deg, var(--primary-color, #007bff) 0%, var(--secondary-color, #0056b3) 100%); color: white;">Actions</th>
         </tr>
       </thead>
       <tbody>
-        <ng-container *ngFor="let cart of carts">
+        <ng-container *ngFor="let cart of filteredCarts">
           <tr>
             <td>{{ cart.orderId }}</td>
+            <td>
+              <span class="badge" [class]="getStatusBadgeClass(cart)">
+                {{ getStatusText(cart) }}
+              </span>
+            </td>
             <td>{{ cart.createdAt | date:'short'}}</td>
             <td>{{currency}}{{ cart.totalAmount }}</td>
             <td>{{ cart.paymentMethod }}</td>
             <td>
-              <button mat-icon-button (click)="deleteOrder(cart)" >
-                <mat-icon style="color: rgb(193, 2, 2) !important;">delete</mat-icon>
-              </button>              
-            </td>
-            <td>
-              <button mat-icon-button (click)="cart.expanded = !cart.expanded"  class="expand-btn">
-                <mat-icon style="color: white !important;">{{ cart.expanded ? 'expand_less' : 'expand_more' }}</mat-icon>
-              </button>
+              <!-- Draft Actions - All buttons in same row with space -->
+              <div *ngIf="isDraftOrder(cart)" class="d-flex align-items-center gap-2">
+                <button 
+                  class="btn btn-success btn-sm" 
+                  (click)="restoreDraftToCart(cart)"
+                  title="Restore to Cart"
+                >
+                  🛒
+                </button>
+                <button 
+                  class="btn btn-primary btn-sm" 
+                  (click)="completeDraftOrder(cart)"
+                  title="Complete Order"
+                >
+                  ✅
+                </button>
+                <button 
+                  class="btn btn-danger btn-sm" 
+                  (click)="deleteOrder(cart)"
+                  title="Delete Order"
+                >
+                  🗑️
+                </button>
+                <button mat-icon-button (click)="cart.expanded = !cart.expanded" class="expand-btn">
+                  <i class="fas {{ cart.expanded ? 'fa-chevron-up' : 'fa-chevron-down' }}" style="color: white !important;"></i>
+                </button>
+              </div>
+              
+              <!-- Regular Order Actions - DELETE button and ARROW button in same row with space -->
+              <div *ngIf="!isDraftOrder(cart)" class="d-flex align-items-center gap-2">
+                <button 
+                  class="btn btn-danger btn-sm" 
+                  (click)="deleteOrder(cart)"
+                  title="Delete Order"
+                >
+                  🗑️
+                </button>
+                <button mat-icon-button (click)="cart.expanded = !cart.expanded" class="expand-btn">
+                  <i class="fas {{ cart.expanded ? 'fa-chevron-up' : 'fa-chevron-down' }}" style="color: white !important;"></i>
+                </button>
+              </div>
             </td>
           </tr>
           <tr *ngIf="cart.expanded">
-            <td colspan="6">
+            <td colspan="7">
               <mat-expansion-panel [expanded]="true">
                 <mat-expansion-panel-header>
                   <mat-panel-title>
@@ -111,12 +158,22 @@
   </div>
 
   <!-- Pagination -->
-  <div *ngIf="carts.length > 0" class="pagination-container">
+  <div *ngIf="filteredCarts.length > 0" class="pagination-container">
     <app-pagination
       [totalCount]="totalCount"
       [pageNumber]="filter.pageNumber"
       [pageSize]="filter.pageSize"
       (pageChange)="onPageChange($event)">
     </app-pagination>
+  </div>
+
+  <!-- Filter info -->
+  <div *ngIf="filteredCarts.length > 0" class="text-center mt-2">
+    <small class="text-muted">
+      Showing {{ filteredCarts.length }} of {{ carts.length }} orders
+      <span *ngIf="searchQuery || orderStatusFilter" class="text-primary">
+        (filtered)
+      </span>
+    </small>
   </div>
   

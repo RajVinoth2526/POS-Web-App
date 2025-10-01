@@ -14,6 +14,8 @@ export class AddProductPopupComponent implements OnInit {
   cartItem: CartItem = {} as CartItem;
   size: string = '';
   currency: string = '';
+  private isUpdating: boolean = false; // Prevent infinite loops during updates
+  
   constructor(
      private _mdr: MatDialogRef<any>,
      @Inject(MAT_DIALOG_DATA) public data: any
@@ -29,8 +31,19 @@ export class AddProductPopupComponent implements OnInit {
   }
 
   onSizeChange(newSize: string): void {
+    if (this.isUpdating) return;
+    
+    this.isUpdating = true;
     this.cartItem.size = newSize;
-    this.cartItem.total = (this.data.product.price/this.data.product.unitValue) * parseFloat(newSize);
+    
+    // Calculate price based on weight/volume
+    // Example: 1000g unit value, 1200 unit price
+    // If customer enters 100g, price should be (1200/1000) * 100 = 120
+    const sizeValue = parseFloat(newSize) || 0;
+    const pricePerUnit = this.data.product.price / this.data.product.unitValue;
+    this.cartItem.total = pricePerUnit * sizeValue;
+    
+    this.isUpdating = false;
   }
 
   get totalPrice(): number {
@@ -47,6 +60,48 @@ export class AddProductPopupComponent implements OnInit {
 
   decrease() {
     if (this.quantity > 1) this.quantity--;
+  }
+
+  // Size/Weight/Volume controls
+  increaseSize() {
+    if (this.data.product.isPartialAllowed) {
+      const currentSize = parseFloat(this.cartItem.size) || 0;
+      const newSize = currentSize + 1;
+      this.cartItem.size = newSize.toString();
+      this.onSizeChange(this.cartItem.size);
+    }
+  }
+
+  decreaseSize() {
+    if (this.data.product.isPartialAllowed) {
+      const currentSize = parseFloat(this.cartItem.size) || 0;
+      if (currentSize > 0.01) {
+        const newSize = Math.max(0.01, currentSize - 1);
+        this.cartItem.size = newSize.toString();
+        this.onSizeChange(this.cartItem.size);
+      }
+    }
+  }
+
+  // Price controls
+  increasePrice() {
+    if (this.data.product.isPartialAllowed) {
+      const currentPrice = this.cartItem.total || 0;
+      const newPrice = currentPrice + 1;
+      this.cartItem.total = newPrice;
+      this.onPriceChange(newPrice);
+    }
+  }
+
+  decreasePrice() {
+    if (this.data.product.isPartialAllowed) {
+      const currentPrice = this.cartItem.total || 0;
+      if (currentPrice > 0.01) {
+        const newPrice = Math.max(0.01, currentPrice - 1);
+        this.cartItem.total = newPrice;
+        this.onPriceChange(newPrice);
+      }
+    }
   }
 
   addProduct() {
@@ -74,8 +129,38 @@ export class AddProductPopupComponent implements OnInit {
   }
 
   onPriceChange(newPrice: number): void {
-    this.cartItem.price = newPrice;
-    this.cartItem.size = (newPrice/this.data.product.price).toFixed(2);
+    if (this.isUpdating) return;
+    
+    this.isUpdating = true;
+    this.cartItem.total = newPrice;
+    
+    // Calculate weight/volume based on price
+    // Example: 1000g unit value, 1200 unit price
+    // If customer enters 120 price, weight should be 120 / (1200/1000) = 100g
+    const pricePerUnit = this.data.product.price / this.data.product.unitValue;
+    const calculatedSize = newPrice / pricePerUnit;
+    this.cartItem.size = calculatedSize.toFixed(2);
+    
+    this.isUpdating = false;
+  }
+
+  // Get the appropriate label based on unit type
+  getUnitLabel(): string {
+    const unitType = this.data.product.unitType?.toLowerCase();
+    if (unitType === 'weight') {
+      return 'Weight';
+    } else if (unitType === 'volume') {
+      return 'Volume';
+    } else {
+      return 'Amount';
+    }
+  }
+
+  // Get price per unit for display
+  getPricePerUnit(): number {
+    // Always return the base rate: unit price / unit value
+    // Example: 1200 / 1000 = 1.2 per gram
+    return this.data.product.price / this.data.product.unitValue;
   }
   
 }

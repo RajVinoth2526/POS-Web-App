@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, OnDestroy, OnInit, Output } from '@angular/core';
+import { Component, EventEmitter, Input, OnDestroy, OnInit, Output, OnChanges, SimpleChanges } from '@angular/core';
 import { Router } from '@angular/router';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { NgxSpinner } from 'ngx-spinner/lib/ngx-spinner.enum';
@@ -15,14 +15,33 @@ import { AddProductPopupComponent } from '../add-product-popup/add-product-popup
   selector: 'app-product-list',
   templateUrl: './product-list.component.html'
 })
-export class ProductListComponent implements OnInit, OnDestroy {
+export class ProductListComponent implements OnInit, OnDestroy, OnChanges {
   products: Product[] = [];
   currency: string = '';
   searchQuery: string = '';
+  selectedCategory: string = '';
   totalCount: number = 0;
   filteredProducts: any[] = [];
   productSearch$ = new Subject<string>();
   private destroy$ = new Subject<void>();
+
+  categories = [
+    { value: 'cakes', label: 'Cakes' },
+    { value: 'sweets', label: 'Sweets' },
+    { value: 'milkshakes', label: 'Milk Shakes' },
+    { value: 'beverages', label: 'Beverages' },
+    { value: 'juice', label: 'Juice' },
+    { value: 'snacks', label: 'Snacks' },
+    { value: 'dairy', label: 'Dairy Products' },
+    { value: 'bakery', label: 'Bakery Items' },
+    { value: 'frozen', label: 'Frozen Foods' },
+    { value: 'canned', label: 'Canned Goods' },
+    { value: 'spices', label: 'Spices & Seasonings' },
+    { value: 'beverages_hot', label: 'Hot Beverages' },
+    { value: 'beverages_cold', label: 'Cold Beverages' },
+    { value: 'confectionery', label: 'Confectionery' },
+    { value: 'health_food', label: 'Health Food' }
+  ];
   filter: Filter = {
     pageNumber: 1,
     pageSize: 20,
@@ -32,6 +51,9 @@ export class ProductListComponent implements OnInit, OnDestroy {
   @Output() add = new EventEmitter<any>();
   @Input() isViewStyleTable: boolean = false;
   @Input() isFromProductViews: boolean = false;
+  @Input() externalSearchQuery: string = '';
+  @Input() externalCategory: string = '';
+  @Input() externalSortBy: string = '';
 
   constructor(private productService: ProductService,
     private systemService: SystemService,
@@ -52,6 +74,8 @@ export class ProductListComponent implements OnInit, OnDestroy {
         if (query != null) {
           this.filter.name = query;
         }
+        // Preserve category filter when searching
+        this.filter.category = this.selectedCategory || '';
 
         const observable =  this.productService.getAllProducts(this.filter);
 
@@ -78,6 +102,12 @@ export class ProductListComponent implements OnInit, OnDestroy {
     this.destroy$.complete();
   }
 
+  ngOnChanges(changes: SimpleChanges): void {
+    if (changes['externalSearchQuery'] && this.isFromProductViews) {
+      this.onExternalSearch();
+    }
+  }
+
   onPageChange(event: { pageNumber: number, pageSize: number }) {
     this.filter.pageNumber = event.pageNumber;
     this.filter.pageSize = event.pageSize;
@@ -101,20 +131,24 @@ export class ProductListComponent implements OnInit, OnDestroy {
 
   clearSearch(): void {
     this.searchQuery = '';
+    this.selectedCategory = '';
     this.filter.pageNumber = 1;
     this.filter.pageSize = 20;
+    this.filter.category = '';
     this.onSearch();
   }
 
   addToCart(product: Product) {
     const dialogRef = this.dialog.open(AddProductPopupComponent, {
-      width: '50%',
-      height: 'auto',
+      width: '500px',
+      maxWidth: '90vw',
+      maxHeight: '90vh',
+      panelClass: 'add-product-dialog',
+      disableClose: false,
       data: {
         product: product,
         title: 'Add Product',
       }
-
     });
 
     dialogRef.afterClosed().subscribe(result => {
@@ -129,6 +163,27 @@ export class ProductListComponent implements OnInit, OnDestroy {
     const query = this.searchQuery?.trim().toLowerCase();
     this.productSearch$.next(query);
   }
+
+  onCategoryFilter(): void {
+    this.filterProducts();
+  }
+
+  filterProducts(): void {
+    this.filter.category = this.selectedCategory || '';
+    this.filter.pageNumber = 1;
+    // Call API immediately when category is selected
+    this.getProducts(this.filter);
+  }
+
+  // Handle external search from view-products component
+  onExternalSearch(): void {
+    if (this.isFromProductViews) {
+      this.searchQuery = this.externalSearchQuery;
+      this.filter.name = this.externalSearchQuery?.trim().toLowerCase();
+      this.filter.pageNumber = 1;
+      this.getProducts(this.filter);
+    }
+  }
   
 
   editProduct(productId: string) {
@@ -138,8 +193,7 @@ export class ProductListComponent implements OnInit, OnDestroy {
   OnDelete(productId: string) {
     const dialogRef = this.dialog.open(ConfirmationComponent, {
       width: '500px',
-      height: 'auto',
-      disableClose: true ,
+      disableClose: true,
       data: {
         id: productId,
         title: 'Delete Product',

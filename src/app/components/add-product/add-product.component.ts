@@ -30,6 +30,24 @@ export class AddProductComponent implements OnInit {
     { value: 'weight', label: 'Weight' }
   ];
 
+  categories = [
+    { value: 'cakes', label: 'Cakes' },
+    { value: 'sweets', label: 'Sweets' },
+    { value: 'milkshakes', label: 'Milk Shakes' },
+    { value: 'beverages', label: 'Beverages' },
+    { value: 'juice', label: 'Juice' },
+    { value: 'snacks', label: 'Snacks' },
+    { value: 'dairy', label: 'Dairy Products' },
+    { value: 'bakery', label: 'Bakery Items' },
+    { value: 'frozen', label: 'Frozen Foods' },
+    { value: 'canned', label: 'Canned Goods' },
+    { value: 'spices', label: 'Spices & Seasonings' },
+    { value: 'beverages_hot', label: 'Hot Beverages' },
+    { value: 'beverages_cold', label: 'Cold Beverages' },
+    { value: 'confectionery', label: 'Confectionery' },
+    { value: 'health_food', label: 'Health Food' }
+  ];
+
   unitOptions = {
     volume: [
       { value: 'l', label: 'Liters' },
@@ -57,7 +75,7 @@ export class AddProductComponent implements OnInit {
       price: new FormControl('', [Validators.required, Validators.min(1)]),
       sku: new FormControl(''),
       barcode: new FormControl(''),
-      category: new FormControl(''),
+      category: new FormControl('', Validators.required),
       stockQuantity: new FormControl(''),
       unitType: new FormControl(''),
       unit: new FormControl(''),

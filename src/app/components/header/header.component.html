@@ -1,7 +1,70 @@
-<!-- src/app/header/header.component.html -->
-<nav class="navbar navbar-expand-lg shadow-sm pos-header">
-    <i class="bi bi-list toggle-icon" (click)="toggleSidebar()"></i>
-    <div class="container-fluid">
-        <a class="navbar-brand fw-bold" style="color: white;" href="#">{{companyName}}</a>
+<!-- Modern Fixed Header -->
+<nav class="navbar navbar-expand-lg modern-header fixed-top">
+    <div class="container-fluid d-flex justify-content-between align-items-center">
+        <!-- Left Section: Toggle & Brand -->
+        <div class="d-flex align-items-center">
+            <button class="animated-toggle-btn" (click)="toggleSidebar()" aria-label="Toggle Sidebar">
+                <div class="hamburger">
+                    <span class="line line1"></span>
+                    <span class="line line2"></span>
+                    <span class="line line3"></span>
+                </div>
+                <div class="ripple-effect"></div>
+            </button>
+            <a class="modern-brand" href="#">{{companyName}}</a>
+        </div>
+        
+        <!-- Right Section: User Menu -->
+        <div class="user-section" *ngIf="currentUser">
+            <div class="dropdown">
+                <button class="modern-user-btn dropdown-toggle d-flex align-items-center" 
+                        type="button" 
+                        id="userDropdown" 
+                        data-bs-toggle="dropdown" 
+                        aria-expanded="false">
+                    <div class="user-avatar">
+                        <i class="fas fa-user-circle"></i>
+                    </div>
+                    <div class="user-info d-none d-md-block">
+                        <span class="user-name">{{getUserDisplayName()}}</span>
+                        <small class="user-role">{{currentUser.role || 'User'}}</small>
+                    </div>
+                    <i class="fas fa-chevron-down ms-2"></i>
+                </button>
+                <ul class="dropdown-menu modern-dropdown dropdown-menu-end" aria-labelledby="userDropdown">
+                    <li class="dropdown-header-modern">
+                        <div class="user-profile-info">
+                            <div class="profile-avatar">
+                                <i class="fas fa-user-circle"></i>
+                            </div>
+                            <div class="profile-details">
+                                <h6 class="profile-name">{{currentUser.firstName}} {{currentUser.lastName}}</h6>
+                                <small class="profile-email">{{currentUser.email}}</small>
+                            </div>
+                        </div>
+                    </li>
+                    <li><hr class="dropdown-divider-modern"></li>
+                    <li>
+                        <a class="dropdown-item-modern" href="#" (click)="onProfile($event)">
+                            <i class="fas fa-user-edit"></i>
+                            <span>Profile</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a class="dropdown-item-modern" href="#" (click)="onSettings($event)">
+                            <i class="fas fa-cog"></i>
+                            <span>Settings</span>
+                        </a>
+                    </li>
+                    <li><hr class="dropdown-divider-modern"></li>
+                    <li>
+                        <a class="dropdown-item-modern logout-item" href="#" (click)="onLogout($event)">
+                            <i class="fas fa-sign-out-alt"></i>
+                            <span>Logout</span>
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </div>
     </div>
 </nav>

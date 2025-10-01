@@ -1,0 +1,39 @@
+/* Playfair Display Font - Downloaded for offline use */
+@font-face {
+  font-family: 'Playfair Display';
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url('./playfair-display-v30-latin-regular.woff2') format('woff2'),
+       url('./playfair-display-v30-latin-regular.woff') format('woff');
+}
+
+@font-face {
+  font-family: 'Playfair Display';
+  font-style: normal;
+  font-weight: 500;
+  font-display: swap;
+  src: url('./playfair-display-v30-latin-500.woff2') format('woff2'),
+       url('./playfair-display-v30-latin-500.woff') format('woff');
+}
+
+@font-face {
+  font-family: 'Playfair Display';
+  font-style: normal;
+  font-weight: 600;
+  font-display: swap;
+  src: url('./playfair-display-v30-latin-600.woff2') format('woff2'),
+       url('./playfair-display-v30-latin-600.woff') format('woff');
+}
+
+@font-face {
+  font-family: 'Playfair Display';
+  font-style: normal;
+  font-weight: 700;
+  font-display: swap;
+  src: url('./playfair-display-v30-latin-700.woff2') format('woff2'),
+       url('./playfair-display-v30-latin-700.woff') format('woff');
+}
+
+
+

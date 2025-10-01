@@ -63,7 +63,7 @@ export class SystemService {
   }
 
   getThemeSettings(id: string): Observable<ThemeSettings> {
-    if (environment.systemMode === 1) {
+    if (environment.systemMode === 2) { // OffLine mode - use Firebase
       return this.firebaseSystemService.getThemeSettings(id.toString()).pipe(
         switchMap((theme: ThemeSettings | undefined) => {
           if (!theme) {
@@ -78,7 +78,7 @@ export class SystemService {
   }
 
   createThemeSettings(data: ThemeSettings): Observable<ApiResponse<ThemeSettings>> {
-    if (environment.systemMode === 1) {
+    if (environment.systemMode === 2) { // OffLine mode - use Firebase
       return this.firebaseSystemService.createThemeSettings(data).pipe(
         map((theme: ThemeSettings) => ({
           data: theme,
@@ -92,7 +92,7 @@ export class SystemService {
   }
 
   updateThemeSettings(id: string, data: Partial<ThemeSettings>): Observable<ApiResponse<ThemeSettings>> {
-    if (environment.systemMode === 1) {
+    if (environment.systemMode === 2) { // OffLine mode - use Firebase
       return this.firebaseSystemService.updateThemeSettings(id.toString(), data).pipe(
         map((theme: ThemeSettings) => ({
           data: theme,
@@ -106,7 +106,7 @@ export class SystemService {
   }
 
   getAllSystemThemeSettings(): Observable<ApiResponse<ThemeSettings[]>> {
-    if (environment.systemMode === 1) {
+    if (environment.systemMode === 2) { // OffLine mode - use Firebase
       return this.firebaseSystemService.getAllSystemThemeSettings().pipe(
         map((themes: ThemeSettings[]) => ({
           data: themes,
@@ -119,7 +119,7 @@ export class SystemService {
     }
   }
   getProfileData(id: string): Observable<Profile> {
-    if (environment.systemMode === 1) {
+    if (environment.systemMode === 2) { // OffLine mode - use Firebase
       return this.firebaseSystemService.getProfileData(id.toString()).pipe(
         switchMap((profile: Profile | undefined) => {
           if (!profile) {
@@ -134,7 +134,7 @@ export class SystemService {
   }
 
   createProfile(data: Profile): Observable<ApiResponse<Profile>> {
-    if (environment.systemMode === 1) {
+    if (environment.systemMode === 2) { // OffLine mode - use Firebase
       return this.firebaseSystemService.createProfile(data).pipe(
         map((profile: Profile) => ({
           data: profile,
@@ -148,7 +148,7 @@ export class SystemService {
   }
 
   updateProfile(id: string, data: Partial<Profile>): Observable<ApiResponse<Profile>> {
-    if (environment.systemMode === 1) {
+    if (environment.systemMode === 2) { // OffLine mode - use Firebase
       return this.firebaseSystemService.updateProfile(id.toString(), data).pipe(
         map((profile: Profile) => ({
           data: profile,
@@ -162,7 +162,7 @@ export class SystemService {
   }
 
   getAllProfile(): Observable<ApiResponse<Profile[]>> {
-    if (environment.systemMode === 1) {
+    if (environment.systemMode === 2) { // OffLine mode - use Firebase
       return this.firebaseSystemService.getAllProfile().pipe(
         map((profiles: Profile[]) => ({
           data: profiles,

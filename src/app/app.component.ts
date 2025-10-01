@@ -1,4 +1,6 @@
 import { Component, OnInit } from '@angular/core';
+import { Router, NavigationEnd } from '@angular/router';
+import { filter } from 'rxjs/operators';
 import { ApiResponse, OrderId, Profile, ThemeSettings } from './model/system.model';
 import { environment } from 'src/environments/environment';
 import { env } from 'process';
@@ -13,10 +15,13 @@ import { OrderService } from './service/order.service';
 })
 export class AppComponent implements OnInit{
   isSidebarOpen = false;
+  isAuthPage = false;
+  
   constructor(private settingsService: SystemService,
               private spinner: NgxSpinnerService,
               private firebaseInitService: FirebaseInitService,
-              private orderService: OrderService   
+              private orderService: OrderService,
+              private router: Router   
   ) { 
     this.getThemeSettings();
     this.getProfileDetails();
@@ -24,6 +29,17 @@ export class AppComponent implements OnInit{
   }
 
   ngOnInit(): void {
+    // Track route changes to determine if we're on auth pages
+    this.router.events
+      .pipe(filter(event => event instanceof NavigationEnd))
+      .subscribe((event: NavigationEnd) => {
+        this.isAuthPage = event.url === '/login' || event.url === '/register' || event.url === '/password-reset';
+        console.log('Current route:', event.url, 'Is auth page:', this.isAuthPage);
+      });
+    
+    // Check initial route
+    this.isAuthPage = this.router.url === '/login' || this.router.url === '/register' || this.router.url === '/password-reset';
+    console.log('Initial route:', this.router.url, 'Is auth page:', this.isAuthPage);
   }
 
   getOrderId() {
@@ -61,7 +77,10 @@ export class AppComponent implements OnInit{
       document.documentElement.style.setProperty('--primary-color', theme.primaryColor);
       document.documentElement.style.setProperty('--secondary-color', theme.secondaryColor);
       document.documentElement.style.setProperty('--background-color', theme.backgroundColor);
-      document.body.style.setProperty('--theme-font-family', theme.fontStyle);
+      document.documentElement.style.setProperty('--theme-font-family', theme.fontStyle);
+      
+      // Debug helper - set data attribute for font debugging
+      document.body.setAttribute('data-font', theme.fontStyle);
     });
   
   }
